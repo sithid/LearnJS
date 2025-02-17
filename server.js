@@ -6,15 +6,19 @@ const marked = require('marked');
 const app = express();
 const port = process.env.PORT || 8000;
 
-// Serve static files
-app.use(express.static('.'));
+// Configure marked options
+marked.setOptions({
+    highlight: function(code, lang) {
+        return code;
+    },
+    gfm: true,
+    breaks: true,
+    headerIds: true,
+    mangle: false
+});
 
 // Middleware to handle markdown files
-app.use(async (req, res, next) => {
-    if (!req.path.endsWith('.md')) {
-        return next();
-    }
-
+app.get('**/*.md', async (req, res, next) => {
     try {
         const filePath = path.join(__dirname, req.path);
         const content = await fs.readFile(filePath, 'utf-8');
@@ -28,59 +32,46 @@ app.use(async (req, res, next) => {
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <title>${path.basename(req.path, '.md')}</title>
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.2.0/github-markdown.min.css">
                 <style>
-                    body {
-                        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-                        line-height: 1.6;
-                        color: #333;
-                        max-width: 800px;
+                    .markdown-body {
+                        box-sizing: border-box;
+                        min-width: 200px;
+                        max-width: 980px;
                         margin: 0 auto;
-                        padding: 20px;
+                        padding: 45px;
                     }
+
+                    @media (max-width: 767px) {
+                        .markdown-body {
+                            padding: 15px;
+                        }
+                    }
+
                     pre {
                         background-color: #f6f8fa;
-                        padding: 16px;
                         border-radius: 6px;
-                        overflow-x: auto;
+                        padding: 16px;
+                        overflow: auto;
                     }
+
                     code {
-                        font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
-                        font-size: 85%;
-                        background-color: #f6f8fa;
+                        background-color: rgba(175,184,193,0.2);
+                        border-radius: 6px;
                         padding: 0.2em 0.4em;
-                        border-radius: 3px;
+                        font-size: 85%;
                     }
+
                     pre code {
                         background-color: transparent;
                         padding: 0;
                     }
-                    img {
-                        max-width: 100%;
-                        height: auto;
-                    }
-                    table {
-                        border-collapse: collapse;
-                        width: 100%;
-                        margin: 1em 0;
-                    }
-                    th, td {
-                        border: 1px solid #ddd;
-                        padding: 8px;
-                        text-align: left;
-                    }
-                    th {
-                        background-color: #f6f8fa;
-                    }
-                    blockquote {
-                        margin: 0;
-                        padding-left: 1em;
-                        border-left: 4px solid #ddd;
-                        color: #666;
-                    }
                 </style>
             </head>
             <body>
-                ${htmlContent}
+                <article class="markdown-body">
+                    ${htmlContent}
+                </article>
             </body>
             </html>
         `;
@@ -90,6 +81,9 @@ app.use(async (req, res, next) => {
         next(err);
     }
 });
+
+// Serve static files
+app.use(express.static('.'));
 
 // Error handling middleware
 app.use((err, req, res, next) => {
