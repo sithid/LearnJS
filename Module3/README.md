@@ -1,40 +1,44 @@
 # Module 3: Modern JavaScript
 
 ## Overview
-This module covers modern JavaScript features and practices, focusing on ES6+ syntax, asynchronous programming, and modular code organization. Each lesson includes practical exercises, test suites, and real-world applications.
+This module covers modern JavaScript features and patterns essential for contemporary web development. Each lesson focuses on ES6+ features, asynchronous programming, and modular development.
 
 ## Learning Objectives
 By completing this module, you will:
-- Master ES6+ features
-- Handle asynchronous operations
-- Implement modular code design
-- Use modern JavaScript patterns
-- Test async code
-- Apply modern best practices
+- Master ES6+ features and syntax
+- Understand asynchronous programming
+- Implement modular JavaScript code
+- Handle errors effectively
+- Write modern, maintainable code
 
 ## Lessons
 
 ### Lesson 1: ES6+ Features
-- Arrow functions
+- Arrow functions and lexical scope
 - Template literals
-- Destructuring
+- Destructuring assignments
 - Spread/rest operators
 - Classes and inheritance
-- Testing modern syntax
+- Map and Set
+- Optional chaining and nullish coalescing
 
-### Lesson 2: Promises and Async
-- Promises
-- Async/await
+### Lesson 2: Promises and Async/Await
+- Promise fundamentals
+- Async/await syntax
 - Error handling
-- API integration
-- Testing async code
+- Promise chaining
+- Concurrent operations
+- Best practices for async code
+- Real-world async patterns
 
 ### Lesson 3: Modules
-- Module syntax
-- Import/export
+- Module syntax and semantics
+- Import and export
+- Default and named exports
+- Module bundling basics
+- Dynamic imports
+- Module best practices
 - Code organization
-- Dependency management
-- Testing modules
 
 ## Getting Started
 
@@ -46,12 +50,12 @@ By completing this module, you will:
 
 ## Testing Your Code
 
-Each lesson includes a modern test suite:
+Each lesson includes a test suite:
 1. Open the lesson's `test.html` in your browser
-2. Write code using modern syntax
+2. Write your code in the exercise files
 3. Tests run automatically
-4. Debug async operations
-5. Verify all tests pass
+4. Fix any failing tests
+5. Verify all tests pass before moving on
 
 ## Exercise Structure
 ```
@@ -63,48 +67,42 @@ Lesson-Name/
 └── test.js            # Test suite
 ```
 
-## Modern JavaScript Features
-- ES6+ Syntax
-- Async Programming
-- Module Systems
-- Class Syntax
-- Modern APIs
-
 ## Testing Tools
-- Async Test Runners
-- Promise Testing
-- Module Testing
-- Error Handling
-- Performance Testing
+- JavaScript Testing Framework
+- Promise Testing Utilities
+- Module Loading Tools
+- Code Coverage Analysis
+- Performance Monitoring
 
 ## Best Practices
-- Use modern syntax
-- Implement async/await
-- Write modular code
-- Handle errors properly
-- Follow ES6+ conventions
-- Test async operations
+- Write code in the exercises.js file
+- Run tests frequently
+- Read error messages carefully
+- Use modern JavaScript features
+- Follow consistent coding style
+
+## Browser Compatibility
+Tested and supported in:
+- Chrome (latest) - Full support for ES6+, Modules, and Async features
+- Firefox (latest) - Complete ES6+ and module system support
+- Safari (latest) - Full support for modern JavaScript features
+- Edge (latest) - Comprehensive support for ES6+ and modules
+- Node.js (14+) - For testing modules and ES6+ features
+
+Note: While these features are well-supported in modern browsers, some older browsers may require transpilation or polyfills.
 
 ## Completion Checklist
 - [ ] All exercises completed
 - [ ] All tests passing
-- [ ] Code uses modern features
+- [ ] Code follows best practices
 - [ ] Solutions reviewed
 - [ ] Concepts understood
-- [ ] Async code tested
 
 ## Additional Resources
-- ES6+ Specification
-- MDN Async Programming
-- JavaScript Modules Guide
-- Promise Documentation
-- Modern JS Testing Guide
-
-## Environment Requirements
-- Modern browser (Chrome, Firefox, Safari, Edge)
-- ES6+ support
-- Module support
-- Async/await support
-- Local development server
+- MDN JavaScript Guide
+- JavaScript.info
+- ES6+ Features Reference
+- Async JavaScript Guide
+- JavaScript Modules Documentation
 
 Move on to Module 4 once you've completed all lessons and their tests successfully. 

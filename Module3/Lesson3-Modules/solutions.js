@@ -1,551 +1,314 @@
-// Exercise 1: Basic Modules
+// Exercise 1: Basic Module Exports
+export const PI = 3.14159;
+export const E = 2.71828;
+export const square = x => x * x;
+export const cube = x => x * x * x;
 
-// math.js
-export const MathOperations = {
-    add: (a, b) => {
+// Exercise 2: Default Export - Calculator Class
+export default class Calculator {
+    add(a, b) {
         return a + b;
-    },
-    subtract: (a, b) => {
+    }
+    
+    subtract(a, b) {
         return a - b;
-    },
-    multiply: (a, b) => {
+    }
+    
+    multiply(a, b) {
         return a * b;
-    },
-    divide: (a, b) => {
+    }
+    
+    divide(a, b) {
         if (b === 0) {
-            throw new Error('Division by zero is not allowed');
+            throw new Error('Division by zero');
         }
         return a / b;
     }
-};
-
-// string-utils.js
-export const StringUtils = {
-    capitalize: (str) => {
-        if (!str) return '';
-        return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
-    },
-    reverse: (str) => {
-        return str.split('').reverse().join('');
-    },
-    countWords: (str) => {
-        return str.trim().split(/\s+/).length;
-    },
-    format: (template, ...args) => {
-        return template.replace(/{(\d+)}/g, (match, index) => {
-            return typeof args[index] !== 'undefined' ? args[index] : match;
-        });
-    }
-};
-
-// date-formatter.js
-export const DateFormatter = {
-    formatDate: (date) => {
-        return date.toISOString().split('T')[0];
-    },
-    formatTime: (date) => {
-        return date.toTimeString().split(' ')[0];
-    },
-    getRelativeTime: (date) => {
-        const now = new Date();
-        const diff = now - date;
-        const seconds = Math.floor(diff / 1000);
-        const minutes = Math.floor(seconds / 60);
-        const hours = Math.floor(minutes / 60);
-        const days = Math.floor(hours / 24);
-
-        if (days > 0) return `${days} day${days > 1 ? 's' : ''} ago`;
-        if (hours > 0) return `${hours} hour${hours > 1 ? 's' : ''} ago`;
-        if (minutes > 0) return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
-        return `${seconds} second${seconds !== 1 ? 's' : ''} ago`;
-    }
-};
-
-// validator.js
-export const NumberValidator = {
-    isInteger: (num) => {
-        return Number.isInteger(num);
-    },
-    isInRange: (num, min, max) => {
-        return num >= min && num <= max;
-    },
-    isPositive: (num) => {
-        return num > 0;
-    },
-    isValidPhoneNumber: (num) => {
-        const phoneRegex = /^\+?[\d\s-]{10,}$/;
-        return phoneRegex.test(num);
-    }
-};
-
-// Exercise 2: Module Organization
-
-// user.js
-export class User {
-    constructor(id, name, email) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.createdAt = new Date();
-    }
-
-    updateProfile(data) {
-        Object.assign(this, data);
-        this.updatedAt = new Date();
-    }
-
-    static validate(userData) {
-        const errors = [];
-        if (!userData.name) errors.push('Name is required');
-        if (!userData.email?.includes('@')) errors.push('Invalid email');
-        return errors;
-    }
 }
 
-// product.js
-export class Product {
-    static #products = new Map();
-
-    constructor(id, name, price, category) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
-        this.category = category;
-        Product.#products.set(id, this);
+// Exercise 3: Module Organization - User Utils
+export const userUtils = {
+    validateEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    },
+    
+    formatName(firstName, lastName) {
+        const formatWord = word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+        return `${formatWord(firstName)} ${formatWord(lastName)}`;
     }
+};
 
-    updatePrice(newPrice) {
-        if (newPrice < 0) throw new Error('Price cannot be negative');
-        this.price = newPrice;
-    }
-
-    static search(query) {
-        query = query.toLowerCase();
-        return Array.from(Product.#products.values())
-            .filter(product => 
-                product.name.toLowerCase().includes(query) ||
-                product.category.toLowerCase().includes(query)
-            );
-    }
-}
-
-// cart.js
-export class ShoppingCart {
-    constructor() {
-        this.items = new Map();
-        this.total = 0;
-    }
-
-    addItem(product, quantity = 1) {
-        const currentQuantity = this.items.get(product.id)?.quantity || 0;
-        this.items.set(product.id, {
-            product,
-            quantity: currentQuantity + quantity
-        });
-        this.calculateTotal();
-    }
-
-    removeItem(productId) {
-        this.items.delete(productId);
-        this.calculateTotal();
-    }
-
-    calculateTotal() {
-        this.total = Array.from(this.items.values())
-            .reduce((sum, { product, quantity }) => 
-                sum + product.price * quantity, 0);
-        return this.total;
-    }
-}
-
-// order.js
-export class Order {
-    constructor(cart, user) {
-        this.cart = cart;
-        this.user = user;
-        this.status = 'pending';
-        this.createdAt = new Date();
-        this.total = cart.total;
-    }
-
-    async process() {
-        try {
-            await this.validateStock();
-            await this.processPayment();
-            this.status = 'completed';
-            return true;
-        } catch (error) {
-            this.status = 'failed';
-            throw error;
+// Exercise 4: Module Dependencies - Process User Data
+export const processUserData = async ({ firstName, lastName, date }) => {
+    try {
+        // Validate inputs
+        if (!firstName || !lastName || !date) {
+            throw new Error('Missing required fields');
         }
-    }
-
-    generateInvoice() {
-        return {
-            orderId: Math.random().toString(36).substr(2, 9),
-            customerName: this.user.name,
-            items: Array.from(this.cart.items.values()),
-            total: this.total,
-            date: this.createdAt,
-            status: this.status
-        };
-    }
-}
-
-// Exercise 3: Advanced Patterns
-
-// factory.js
-export const UserFactory = {
-    createCustomer(data) {
-        return {
-            ...data,
-            type: 'customer',
-            permissions: ['read', 'write'],
-            createdAt: new Date()
-        };
-    },
-    createAdmin(data) {
-        return {
-            ...data,
-            type: 'admin',
-            permissions: ['read', 'write', 'delete', 'manage'],
-            createdAt: new Date()
-        };
-    },
-    createGuest() {
-        return {
-            id: `guest-${Date.now()}`,
-            type: 'guest',
-            permissions: ['read'],
-            createdAt: new Date()
-        };
-    }
-};
-
-// singleton.js
-export class Database {
-    static #instance = null;
-    #connections = new Set();
-
-    constructor() {
-        if (Database.#instance) {
-            return Database.#instance;
-        }
-        Database.#instance = this;
-    }
-
-    async query(sql) {
-        const connection = await this.#getConnection();
-        try {
-            return await connection.execute(sql);
-        } finally {
-            this.#releaseConnection(connection);
-        }
-    }
-
-    #getConnection() {
-        // Simulated connection pool
-        return Promise.resolve({
-            execute: async (sql) => ({ rows: [], sql })
-        });
-    }
-
-    #releaseConnection(connection) {
-        // Release connection back to pool
-    }
-}
-
-// observer.js
-export class EventSystem {
-    #subscribers = new Map();
-
-    constructor() {
-        this.#subscribers = new Map();
-    }
-
-    subscribe(event, callback) {
-        if (!this.#subscribers.has(event)) {
-            this.#subscribers.set(event, new Set());
-        }
-        this.#subscribers.get(event).add(callback);
         
-        return () => this.unsubscribe(event, callback);
+        // Process data
+        const fullName = userUtils.formatName(firstName, lastName);
+        const formattedDate = new Date(date).toISOString();
+        
+        return {
+            fullName,
+            formattedDate,
+            processed: true,
+            timestamp: Date.now()
+        };
+    } catch (error) {
+        throw new Error(`Error processing user data: ${error.message}`);
     }
+};
 
-    unsubscribe(event, callback) {
-        const subscribers = this.#subscribers.get(event);
-        if (subscribers) {
-            subscribers.delete(callback);
+// Exercise 5: Dynamic Imports
+export const loadModule = async (moduleName) => {
+    try {
+        const module = await import(`./${moduleName}.js`);
+        await module.initialize?.(); // Call initialize if it exists
+        return module;
+    } catch (error) {
+        throw new Error(`Failed to load module ${moduleName}: ${error.message}`);
+    }
+};
+
+// Exercise 6: Module Aggregation
+export const api = {
+    math: {
+        PI,
+        E,
+        square,
+        cube
+    },
+    calculator: new Calculator(),
+    user: userUtils
+};
+
+// Exercise 7: Circular Dependencies
+const moduleB = {
+    getData: () => 'Data from B'
+};
+
+export const moduleA = {
+    getValue() {
+        return 42;
+    },
+    
+    useModuleB() {
+        return `Module A using: ${moduleB.getData()}`;
+    }
+};
+
+// Lazy initialization for moduleB to avoid circular dependency issues
+Object.assign(moduleB, {
+    useModuleA() {
+        return `Module B using: ${moduleA.getValue()}`;
+    }
+});
+
+// Exercise 8: Module State
+export const stateManager = (function() {
+    let state = {};
+    const listeners = new Set();
+    
+    return {
+        setState(newState) {
+            state = { ...state, ...newState };
+            listeners.forEach(listener => listener(state));
+        },
+        
+        getState() {
+            return { ...state };
+        },
+        
+        subscribe(listener) {
+            listeners.add(listener);
+            return () => listeners.delete(listener);
+        }
+    };
+})();
+
+// Exercise 9: Module Initialization
+export const databaseModule = {
+    _connection: null,
+    _initialized: false,
+    
+    async initialize(config) {
+        if (this._initialized) {
+            throw new Error('Database already initialized');
+        }
+        
+        try {
+            // Simulate database connection
+            await new Promise(resolve => setTimeout(resolve, 100));
+            this._connection = {
+                ...config,
+                timestamp: Date.now()
+            };
+            this._initialized = true;
+            console.log('Database initialized');
+        } catch (error) {
+            throw new Error(`Database initialization failed: ${error.message}`);
+        }
+    },
+    
+    async query(sql) {
+        if (!this._initialized) {
+            throw new Error('Database not initialized');
+        }
+        
+        // Simulate query execution
+        await new Promise(resolve => setTimeout(resolve, 50));
+        return {
+            sql,
+            timestamp: Date.now(),
+            connection: this._connection
+        };
+    },
+    
+    async cleanup() {
+        if (!this._initialized) {
+            return;
+        }
+        
+        try {
+            // Simulate cleanup
+            await new Promise(resolve => setTimeout(resolve, 100));
+            this._connection = null;
+            this._initialized = false;
+            console.log('Database connection closed');
+        } catch (error) {
+            throw new Error(`Database cleanup failed: ${error.message}`);
         }
     }
+};
 
-    emit(event, data) {
-        const subscribers = this.#subscribers.get(event);
-        if (subscribers) {
-            subscribers.forEach(callback => {
-                try {
-                    callback(data);
-                } catch (error) {
-                    console.error(`Error in event handler for ${event}:`, error);
+// Exercise 10: Module Patterns
+export const modulePatterns = {
+    // Singleton Logger
+    logger: (function() {
+        let instance;
+        
+        function createLogger() {
+            const logs = [];
+            
+            return {
+                log(message) {
+                    const timestamp = new Date().toISOString();
+                    logs.push({ timestamp, message, type: 'log' });
+                    console.log(`[${timestamp}] ${message}`);
+                },
+                
+                error(message) {
+                    const timestamp = new Date().toISOString();
+                    logs.push({ timestamp, message, type: 'error' });
+                    console.error(`[${timestamp}] ERROR: ${message}`);
+                },
+                
+                getLogs() {
+                    return [...logs];
                 }
+            };
+        }
+        
+        return {
+            getInstance() {
+                if (!instance) {
+                    instance = createLogger();
+                }
+                return instance;
+            }
+        };
+    })(),
+    
+    // Calculator using module pattern
+    calculator: (function() {
+        const history = [];
+        
+        function addToHistory(operation, a, b, result) {
+            history.push({
+                operation,
+                a,
+                b,
+                result,
+                timestamp: Date.now()
             });
         }
-    }
-}
-
-// builder.js
-export class QueryBuilder {
-    constructor() {
-        this.query = {
-            select: ['*'],
-            from: null,
-            where: [],
-            orderBy: null,
-            limit: null
+        
+        return {
+            add(a, b) {
+                const result = a + b;
+                addToHistory('add', a, b, result);
+                return result;
+            },
+            
+            subtract(a, b) {
+                const result = a - b;
+                addToHistory('subtract', a, b, result);
+                return result;
+            },
+            
+            multiply(a, b) {
+                const result = a * b;
+                addToHistory('multiply', a, b, result);
+                return result;
+            },
+            
+            divide(a, b) {
+                if (b === 0) {
+                    throw new Error('Division by zero');
+                }
+                const result = a / b;
+                addToHistory('divide', a, b, result);
+                return result;
+            },
+            
+            getHistory() {
+                return [...history];
+            }
         };
-    }
-
-    select(fields) {
-        this.query.select = Array.isArray(fields) ? fields : [fields];
-        return this;
-    }
-
-    from(table) {
-        this.query.from = table;
-        return this;
-    }
-
-    where(condition) {
-        this.query.where.push(condition);
-        return this;
-    }
-
-    orderBy(field, direction = 'ASC') {
-        this.query.orderBy = { field, direction };
-        return this;
-    }
-
-    limit(count) {
-        this.query.limit = count;
-        return this;
-    }
-
-    build() {
-        if (!this.query.from) {
-            throw new Error('FROM clause is required');
-        }
-
-        let sql = `SELECT ${this.query.select.join(', ')} FROM ${this.query.from}`;
-        
-        if (this.query.where.length > 0) {
-            sql += ` WHERE ${this.query.where.join(' AND ')}`;
-        }
-        
-        if (this.query.orderBy) {
-            sql += ` ORDER BY ${this.query.orderBy.field} ${this.query.orderBy.direction}`;
-        }
-        
-        if (this.query.limit !== null) {
-            sql += ` LIMIT ${this.query.limit}`;
-        }
-
-        return sql;
-    }
-}
-
-// Exercise 4: Dynamic Loading
-
-export async function loadFeature(featureName) {
-    const progressCallback = (progress) => {
-        // Update loading progress UI
-        document.dispatchEvent(new CustomEvent('moduleLoadProgress', {
-            detail: { featureName, progress }
-        }));
-    };
-
-    try {
-        progressCallback(0);
-        
-        // Simulate network delay
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        progressCallback(30);
-
-        const module = await import(/* webpackChunkName: "[request]" */ `./features/${featureName}.js`);
-        progressCallback(60);
-
-        // Initialize the feature
-        await module.default.initialize();
-        progressCallback(90);
-
-        // Final setup
-        await new Promise(resolve => setTimeout(resolve, 500));
-        progressCallback(100);
-
-        return module.default;
-    } catch (error) {
-        throw new Error(`Failed to load feature "${featureName}": ${error.message}`);
-    }
-}
-
-// Exercise 5: Real Application
-
-// core.js
-export class Core {
-    #modules = new Map();
-    #status = 'idle';
-
-    constructor() {
-        this.eventSystem = new EventSystem();
-        this.database = new Database();
-    }
-
-    async start() {
-        this.#status = 'starting';
-        this.eventSystem.emit('core:starting');
-
-        try {
-            await this.#initializeModules();
-            this.#status = 'running';
-            this.eventSystem.emit('core:started');
-        } catch (error) {
-            this.#status = 'error';
-            this.eventSystem.emit('core:error', error);
-            throw error;
-        }
-    }
-
-    async stop() {
-        this.#status = 'stopping';
-        this.eventSystem.emit('core:stopping');
-
-        try {
-            await this.#shutdownModules();
-            this.#status = 'stopped';
-            this.eventSystem.emit('core:stopped');
-        } catch (error) {
-            this.#status = 'error';
-            this.eventSystem.emit('core:error', error);
-            throw error;
-        }
-    }
-
-    async #initializeModules() {
-        for (const [name, module] of this.#modules) {
-            await module.initialize?.();
-        }
-    }
-
-    async #shutdownModules() {
-        for (const [name, module] of this.#modules) {
-            await module.shutdown?.();
-        }
-    }
-}
-
-// ui.js
-export class UI {
-    #components = new Map();
-    #root = null;
-
-    constructor(rootElement) {
-        this.#root = rootElement;
-        this.eventSystem = new EventSystem();
-    }
-
-    render(component, data) {
-        const element = this.#components.get(component)?.render(data);
-        if (element) {
-            this.#root.appendChild(element);
-            this.eventSystem.emit('ui:rendered', { component, data });
-        }
-    }
-
-    update(component, data) {
-        const instance = this.#components.get(component);
-        if (instance?.update) {
-            instance.update(data);
-            this.eventSystem.emit('ui:updated', { component, data });
-        }
-    }
-
-    registerComponent(name, component) {
-        this.#components.set(name, component);
-    }
-}
-
-// data.js
-export class DataManager {
-    #cache = new Map();
-    #db = new Database();
-
-    constructor() {
-        this.eventSystem = new EventSystem();
-    }
-
-    async fetch(resource) {
-        // Check cache first
-        if (this.#cache.has(resource)) {
-            return this.#cache.get(resource);
-        }
-
-        try {
-            const data = await this.#db.query(`SELECT * FROM ${resource}`);
-            this.#cache.set(resource, data);
-            this.eventSystem.emit('data:fetched', { resource, data });
-            return data;
-        } catch (error) {
-            this.eventSystem.emit('data:error', { resource, error });
-            throw error;
-        }
-    }
-
-    async save(resource, data) {
-        try {
-            await this.#db.query(`INSERT INTO ${resource} VALUES (?)`, [data]);
-            this.#cache.delete(resource); // Invalidate cache
-            this.eventSystem.emit('data:saved', { resource, data });
-        } catch (error) {
-            this.eventSystem.emit('data:error', { resource, error });
-            throw error;
-        }
-    }
-}
-
-// utils.js
-export const Utils = {
-    debounce(func, wait) {
-        let timeout;
-        return function executedFunction(...args) {
-            const later = () => {
-                clearTimeout(timeout);
-                func(...args);
+    })(),
+    
+    // User Factory
+    userFactory: {
+        createUser(role, data) {
+            const baseUser = {
+                id: Date.now(),
+                createdAt: new Date(),
+                role,
+                ...data
             };
-            clearTimeout(timeout);
-            timeout = setTimeout(later, wait);
-        };
-    },
-
-    throttle(func, limit) {
-        let inThrottle;
-        return function executedFunction(...args) {
-            if (!inThrottle) {
-                func(...args);
-                inThrottle = true;
-                setTimeout(() => inThrottle = false, limit);
+            
+            switch (role) {
+                case 'admin':
+                    return {
+                        ...baseUser,
+                        permissions: ['read', 'write', 'delete', 'manage'],
+                        isAdmin: true
+                    };
+                    
+                case 'moderator':
+                    return {
+                        ...baseUser,
+                        permissions: ['read', 'write', 'delete'],
+                        isModerator: true
+                    };
+                    
+                case 'user':
+                    return {
+                        ...baseUser,
+                        permissions: ['read', 'write'],
+                        isUser: true
+                    };
+                    
+                default:
+                    return {
+                        ...baseUser,
+                        permissions: ['read'],
+                        isGuest: true
+                    };
             }
-        };
-    },
-
-    memoize(func) {
-        const cache = new Map();
-        return function memoized(...args) {
-            const key = JSON.stringify(args);
-            if (cache.has(key)) {
-                return cache.get(key);
-            }
-            const result = func.apply(this, args);
-            cache.set(key, result);
-            return result;
-        };
+        }
     }
 }; 

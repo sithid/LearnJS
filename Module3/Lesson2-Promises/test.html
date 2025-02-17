@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Promises - Tests</title>
+    <title>Promises and Async/Await Tests</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -13,13 +13,16 @@
             background-color: #f5f5f5;
         }
         .test-container {
-            background: white;
+            background-color: white;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             margin-bottom: 20px;
         }
-        .test-result {
+        .test-results {
+            margin-top: 20px;
+        }
+        .test-case {
             padding: 10px;
             margin: 5px 0;
             border-radius: 4px;
@@ -27,305 +30,166 @@
         .pass {
             background-color: #e8f5e9;
             color: #2e7d32;
-            border-left: 4px solid #2e7d32;
         }
         .fail {
-            background-color: #fbe9e7;
+            background-color: #ffebee;
             color: #c62828;
-            border-left: 4px solid #c62828;
-        }
-        .console-output {
-            background-color: #f8f9fa;
-            padding: 10px;
-            border-radius: 4px;
-            margin-top: 5px;
-            font-family: monospace;
-            white-space: pre-wrap;
         }
         h1 {
             color: #333;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 10px;
+            text-align: center;
         }
         .summary {
-            margin-top: 20px;
-            padding: 15px;
-            background: #e3f2fd;
+            text-align: center;
+            font-size: 1.2em;
+            margin: 20px 0;
+            padding: 10px;
             border-radius: 4px;
         }
-        /* Test environment styles */
-        .test-environment {
-            display: none;
+        .summary.all-pass {
+            background-color: #e8f5e9;
+            color: #2e7d32;
         }
-        #user-display {
-            padding: 20px;
-            border: 1px solid #eee;
-        }
-        .loading {
-            color: #666;
-            font-style: italic;
-        }
-        .error {
-            color: red;
+        .summary.has-fail {
+            background-color: #ffebee;
+            color: #c62828;
         }
     </style>
 </head>
 <body>
     <div class="test-container">
-        <h1>Promises - Test Results</h1>
-        <div id="test-results"></div>
+        <h1>Promises and Async/Await Tests</h1>
+        <div id="testResults" class="test-results"></div>
         <div id="summary" class="summary"></div>
     </div>
 
-    <!-- Test Environment (Hidden) -->
-    <div class="test-environment">
-        <div id="user-display"></div>
-    </div>
-
     <script type="module">
-        // Import student's code
-        import * as exercises from './exercises.js';
+        import {
+            createDelayedPromise,
+            processUserData,
+            fetchWithRetry,
+            fetchAllUserData,
+            fetchWithTimeout,
+            getUserDetails,
+            processDataWithRetry,
+            processInParallel,
+            processInSequence,
+            fetchAndCacheUserData
+        } from './exercises.js';
 
-        // Test runner
-        class TestRunner {
-            constructor() {
-                this.results = [];
-                this.passCount = 0;
-                this.totalTests = 0;
-            }
-
-            assert(condition, message) {
-                if (!condition) {
-                    throw new Error(message);
+        async function runTest(description, testFunction) {
+            const resultDiv = document.createElement('div');
+            try {
+                const result = await testFunction();
+                if (result === true) {
+                    resultDiv.className = 'test-case pass';
+                    resultDiv.textContent = `✓ ${description}`;
+                } else {
+                    resultDiv.className = 'test-case fail';
+                    resultDiv.textContent = `✗ ${description}`;
                 }
+            } catch (error) {
+                resultDiv.className = 'test-case fail';
+                resultDiv.textContent = `✗ ${description} (Error: ${error.message})`;
             }
-
-            assertEqual(actual, expected, message) {
-                if (JSON.stringify(actual) !== JSON.stringify(expected)) {
-                    throw new Error(`${message}\nExpected: ${JSON.stringify(expected)}\nActual: ${JSON.stringify(actual)}`);
-                }
-            }
-
-            addResult(testName, passed, error = null) {
-                this.results.push({ testName, passed, error });
-                if (passed) this.passCount++;
-                this.totalTests++;
-            }
-
-            displayResults() {
-                const container = document.getElementById('test-results');
-                const summary = document.getElementById('summary');
-                
-                this.results.forEach(result => {
-                    const div = document.createElement('div');
-                    div.className = `test-result ${result.passed ? 'pass' : 'fail'}`;
-                    div.textContent = `${result.passed ? '✅' : '❌'} ${result.testName}`;
-                    
-                    if (!result.passed && result.error) {
-                        const errorDiv = document.createElement('div');
-                        errorDiv.className = 'console-output';
-                        errorDiv.textContent = result.error;
-                        div.appendChild(errorDiv);
-                    }
-                    
-                    container.appendChild(div);
-                });
-
-                summary.textContent = `Passed ${this.passCount} of ${this.totalTests} tests (${Math.round(this.passCount/this.totalTests*100)}%)`;
-            }
-
-            async runTest(testName, testFn) {
-                try {
-                    await testFn();
-                    this.addResult(testName, true);
-                } catch (error) {
-                    this.addResult(testName, false, error.message);
-                }
-            }
-
-            async assertRejects(promise, message) {
-                try {
-                    await promise;
-                    throw new Error(message);
-                } catch (error) {
-                    // Expected rejection
-                }
-            }
-
-            async assertResolvesWithin(promise, ms, message) {
-                const timeout = new Promise((_, reject) => 
-                    setTimeout(() => reject(new Error(message)), ms)
-                );
-                await Promise.race([promise, timeout]);
-            }
+            document.getElementById('testResults').appendChild(resultDiv);
+            return resultDiv.className.includes('pass');
         }
 
-        // Initialize test runner
-        const runner = new TestRunner();
+        const tests = [
+            // Exercise 1: Basic Promise Creation
+            async () => runTest('createDelayedPromise resolves with correct value', async () => {
+                const result = await createDelayedPromise('test', 100);
+                return result === 'test';
+            }),
 
-        // Run tests
-        document.addEventListener('DOMContentLoaded', async () => {
-            // Test Basic Promises
-            await runner.runTest('Basic Promises - Delay', async () => {
-                const start = Date.now();
-                await exercises.delay(500);
-                const duration = Date.now() - start;
-                runner.assert(
-                    duration >= 500 && duration < 600,
-                    'delay should wait approximately the specified time'
-                );
-            });
+            // Exercise 2: Promise Chaining
+            async () => runTest('processUserData fetches user and posts', async () => {
+                const result = await processUserData(1);
+                return result.user && result.posts && result.posts.length > 0;
+            }),
 
-            await runner.runTest('Basic Promises - Random Result', async () => {
+            // Exercise 3: Promise Error Handling
+            async () => runTest('fetchWithRetry handles retries correctly', async () => {
                 try {
-                    await exercises.randomResult();
+                    await fetchWithRetry('https://invalid-url', 2);
+                    return false;
                 } catch (error) {
-                    // Both success and failure are valid outcomes
+                    return true; // Expected to fail after retries
                 }
-                runner.assert(true, 'randomResult should either resolve or reject');
-            });
+            }),
 
-            await runner.runTest('Basic Promises - Chained Operations', async () => {
-                const result = await exercises.chainedOperations(5);
-                const expected = ((5 * 2) + 100) / 3;
-                runner.assertEqual(result, expected, 'chainedOperations should perform calculations in order');
-            });
+            // Exercise 4: Promise.all Usage
+            async () => runTest('fetchAllUserData fetches multiple users', async () => {
+                const results = await fetchAllUserData([1, 2]);
+                return results.length === 2 && results.every(user => user.id);
+            }),
 
-            // Test Async/Await
-            await runner.runTest('Async/Await - Read File', async () => {
-                const content = await exercises.readFileAsync('file1.txt');
-                runner.assert(
-                    content.includes('Content of file1.txt'),
-                    'readFileAsync should return file content'
-                );
-
-                await runner.assertRejects(
-                    exercises.readFileAsync('invalid.txt'),
-                    'readFileAsync should reject for invalid files'
-                );
-            });
-
-            await runner.runTest('Async/Await - Fetch User', async () => {
-                const user = await exercises.fetchUserAsync(1);
-                runner.assertEqual(
-                    user,
-                    { id: 1, name: 'John' },
-                    'fetchUserAsync should return correct user'
-                );
-
-                await runner.assertRejects(
-                    exercises.fetchUserAsync(999),
-                    'fetchUserAsync should reject for invalid user ID'
-                );
-            });
-
-            // Test Promise Patterns
-            await runner.runTest('Promise Patterns - Sequential', async () => {
-                const start = Date.now();
-                const result = await exercises.sequential();
-                const duration = Date.now() - start;
-                
-                runner.assert(
-                    duration >= 3000,
-                    'sequential should fetch users one after another'
-                );
-                runner.assert(
-                    Array.isArray(result) && result.length === 3,
-                    'sequential should return array of three users'
-                );
-            });
-
-            await runner.runTest('Promise Patterns - Parallel', async () => {
-                const start = Date.now();
-                const result = await exercises.parallel();
-                const duration = Date.now() - start;
-                
-                runner.assert(
-                    duration < 2000,
-                    'parallel should fetch users simultaneously'
-                );
-                runner.assert(
-                    Array.isArray(result) && result.length === 3,
-                    'parallel should return array of three users'
-                );
-            });
-
-            await runner.runTest('Promise Patterns - Race', async () => {
-                const result = await exercises.race();
-                runner.assert(
-                    result === 'success',
-                    'race should return the first resolved value'
-                );
-            });
-
-            await runner.runTest('Promise Patterns - Timeout', async () => {
-                const slowPromise = new Promise(resolve => setTimeout(resolve, 2000));
-                await runner.assertRejects(
-                    exercises.withTimeout(slowPromise, 1000),
-                    'withTimeout should reject if promise takes too long'
-                );
-            });
-
-            // Test Error Handling
-            await runner.runTest('Error Handling - Retry', async () => {
-                let attempts = 0;
-                const failingFn = () => {
-                    attempts++;
-                    if (attempts < 3) throw new Error('Temporary failure');
-                    return 'success';
-                };
-
-                const result = await exercises.withRetry(failingFn);
-                runner.assertEqual(result, 'success', 'withRetry should eventually succeed');
-                runner.assertEqual(attempts, 3, 'withRetry should make multiple attempts');
-            });
-
-            await runner.runTest('Error Handling - Cleanup', async () => {
-                let cleaned = false;
-                const fn = async () => {
-                    try {
-                        throw new Error('Test error');
-                    } finally {
-                        cleaned = true;
-                    }
-                };
-
+            // Exercise 5: Promise.race Implementation
+            async () => runTest('fetchWithTimeout handles timeout correctly', async () => {
                 try {
-                    await exercises.withCleanup(fn);
+                    await fetchWithTimeout('https://invalid-url', 100);
+                    return false;
                 } catch (error) {
-                    runner.assert(cleaned, 'withCleanup should perform cleanup on error');
+                    return error.message === 'Request timed out';
                 }
-            });
+            }),
 
-            // Test Real-world Application
-            await runner.runTest('User Application - Display', async () => {
-                const display = new exercises.UserDisplay();
-                const container = document.getElementById('user-display');
-                
-                // Test loading state
-                display.displayUserProfile(1);
-                runner.assert(
-                    display.loading,
-                    'UserDisplay should show loading state'
-                );
+            // Exercise 6: Async/Await Basics
+            async () => runTest('getUserDetails fetches complete user data', async () => {
+                const result = await getUserDetails(1);
+                return result.user && result.posts;
+            }),
 
-                // Wait for display to complete
-                await new Promise(resolve => setTimeout(resolve, 2000));
-                
-                runner.assert(
-                    !display.loading && !display.error,
-                    'UserDisplay should complete loading without errors'
-                );
-                runner.assert(
-                    container.innerHTML.includes('User Profile') &&
-                    container.innerHTML.includes('Posts'),
-                    'UserDisplay should show user data and posts'
-                );
-            });
+            // Exercise 7: Async Error Handling
+            async () => runTest('processDataWithRetry implements retry logic', async () => {
+                try {
+                    const result = await processDataWithRetry('test-data');
+                    return result.includes('Processed');
+                } catch (error) {
+                    return error.message.includes('Failed after 3 retries');
+                }
+            }),
 
-            // Display results
-            runner.displayResults();
-        });
+            // Exercise 8: Parallel Processing
+            async () => runTest('processInParallel handles multiple tasks', async () => {
+                const tasks = [
+                    () => Promise.resolve(1),
+                    () => Promise.resolve(2)
+                ];
+                const { results, errors } = await processInParallel(tasks);
+                return results.length === 2 && results[0] === 1 && results[1] === 2;
+            }),
+
+            // Exercise 9: Sequential Processing
+            async () => runTest('processInSequence executes tasks in order', async () => {
+                const tasks = [
+                    (prev) => Promise.resolve((prev || 0) + 1),
+                    (prev) => Promise.resolve(prev * 2)
+                ];
+                const result = await processInSequence(tasks);
+                return result === 2;
+            }),
+
+            // Exercise 10: Real-world Example
+            async () => runTest('fetchAndCacheUserData implements caching', async () => {
+                const cache = new Map();
+                const result1 = await fetchAndCacheUserData(1, cache);
+                const result2 = await fetchAndCacheUserData(1, cache);
+                return result1.timestamp === result2.timestamp;
+            })
+        ];
+
+        // Run all tests
+        let passCount = 0;
+        for (const test of tests) {
+            if (await test()) passCount++;
+        }
+
+        // Display summary
+        const summary = document.getElementById('summary');
+        summary.textContent = `Passed ${passCount} out of ${tests.length} tests`;
+        summary.className = `summary ${passCount === tests.length ? 'all-pass' : 'has-fail'}`;
     </script>
 </body>
 </html> 

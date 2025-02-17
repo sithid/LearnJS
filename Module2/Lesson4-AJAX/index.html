@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AJAX and Fetch API Practice</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .exercise {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .exercise h3 {
+            margin-top: 0;
+            color: #2196F3;
+        }
+        button {
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #1976D2;
+        }
+        .result {
+            background-color: #f8f9fa;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .error {
+            color: #dc3545;
+            background-color: #ffebee;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        .success {
+            color: #28a745;
+            background-color: #e8f5e9;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #2196F3;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #f5f5f5;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            background-color: #2196F3;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AJAX and Fetch API Practice</h1>
+        
+        <div class="exercise">
+            <h3>Exercise 1: Basic GET Request</h3>
+            <button onclick="testFetchUser()">Fetch User Data</button>
+            <input type="number" id="userId" value="1" min="1" max="10">
+            <div id="fetchResult" class="result"></div>
+        </div>
+
+        <div class="exercise">
+            <h3>Exercise 2: POST Request</h3>
+            <input type="text" id="postTitle" placeholder="Post Title">
+            <input type="text" id="postBody" placeholder="Post Content">
+            <button onclick="testCreatePost()">Create Post</button>
+            <div id="postResult" class="result"></div>
+        </div>
+
+        <div class="exercise">
+            <h3>Exercise 3: Error Handling</h3>
+            <input type="text" id="fetchUrl" value="https://jsonplaceholder.typicode.com/users/1">
+            <button onclick="testErrorHandling()">Test Fetch</button>
+            <div id="errorResult" class="result"></div>
+        </div>
+
+        <div class="exercise">
+            <h3>Exercise 4: Loading States</h3>
+            <button onclick="testLoading()">Start Request</button>
+            <button onclick="testMultipleLoading()">Multiple Requests</button>
+            <div id="loadingResult" class="result"></div>
+        </div>
+
+        <div class="exercise">
+            <h3>Exercise 5: Multiple Requests</h3>
+            <button onclick="testMultipleRequests()">Fetch User & Posts</button>
+            <div id="multipleResult" class="result"></div>
+        </div>
+
+        <div class="exercise">
+            <h3>Exercise 6: Request Cancellation</h3>
+            <button onclick="testCancellation()">Start Long Request</button>
+            <button onclick="cancelRequest()">Cancel Request</button>
+            <div id="cancellationResult" class="result"></div>
+        </div>
+
+        <div class="exercise">
+            <h3>Exercise 7: Response Caching</h3>
+            <button onclick="testCaching()">Fetch Data</button>
+            <div id="cachingResult" class="result"></div>
+        </div>
+
+        <div class="exercise">
+            <h3>Exercise 8: File Upload</h3>
+            <input type="file" id="fileInput">
+            <button onclick="testFileUpload()">Upload File</button>
+            <div class="progress-bar">
+                <div id="uploadProgress" class="progress-bar-fill"></div>
+            </div>
+            <div id="uploadResult" class="result"></div>
+        </div>
+
+        <div class="exercise">
+            <h3>Exercise 9: API Authentication</h3>
+            <input type="text" id="authToken" placeholder="Auth Token">
+            <button onclick="testAuthentication()">Make Authenticated Request</button>
+            <div id="authResult" class="result"></div>
+        </div>
+
+        <div class="exercise">
+            <h3>Exercise 10: Real-time Updates</h3>
+            <button onclick="startRealtimeUpdates()">Start Updates</button>
+            <button onclick="stopRealtimeUpdates()">Stop Updates</button>
+            <div id="realtimeResult" class="result"></div>
+        </div>
+    </div>
+
+    <script type="module">
+        import {
+            fetchUserData,
+            createPost,
+            fetchWithErrorHandling,
+            createLoadingManager,
+            fetchUserWithPosts,
+            createCancellableFetch,
+            createCachedFetch,
+            uploadFile,
+            createAuthenticatedFetch,
+            createRealtimeConnection,
+            delay
+        } from './exercises.js';
+
+        // Loading Manager instance
+        const loadingManager = createLoadingManager();
+        
+        // Cancellable fetch instance
+        const cancellableFetch = createCancellableFetch();
+        
+        // Cached fetch instance
+        const cachedFetch = createCachedFetch();
+        
+        // Real-time connection instance
+        let realtimeConnection = null;
+
+        // Exercise 1: Basic GET Request
+        window.testFetchUser = async () => {
+            const result = document.getElementById('fetchResult');
+            const userId = document.getElementById('userId').value;
+            
+            try {
+                result.textContent = 'Loading...';
+                const user = await fetchUserData(userId);
+                result.innerHTML = `<pre class="success">${JSON.stringify(user, null, 2)}</pre>`;
+            } catch (error) {
+                result.innerHTML = `<div class="error">${error.message}</div>`;
+            }
+        };
+
+        // Exercise 2: POST Request
+        window.testCreatePost = async () => {
+            const result = document.getElementById('postResult');
+            const title = document.getElementById('postTitle').value;
+            const body = document.getElementById('postBody').value;
+            
+            try {
+                result.textContent = 'Creating post...';
+                const post = await createPost({ title, body, userId: 1 });
+                result.innerHTML = `<pre class="success">${JSON.stringify(post, null, 2)}</pre>`;
+            } catch (error) {
+                result.innerHTML = `<div class="error">${error.message}</div>`;
+            }
+        };
+
+        // Exercise 3: Error Handling
+        window.testErrorHandling = async () => {
+            const result = document.getElementById('errorResult');
+            const url = document.getElementById('fetchUrl').value;
+            
+            result.textContent = 'Fetching...';
+            const response = await fetchWithErrorHandling(url);
+            
+            if (response.error) {
+                result.innerHTML = `<div class="error">${response.error}</div>`;
+            } else {
+                result.innerHTML = `<pre class="success">${JSON.stringify(response.data, null, 2)}</pre>`;
+            }
+        };
+
+        // Exercise 4: Loading States
+        window.testLoading = async () => {
+            const result = document.getElementById('loadingResult');
+            loadingManager.startLoading();
+            result.textContent = 'Request in progress...';
+            
+            try {
+                await delay(2000); // Simulate long request
+                result.innerHTML = '<div class="success">Request completed!</div>';
+            } finally {
+                loadingManager.stopLoading();
+            }
+        };
+
+        window.testMultipleLoading = async () => {
+            const result = document.getElementById('loadingResult');
+            
+            loadingManager.startLoading();
+            loadingManager.startLoading();
+            result.textContent = `Active requests: ${loadingManager.getLoadingCount()}`;
+            
+            await delay(1000);
+            loadingManager.stopLoading();
+            result.textContent = `Active requests: ${loadingManager.getLoadingCount()}`;
+            
+            await delay(1000);
+            loadingManager.stopLoading();
+            result.textContent = `Active requests: ${loadingManager.getLoadingCount()}`;
+        };
+
+        // Exercise 5: Multiple Requests
+        window.testMultipleRequests = async () => {
+            const result = document.getElementById('multipleResult');
+            
+            try {
+                result.textContent = 'Fetching data...';
+                const data = await fetchUserWithPosts(1);
+                result.innerHTML = `<pre class="success">${JSON.stringify(data, null, 2)}</pre>`;
+            } catch (error) {
+                result.innerHTML = `<div class="error">${error.message}</div>`;
+            }
+        };
+
+        // Exercise 6: Request Cancellation
+        window.testCancellation = async () => {
+            const result = document.getElementById('cancellationResult');
+            
+            try {
+                result.textContent = 'Starting long request...';
+                await cancellableFetch.fetch('https://jsonplaceholder.typicode.com/users/1');
+                result.innerHTML = '<div class="success">Request completed!</div>';
+            } catch (error) {
+                result.innerHTML = `<div class="error">${error.message}</div>`;
+            }
+        };
+
+        window.cancelRequest = () => {
+            cancellableFetch.cancel();
+        };
+
+        // Exercise 7: Response Caching
+        window.testCaching = async () => {
+            const result = document.getElementById('cachingResult');
+            const url = 'https://jsonplaceholder.typicode.com/users/1';
+            
+            try {
+                const startTime = performance.now();
+                const data = await cachedFetch(url);
+                const endTime = performance.now();
+                
+                result.innerHTML = `
+                    <div class="success">
+                        Request time: ${Math.round(endTime - startTime)}ms
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    </div>
+                `;
+            } catch (error) {
+                result.innerHTML = `<div class="error">${error.message}</div>`;
+            }
+        };
+
+        // Exercise 8: File Upload
+        window.testFileUpload = async () => {
+            const result = document.getElementById('uploadResult');
+            const fileInput = document.getElementById('fileInput');
+            const progressBar = document.getElementById('uploadProgress');
+            
+            if (!fileInput.files.length) {
+                result.innerHTML = '<div class="error">Please select a file</div>';
+                return;
+            }
+            
+            try {
+                result.textContent = 'Uploading...';
+                await uploadFile(fileInput.files[0], (progress) => {
+                    progressBar.style.width = `${progress}%`;
+                });
+                result.innerHTML = '<div class="success">Upload complete!</div>';
+            } catch (error) {
+                result.innerHTML = `<div class="error">${error.message}</div>`;
+            }
+        };
+
+        // Exercise 9: API Authentication
+        window.testAuthentication = async () => {
+            const result = document.getElementById('authResult');
+            const token = document.getElementById('authToken').value;
+            
+            if (!token) {
+                result.innerHTML = '<div class="error">Please enter an auth token</div>';
+                return;
+            }
+            
+            const authenticatedFetch = createAuthenticatedFetch(token);
+            
+            try {
+                result.textContent = 'Making authenticated request...';
+                const data = await authenticatedFetch('https://api.example.com/data');
+                result.innerHTML = `<pre class="success">${JSON.stringify(data, null, 2)}</pre>`;
+            } catch (error) {
+                result.innerHTML = `<div class="error">${error.message}</div>`;
+            }
+        };
+
+        // Exercise 10: Real-time Updates
+        window.startRealtimeUpdates = () => {
+            const result = document.getElementById('realtimeResult');
+            
+            if (realtimeConnection) {
+                result.innerHTML = '<div class="error">Updates already running</div>';
+                return;
+            }
+            
+            result.textContent = 'Starting real-time updates...';
+            realtimeConnection = createRealtimeConnection(
+                'wss://echo.websocket.org',
+                (data) => {
+                    result.innerHTML += `<div class="success">Update received: ${JSON.stringify(data)}</div>`;
+                }
+            );
+            
+            realtimeConnection.connect();
+        };
+
+        window.stopRealtimeUpdates = () => {
+            const result = document.getElementById('realtimeResult');
+            
+            if (!realtimeConnection) {
+                result.innerHTML = '<div class="error">No active connection</div>';
+                return;
+            }
+            
+            realtimeConnection.disconnect();
+            realtimeConnection = null;
+            result.innerHTML += '<div>Real-time updates stopped</div>';
+        };
+    </script>
+</body>
+</html> 

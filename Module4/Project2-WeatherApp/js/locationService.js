@@ -1,8 +1,14 @@
+import { Cache } from './cache.js';
+
 export class LocationService {
     constructor() {
         this.geocodingUrl = 'https://api.openweathermap.org/geo/1.0';
-        this.searchCache = new Map();
-        this.cacheTimeout = 1000 * 60 * 60; // 1 hour
+        this.cache = new Cache();
+        this.init();
+    }
+
+    async init() {
+        await this.cache.init();
     }
 
     async getCurrentPosition() {
@@ -28,14 +34,6 @@ export class LocationService {
     }
 
     async searchLocations(query) {
-        // Check cache first
-        const cacheKey = query.toLowerCase();
-        const cachedResult = this.searchCache.get(cacheKey);
-        
-        if (cachedResult && Date.now() - cachedResult.timestamp < this.cacheTimeout) {
-            return cachedResult.data;
-        }
-
         try {
             const endpoint = `${this.geocodingUrl}/direct`;
             const params = {
@@ -46,25 +44,29 @@ export class LocationService {
 
             const response = await this.makeRequest(endpoint, params);
             
-            const locations = response.map(location => ({
+            return response.map(location => ({
                 name: this.formatLocationName(location),
                 lat: location.lat,
                 lon: location.lon,
                 country: location.country,
                 state: location.state
             }));
-
-            // Cache the results
-            this.searchCache.set(cacheKey, {
-                data: locations,
-                timestamp: Date.now()
-            });
-
-            return locations;
         } catch (error) {
             console.error('Location search error:', error);
             throw new Error('Failed to search locations');
         }
+    }
+
+    async addFavorite(location) {
+        await this.cache.addFavorite(location);
+    }
+
+    async removeFavorite(location) {
+        await this.cache.removeFavorite(location);
+    }
+
+    async getFavorites() {
+        return await this.cache.getFavorites();
     }
 
     async reverseGeocode(lat, lon) {
@@ -134,6 +136,6 @@ export class LocationService {
     }
 
     clearCache() {
-        this.searchCache.clear();
+        this.cache.clear();
     }
 } 

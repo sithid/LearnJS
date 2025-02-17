@@ -1,0 +1,135 @@
+/* Light Theme (Default) */
+:root {
+    --primary-color: #4a90e2;
+    --secondary-color: #6c757d;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --background-color: #f5f7fa;
+    --card-background: #ffffff;
+    --text-color: #333333;
+    --text-secondary: #666666;
+    --border-color: #e0e0e0;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --input-background: #ffffff;
+    --chart-grid-color: #e0e0e0;
+    --chart-text-color: #666666;
+}
+
+/* Dark Theme */
+[data-theme="dark"] {
+    --primary-color: #66b1ff;
+    --secondary-color: #a0aec0;
+    --success-color: #48bb78;
+    --danger-color: #f56565;
+    --background-color: #1a202c;
+    --card-background: #2d3748;
+    --text-color: #e2e8f0;
+    --text-secondary: #a0aec0;
+    --border-color: #4a5568;
+    --shadow-color: rgba(0, 0, 0, 0.25);
+    --input-background: #2d3748;
+    --chart-grid-color: #4a5568;
+    --chart-text-color: #a0aec0;
+}
+
+/* Theme-specific Styles */
+[data-theme="dark"] {
+    /* Input Fields */
+    .search-container input,
+    .search-results {
+        background-color: var(--input-background);
+        color: var(--text-color);
+        border-color: var(--border-color);
+    }
+
+    .search-result:hover,
+    .search-result:focus {
+        background-color: var(--border-color);
+    }
+
+    /* Weather Cards */
+    .weather-main,
+    .detail,
+    .forecast-item,
+    .chart-wrapper {
+        background-color: var(--card-background);
+        border-color: var(--border-color);
+    }
+
+    /* Icons */
+    .wi {
+        color: var(--text-color);
+    }
+
+    /* Charts */
+    canvas {
+        filter: brightness(0.8);
+    }
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+    position: relative;
+    width: 40px;
+    height: 40px;
+}
+
+.theme-toggle button {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: none;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    transition: background-color 0.3s;
+}
+
+.theme-toggle button:hover {
+    background-color: var(--border-color);
+}
+
+/* Theme Icons */
+.theme-icon {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: transform 0.3s;
+}
+
+[data-theme="light"] .theme-icon {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23333'%3E%3Cpath d='M12 3a1 1 0 0 1 1 1v1a1 1 0 1 1-2 0V4a1 1 0 0 1 1-1zm0 15a1 1 0 0 1 1 1v1a1 1 0 1 1-2 0v-1a1 1 0 0 1 1-1zm9-7a1 1 0 0 1-1 1h-1a1 1 0 1 1 0-2h1a1 1 0 0 1 1 1zM4 12a1 1 0 0 1-1 1H2a1 1 0 1 1 0-2h1a1 1 0 0 1 1 1zm15.7-7.7a1 1 0 0 1 0 1.4l-.7.7a1 1 0 1 1-1.4-1.4l.7-.7a1 1 0 0 1 1.4 0zM4.3 19.7a1 1 0 0 1 0-1.4l.7-.7a1 1 0 1 1 1.4 1.4l-.7.7a1 1 0 0 1-1.4 0zM4.3 4.3a1 1 0 0 1 1.4 0l.7.7a1 1 0 1 1-1.4 1.4l-.7-.7a1 1 0 0 1 0-1.4zm15.4 15.4a1 1 0 0 1-1.4 0l-.7-.7a1 1 0 1 1 1.4-1.4l.7.7a1 1 0 0 1 0 1.4zM12 6a6 6 0 1 1 0 12 6 6 0 0 1 0-12z'/%3E%3C/svg%3E");
+}
+
+[data-theme="dark"] .theme-icon {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23e2e8f0'%3E%3Cpath d='M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446A9 9 0 1 1 12 3z'/%3E%3C/svg%3E");
+}
+
+/* Transition Styles */
+.theme-transition {
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+
+/* Chart Theme Overrides */
+[data-theme="dark"] .chart-wrapper {
+    --chart-background: var(--card-background);
+    --chart-grid-color: var(--border-color);
+    --chart-text-color: var(--text-secondary);
+}
+
+/* Loading and Error States */
+[data-theme="dark"] .loading-indicator {
+    background-color: var(--card-background);
+}
+
+[data-theme="dark"] .error-container {
+    background-color: var(--danger-color);
+    color: var(--text-color);
+}
+
+/* Focus Styles */
+[data-theme="dark"] *:focus {
+    outline-color: var(--primary-color);
+} 
