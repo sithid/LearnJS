@@ -1,11 +1,7 @@
 // Exercise 1: Arrow Functions and Lexical Scope
 export const createCounter = () => {
-    let count = 0;
-    return {
-        increment: () => ++count,
-        decrement: () => --count,
-        getCount: () => count
-    };
+    // TODO: Create a counter object with increment, decrement, and getCount methods
+    // Use arrow functions and closure to maintain count
 };
 
 // Exercise 2: Template Literals

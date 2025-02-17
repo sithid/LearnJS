@@ -1,292 +1,113 @@
-// Exercise 1: Basic Modules
-// TODO: Implement the following modules
+// Exercise 1: Basic Module Exports
+// TODO: Export mathematical constants PI and E
+// TODO: Export functions square and cube that calculate the square and cube of a number
+// Use named exports for all items
 
-// math.js
-export const MathOperations = {
-    // TODO: Implement basic math operations
-    add: (a, b) => {
-        // Implement addition
-    },
-    subtract: (a, b) => {
-        // Implement subtraction
-    },
-    multiply: (a, b) => {
-        // Implement multiplication
-    },
-    divide: (a, b) => {
-        // Implement division with error handling for divide by zero
-    }
+// Exercise 2: Default Exports
+// TODO: Create and export a Calculator class as the default export
+// The calculator should have methods: add, subtract, multiply, divide
+// Each method should take two parameters and return the result of the operation
+
+// Exercise 3: Module Organization
+// TODO: Create a userUtils object with methods:
+// - validateEmail(email) - returns true if email is valid
+// - formatName(firstName, lastName) - returns properly formatted full name
+// Export userUtils as a named export
+
+// Exercise 4: Module Dependencies
+// TODO: Import date formatting and input validation utilities (assume they exist)
+// Create and export an async function processUserData that:
+// - Takes a user object with firstName, lastName, and date
+// - Returns a processed object with fullName and formattedDate
+// Handle any potential errors
+
+// Exercise 5: Dynamic Imports
+// TODO: Create and export an async function loadModule that:
+// - Takes a module name as parameter
+// - Dynamically imports the module
+// - Returns the module exports
+// Handle loading errors appropriately
+
+// Exercise 6: Module Aggregation
+// TODO: Create a module that re-exports functionality from:
+// - userUtils (Exercise 3)
+// - Calculator (Exercise 2)
+// - Mathematical functions (Exercise 1)
+// Export them as a single object
+
+// Exercise 7: Circular Dependencies
+// TODO: Create two modules that depend on each other
+// Module A should export a function that uses Module B
+// Module B should export a function that uses Module A
+// Implement this in a way that avoids initialization problems
+
+// Exercise 8: Module State
+// TODO: Create a state manager that:
+// - Maintains private state
+// - Provides methods to get and set state
+// - Ensures state updates are safe
+// Export the state manager interface
+
+// Exercise 9: Module Initialization
+// TODO: Create a database module that:
+// - Has an async initialize method
+// - Provides methods for CRUD operations
+// - Has a cleanup method
+// Export the database interface
+
+// Exercise 10: Module Patterns
+// TODO: Implement and export:
+// - A singleton logger
+// - A calculator using the module pattern
+// - A user factory
+// Export all patterns in a single object
+
+// Default export for Exercise 2
+export default class Calculator {
+    // TODO: Implement calculator methods
+}
+
+// Named exports for Exercise 1
+export const PI = undefined;
+export const E = undefined;
+export const square = x => {
+    // TODO: Implement square function
+};
+export const cube = x => {
+    // TODO: Implement cube function
 };
 
-// string-utils.js
-export const StringUtils = {
-    // TODO: Implement string utility functions
-    capitalize: (str) => {
-        // Implement string capitalization
-    },
-    reverse: (str) => {
-        // Implement string reversal
-    },
-    countWords: (str) => {
-        // Implement word counting
-    },
-    format: (template, ...args) => {
-        // Implement string template formatting
-    }
+// Named export for Exercise 3
+export const userUtils = {
+    // TODO: Implement userUtils methods
 };
 
-// date-formatter.js
-export const DateFormatter = {
-    // TODO: Implement date formatting functions
-    formatDate: (date) => {
-        // Format date as YYYY-MM-DD
-    },
-    formatTime: (date) => {
-        // Format time as HH:mm:ss
-    },
-    getRelativeTime: (date) => {
-        // Return relative time (e.g., "2 hours ago")
-    }
+// Export for Exercise 4
+export const processUserData = async ({ firstName, lastName, date }) => {
+    // TODO: Implement processUserData
 };
 
-// validator.js
-export const NumberValidator = {
-    // TODO: Implement number validation functions
-    isInteger: (num) => {
-        // Check if number is integer
-    },
-    isInRange: (num, min, max) => {
-        // Check if number is in range
-    },
-    isPositive: (num) => {
-        // Check if number is positive
-    },
-    isValidPhoneNumber: (num) => {
-        // Validate phone number format
-    }
+// Export for Exercise 5
+export const loadModule = async (moduleName) => {
+    // TODO: Implement loadModule
 };
 
-// Exercise 2: Module Organization
-// TODO: Implement the following module system
-
-// user.js
-export class User {
-    // TODO: Implement user management
-    constructor(id, name, email) {
-        // Initialize user properties
-    }
-
-    updateProfile(data) {
-        // Update user profile
-    }
-
-    static validate(userData) {
-        // Validate user data
-    }
-}
-
-// product.js
-export class Product {
-    // TODO: Implement product catalog
-    constructor(id, name, price, category) {
-        // Initialize product properties
-    }
-
-    updatePrice(newPrice) {
-        // Update product price
-    }
-
-    static search(query) {
-        // Search products
-    }
-}
-
-// cart.js
-export class ShoppingCart {
-    // TODO: Implement shopping cart
-    constructor() {
-        // Initialize cart
-    }
-
-    addItem(product, quantity) {
-        // Add item to cart
-    }
-
-    removeItem(productId) {
-        // Remove item from cart
-    }
-
-    calculateTotal() {
-        // Calculate cart total
-    }
-}
-
-// order.js
-export class Order {
-    // TODO: Implement order processing
-    constructor(cart, user) {
-        // Initialize order
-    }
-
-    process() {
-        // Process order
-    }
-
-    generateInvoice() {
-        // Generate invoice
-    }
-}
-
-// Exercise 3: Advanced Patterns
-// TODO: Implement the following module patterns
-
-// factory.js
-export const UserFactory = {
-    // TODO: Implement factory pattern
-    createCustomer(data) {
-        // Create customer user
-    },
-    createAdmin(data) {
-        // Create admin user
-    },
-    createGuest() {
-        // Create guest user
-    }
+// Export for Exercise 7
+export const moduleA = {
+    // TODO: Implement moduleA
 };
 
-// singleton.js
-export class Database {
-    // TODO: Implement singleton pattern
-    constructor() {
-        if (Database.instance) {
-            return Database.instance;
-        }
-        // Initialize database connection
-        Database.instance = this;
-    }
+// Export for Exercise 8
+export const stateManager = {
+    // TODO: Implement state manager
+};
 
-    query(sql) {
-        // Execute query
-    }
-}
+// Export for Exercise 9
+export const databaseModule = {
+    // TODO: Implement database module
+};
 
-// observer.js
-export class EventSystem {
-    // TODO: Implement observer pattern
-    constructor() {
-        // Initialize event system
-    }
-
-    subscribe(event, callback) {
-        // Subscribe to event
-    }
-
-    unsubscribe(event, callback) {
-        // Unsubscribe from event
-    }
-
-    emit(event, data) {
-        // Emit event
-    }
-}
-
-// builder.js
-export class QueryBuilder {
-    // TODO: Implement builder pattern
-    constructor() {
-        // Initialize query builder
-    }
-
-    select(fields) {
-        // Add SELECT clause
-        return this;
-    }
-
-    where(condition) {
-        // Add WHERE clause
-        return this;
-    }
-
-    build() {
-        // Build and return query
-    }
-}
-
-// Exercise 4: Dynamic Loading
-// TODO: Implement dynamic module loading
-
-export async function loadFeature(featureName) {
-    // TODO: Implement dynamic module loading
-    try {
-        // Load module dynamically
-        // Show loading progress
-        // Handle errors
-    } catch (error) {
-        // Handle loading errors
-    }
-}
-
-// Exercise 5: Real Application
-// TODO: Implement a modular application
-
-// core.js
-export class Core {
-    // TODO: Implement core functionality
-    constructor() {
-        // Initialize core system
-    }
-
-    start() {
-        // Start application
-    }
-
-    stop() {
-        // Stop application
-    }
-}
-
-// ui.js
-export class UI {
-    // TODO: Implement UI components
-    constructor() {
-        // Initialize UI
-    }
-
-    render(component, data) {
-        // Render UI component
-    }
-
-    update(component, data) {
-        // Update UI component
-    }
-}
-
-// data.js
-export class DataManager {
-    // TODO: Implement data management
-    constructor() {
-        // Initialize data manager
-    }
-
-    async fetch(resource) {
-        // Fetch data
-    }
-
-    async save(resource, data) {
-        // Save data
-    }
-}
-
-// utils.js
-export const Utils = {
-    // TODO: Implement utility functions
-    debounce(func, wait) {
-        // Implement debounce
-    },
-    throttle(func, limit) {
-        // Implement throttle
-    },
-    memoize(func) {
-        // Implement memoization
-    }
+// Export for Exercise 10
+export const modulePatterns = {
+    // TODO: Implement module patterns
 }; 

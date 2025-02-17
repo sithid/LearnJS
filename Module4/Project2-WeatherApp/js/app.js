@@ -1,221 +1,181 @@
-import { WeatherService } from './weather.js';
-import { LocationService } from './location.js';
-import { UI } from './ui.js';
-import { Cache } from './cache.js';
+import { WeatherUI } from './components/WeatherUI.js';
+import { LocationSearch } from './components/LocationSearch.js';
+import { WeatherForecast } from './components/WeatherForecast.js';
+import { WeatherService } from './services/weatherService.js';
+import { WeatherCharts } from './utils/charts.js';
+import { notificationManager } from './utils/notifications.js';
+import { geolocationService } from './utils/geolocation.js';
+import { initializeTheme } from './utils/theme.js';
 
-class App {
+class WeatherApp {
     constructor() {
-        this.cache = new Cache();
-        this.weatherService = new WeatherService(process.env.WEATHER_API_KEY);
-        this.locationService = new LocationService();
-        this.ui = new UI();
+        this.ui = new WeatherUI();
+        this.locationSearch = new LocationSearch();
+        this.forecast = new WeatherForecast();
+        this.charts = new WeatherCharts();
+        this.weatherService = new WeatherService();
         
-        this.currentUnit = 'celsius';
-        this.currentLocation = null;
-        
-        this.init();
+        this.initialize();
     }
 
-    async init() {
+    async initialize() {
         try {
-            // Show loading state
-            this.ui.showLoading();
+            // Initialize theme
+            initializeTheme();
 
-            // Initialize services
-            await this.initializeServices();
+            // Initialize notifications
+            await notificationManager.initialize();
 
-            // Set up event listeners
+            // Setup event listeners
             this.setupEventListeners();
 
-            // Try to get user's location
-            await this.getUserLocation();
-
-            // Hide loading state
-            this.ui.hideLoading();
+            // Try to load last location or get current location
+            await this.loadInitialLocation();
         } catch (error) {
-            console.error('Failed to initialize app:', error);
-            this.ui.showError('Failed to load weather data. Please try again.');
-            this.ui.hideLoading();
-        }
-    }
-
-    async initializeServices() {
-        // Initialize cache
-        await this.cache.init();
-
-        // Load saved favorites
-        const favorites = await this.cache.getFavorites();
-        this.ui.renderFavorites(favorites);
-
-        // Set saved temperature unit
-        const savedUnit = localStorage.getItem('temperatureUnit');
-        if (savedUnit) {
-            this.currentUnit = savedUnit;
-            this.ui.updateUnitDisplay(savedUnit);
+            console.error('Initialization error:', error);
+            this.ui.showError('Failed to initialize the application');
         }
     }
 
     setupEventListeners() {
-        // Search
-        document.getElementById('location-search').addEventListener('input', (e) => {
-            this.handleSearch(e.target.value);
-        });
-
-        document.getElementById('search-btn').addEventListener('click', () => {
-            const searchInput = document.getElementById('location-search');
-            this.handleSearch(searchInput.value);
-        });
-
-        // Geolocation
-        document.getElementById('geolocation-btn').addEventListener('click', () => {
-            this.getUserLocation();
-        });
-
-        // Temperature unit toggle
-        document.getElementById('unit-toggle').addEventListener('click', () => {
-            this.toggleTemperatureUnit();
-        });
-
-        // Theme toggle
-        document.getElementById('theme-toggle').addEventListener('click', () => {
-            this.ui.toggleTheme();
-        });
-
-        // Favorites
-        document.getElementById('add-favorite').addEventListener('click', () => {
-            this.toggleFavorite();
-        });
-
-        // Search results
-        document.getElementById('search-results').addEventListener('click', (e) => {
-            if (e.target.classList.contains('search-result')) {
-                this.handleLocationSelect(e.target.dataset.location);
-            }
-        });
-    }
-
-    async handleSearch(query) {
-        if (query.length < 3) {
-            this.ui.hideSearchResults();
-            return;
-        }
-
-        try {
-            const locations = await this.locationService.searchLocations(query);
-            this.ui.showSearchResults(locations);
-        } catch (error) {
-            console.error('Search failed:', error);
-            this.ui.showError('Location search failed. Please try again.');
-        }
-    }
-
-    async handleLocationSelect(locationData) {
-        try {
-            this.ui.showLoading();
-            this.ui.hideSearchResults();
-
-            const location = JSON.parse(locationData);
-            this.currentLocation = location;
-
-            // Get weather data
-            await this.updateWeatherData(location);
-
-            // Clear search
-            document.getElementById('location-search').value = '';
-        } catch (error) {
-            console.error('Failed to get weather data:', error);
-            this.ui.showError('Failed to get weather data. Please try again.');
-        } finally {
-            this.ui.hideLoading();
-        }
-    }
-
-    async getUserLocation() {
-        try {
-            this.ui.showLoading();
-            const position = await this.locationService.getCurrentPosition();
-            const location = await this.locationService.reverseGeocode(
-                position.coords.latitude,
-                position.coords.longitude
-            );
-            
-            this.currentLocation = location;
-            await this.updateWeatherData(location);
-        } catch (error) {
-            console.error('Failed to get user location:', error);
-            this.ui.showError('Failed to get your location. Please search for a location instead.');
-        } finally {
-            this.ui.hideLoading();
-        }
-    }
-
-    async updateWeatherData(location) {
-        try {
-            // Get current weather
-            const weatherData = await this.weatherService.getCurrentWeather(
-                location.lat,
-                location.lon
-            );
-
-            // Get forecast
-            const forecast = await this.weatherService.getForecast(
-                location.lat,
-                location.lon
-            );
-
-            // Update UI
-            this.ui.updateWeatherDisplay(weatherData, this.currentUnit);
-            this.ui.updateForecast(forecast, this.currentUnit);
-            this.ui.updateCharts(forecast);
-            this.ui.updateLocationName(location.name);
-
-            // Cache the data
-            await this.cache.cacheWeatherData(location, weatherData, forecast);
-        } catch (error) {
-            throw new Error('Failed to update weather data');
-        }
-    }
-
-    async toggleFavorite() {
-        if (!this.currentLocation) return;
-
-        try {
-            const favorites = await this.cache.getFavorites();
-            const isFavorite = favorites.some(fav => 
-                fav.lat === this.currentLocation.lat && 
-                fav.lon === this.currentLocation.lon
-            );
-
-            if (isFavorite) {
-                await this.cache.removeFavorite(this.currentLocation);
-                this.ui.showSuccess('Location removed from favorites');
+        // Setup location search
+        this.locationSearch.onSearch(async (query) => {
+            if (typeof query === 'string') {
+                return await this.weatherService.searchLocation(query);
             } else {
-                await this.cache.addFavorite(this.currentLocation);
-                this.ui.showSuccess('Location added to favorites');
+                await this.updateWeather(query);
             }
+        });
 
-            const updatedFavorites = await this.cache.getFavorites();
-            this.ui.renderFavorites(updatedFavorites);
-            this.ui.updateFavoriteButton(isFavorite);
+        // Setup geolocation button
+        const geoButton = document.getElementById('geolocation-btn');
+        if (geoButton) {
+            geoButton.addEventListener('click', () => this.getCurrentLocation());
+        }
+
+        // Setup favorites
+        const favoritesContainer = document.getElementById('favorites-list');
+        if (favoritesContainer) {
+            favoritesContainer.addEventListener('click', (e) => {
+                const favoriteItem = e.target.closest('.favorite-location');
+                if (favoriteItem) {
+                    const location = {
+                        name: favoriteItem.dataset.name,
+                        lat: parseFloat(favoriteItem.dataset.lat),
+                        lon: parseFloat(favoriteItem.dataset.lon)
+                    };
+                    this.updateWeather(location);
+                }
+            });
+        }
+
+        // Listen for unit changes
+        document.addEventListener('unit-changed', async () => {
+            const currentLocation = this.weatherService.getCurrentLocation();
+            if (currentLocation) {
+                await this.updateWeather(currentLocation);
+            }
+        });
+    }
+
+    async loadInitialLocation() {
+        const savedLocation = localStorage.getItem('lastLocation');
+        if (savedLocation) {
+            try {
+                const location = JSON.parse(savedLocation);
+                await this.updateWeather(location);
+                return;
+            } catch (error) {
+                console.error('Error loading saved location:', error);
+            }
+        }
+        
+        await this.getCurrentLocation();
+    }
+
+    async getCurrentLocation() {
+        try {
+            this.ui.showLoading();
+            const position = await geolocationService.getCurrentPosition();
+            const location = {
+                name: 'Current Location',
+                lat: position.coords.latitude,
+                lon: position.coords.longitude
+            };
+            await this.updateWeather(location);
         } catch (error) {
-            console.error('Failed to update favorites:', error);
-            this.ui.showError('Failed to update favorites. Please try again.');
+            console.error('Geolocation error:', error);
+            this.ui.showError('Failed to get current location. Please search for a location manually.');
+        } finally {
+            this.ui.hideLoading();
         }
     }
 
-    toggleTemperatureUnit() {
-        this.currentUnit = this.currentUnit === 'celsius' ? 'fahrenheit' : 'celsius';
-        localStorage.setItem('temperatureUnit', this.currentUnit);
-        
-        this.ui.updateUnitDisplay(this.currentUnit);
-        
-        if (this.currentLocation) {
-            this.updateWeatherData(this.currentLocation);
+    async updateWeather(location) {
+        try {
+            this.ui.showLoading();
+
+            // Save location
+            localStorage.setItem('lastLocation', JSON.stringify(location));
+
+            // Fetch weather data
+            const [currentWeather, forecast] = await Promise.all([
+                this.weatherService.getCurrentWeather(location),
+                this.weatherService.getForecast(location)
+            ]);
+
+            // Update UI components
+            this.ui.updateCurrentWeather(currentWeather);
+            this.forecast.updateForecast(forecast);
+
+            // Update charts
+            this.updateCharts(forecast);
+
+            // Check for weather alerts
+            if (currentWeather.alerts && currentWeather.alerts.length > 0) {
+                notificationManager.showWeatherAlert(currentWeather.alerts[0]);
+            }
+
+        } catch (error) {
+            console.error('Error updating weather:', error);
+            this.ui.showError('Failed to update weather information');
+        } finally {
+            this.ui.hideLoading();
         }
+    }
+
+    updateCharts(forecast) {
+        const temperatureData = {
+            labels: forecast.list.map(item => new Date(item.dt * 1000).toLocaleTimeString()),
+            datasets: [{
+                label: 'Temperature',
+                data: forecast.list.map(item => item.temp)
+            }]
+        };
+
+        const humidityData = {
+            labels: forecast.list.map(item => new Date(item.dt * 1000).toLocaleTimeString()),
+            datasets: [{
+                label: 'Humidity',
+                data: forecast.list.map(item => item.humidity)
+            }]
+        };
+
+        const windData = {
+            labels: forecast.list.map(item => new Date(item.dt * 1000).toLocaleTimeString()),
+            datasets: [{
+                label: 'Wind Speed',
+                data: forecast.list.map(item => item.windSpeed)
+            }]
+        };
+
+        this.charts.createTemperatureChart('temperature-chart', temperatureData);
+        this.charts.createHumidityChart('humidity-chart', humidityData);
+        this.charts.createWindChart('wind-chart', windData);
     }
 }
 
-// Initialize the application
+// Initialize the app when the DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    window.app = new App();
+    new WeatherApp();
 }); 

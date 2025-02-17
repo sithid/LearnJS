@@ -188,4 +188,91 @@ document.addEventListener('DOMContentLoaded', async function() {
     } catch (error) {
         console.error('Test error:', error);
     }
-}); 
+});
+
+// Exercise 1: Basic Promise Creation
+export const createDelayedPromise = (value, delay) => {
+    // TODO: Return a promise that resolves with the value after delay milliseconds
+};
+
+// Exercise 2: Promise Chaining
+export const processUserData = (userId) => {
+    // TODO: Simulate fetching user data, then their posts
+    // Return a promise that resolves with { user, posts }
+    // Use the fetchUser and fetchUserPosts helper functions
+};
+
+// Exercise 3: Promise Error Handling
+export const fetchWithRetry = (url, maxRetries) => {
+    // TODO: Implement a fetch with retry mechanism
+    // Retry failed requests up to maxRetries times
+    // Use exponential backoff between retries
+};
+
+// Exercise 4: Promise.all Usage
+export const fetchAllUserData = (userIds) => {
+    // TODO: Fetch data for all users in parallel using Promise.all
+    // Return array of user data
+};
+
+// Exercise 5: Promise.race Implementation
+export const fetchWithTimeout = (url, timeoutMs) => {
+    // TODO: Race between fetch request and timeout
+    // Reject if request takes longer than timeoutMs
+};
+
+// Exercise 6: Async/Await Basics
+export const getUserDetails = async (userId) => {
+    // TODO: Use async/await to fetch user and their posts
+    // Handle errors appropriately
+};
+
+// Exercise 7: Async Error Handling
+export const processDataWithRetry = async (data) => {
+    // TODO: Process data with retry mechanism using async/await
+    // Implement exponential backoff
+    // Maximum 3 retries
+};
+
+// Exercise 8: Parallel Processing
+export const processInParallel = async (tasks) => {
+    // TODO: Execute multiple async tasks in parallel
+    // Return results as they complete
+    // Handle errors for individual tasks
+};
+
+// Exercise 9: Sequential Processing
+export const processInSequence = async (tasks) => {
+    // TODO: Execute async tasks in sequence
+    // Each task depends on the previous task's result
+};
+
+// Exercise 10: Real-world Example
+export const fetchAndCacheUserData = async (userId, cache) => {
+    // TODO: Implement a caching mechanism for user data
+    // Check cache before fetching
+    // Update cache with new data
+    // Handle errors appropriately
+};
+
+// Helper functions (simulated API calls)
+const fetchUser = async (userId) => {
+    await new Promise(resolve => setTimeout(resolve, 100));
+    return { id: userId, name: `User ${userId}`, email: `user${userId}@example.com` };
+};
+
+const fetchUserPosts = async (userId) => {
+    await new Promise(resolve => setTimeout(resolve, 100));
+    return [
+        { id: 1, userId, title: 'Post 1' },
+        { id: 2, userId, title: 'Post 2' }
+    ];
+};
+
+// Helper function for processDataWithRetry
+const processData = async (data) => {
+    if (Math.random() < 0.5) { // Simulate random failures
+        throw new Error('Processing failed');
+    }
+    return `Processed: ${data}`;
+};
