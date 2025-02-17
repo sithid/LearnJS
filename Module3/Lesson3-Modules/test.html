@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modules - Tests</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .test-result {
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 4px;
+        }
+        .pass {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            border-left: 4px solid #2e7d32;
+        }
+        .fail {
+            background-color: #fbe9e7;
+            color: #c62828;
+            border-left: 4px solid #c62828;
+        }
+        .console-output {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        h1 {
+            color: #333;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+        .summary {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e3f2fd;
+            border-radius: 4px;
+        }
+        /* Test environment styles */
+        .test-environment {
+            display: none;
+        }
+        #app-container {
+            padding: 20px;
+            border: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Modules - Test Results</h1>
+        <div id="test-results"></div>
+        <div id="summary" class="summary"></div>
+    </div>
+
+    <!-- Test Environment (Hidden) -->
+    <div class="test-environment">
+        <div id="app-container"></div>
+    </div>
+
+    <script type="module">
+        // Import student's code
+        import * as exercises from './exercises.js';
+        const {
+            MathOperations,
+            StringUtils,
+            DateFormatter,
+            NumberValidator,
+            User,
+            Product,
+            ShoppingCart,
+            Order,
+            UserFactory,
+            Database,
+            EventSystem,
+            QueryBuilder,
+            loadFeature,
+            Core,
+            UI
+        } = exercises;
+
+        // Test runner
+        class TestRunner {
+            constructor() {
+                this.results = [];
+                this.passCount = 0;
+                this.totalTests = 0;
+            }
+
+            assert(condition, message) {
+                if (!condition) {
+                    throw new Error(message);
+                }
+            }
+
+            assertEqual(actual, expected, message) {
+                if (JSON.stringify(actual) !== JSON.stringify(expected)) {
+                    throw new Error(`${message}\nExpected: ${JSON.stringify(expected)}\nActual: ${JSON.stringify(actual)}`);
+                }
+            }
+
+            addResult(testName, passed, error = null) {
+                this.results.push({ testName, passed, error });
+                if (passed) this.passCount++;
+                this.totalTests++;
+            }
+
+            displayResults() {
+                const container = document.getElementById('test-results');
+                const summary = document.getElementById('summary');
+                
+                this.results.forEach(result => {
+                    const div = document.createElement('div');
+                    div.className = `test-result ${result.passed ? 'pass' : 'fail'}`;
+                    div.textContent = `${result.passed ? '✅' : '❌'} ${result.testName}`;
+                    
+                    if (!result.passed && result.error) {
+                        const errorDiv = document.createElement('div');
+                        errorDiv.className = 'console-output';
+                        errorDiv.textContent = result.error;
+                        div.appendChild(errorDiv);
+                    }
+                    
+                    container.appendChild(div);
+                });
+
+                summary.textContent = `Passed ${this.passCount} of ${this.totalTests} tests (${Math.round(this.passCount/this.totalTests*100)}%)`;
+            }
+
+            async runTest(testName, testFn) {
+                try {
+                    await testFn();
+                    this.addResult(testName, true);
+                } catch (error) {
+                    this.addResult(testName, false, error.message);
+                }
+            }
+        }
+
+        // Initialize test runner
+        const runner = new TestRunner();
+
+        // Run tests
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Test Basic Modules
+            await runner.runTest('Math Operations - Basic Math', () => {
+                runner.assertEqual(MathOperations.add(2, 3), 5, 'Addition should work correctly');
+                runner.assertEqual(MathOperations.subtract(5, 3), 2, 'Subtraction should work correctly');
+                runner.assertEqual(MathOperations.multiply(4, 3), 12, 'Multiplication should work correctly');
+                runner.assertEqual(MathOperations.divide(6, 2), 3, 'Division should work correctly');
+                
+                try {
+                    MathOperations.divide(1, 0);
+                    throw new Error('Should throw error for divide by zero');
+                } catch (error) {
+                    // Expected error
+                }
+            });
+
+            await runner.runTest('String Utils - String Operations', () => {
+                runner.assertEqual(
+                    StringUtils.capitalize('hello world'),
+                    'Hello World',
+                    'Capitalization should work'
+                );
+                runner.assertEqual(
+                    StringUtils.reverse('hello'),
+                    'olleh',
+                    'String reversal should work'
+                );
+                runner.assertEqual(
+                    StringUtils.countWords('hello world test'),
+                    3,
+                    'Word counting should work'
+                );
+                runner.assertEqual(
+                    StringUtils.format('Hello {0}!', 'World'),
+                    'Hello World!',
+                    'String formatting should work'
+                );
+            });
+
+            await runner.runTest('Date Formatter - Date Operations', () => {
+                const date = new Date('2023-01-15T14:30:00');
+                runner.assertEqual(
+                    DateFormatter.formatDate(date),
+                    '2023-01-15',
+                    'Date formatting should work'
+                );
+                runner.assertEqual(
+                    DateFormatter.formatTime(date),
+                    '14:30:00',
+                    'Time formatting should work'
+                );
+                runner.assert(
+                    DateFormatter.getRelativeTime(date).includes('ago'),
+                    'Relative time should work'
+                );
+            });
+
+            await runner.runTest('Number Validator - Validation', () => {
+                runner.assert(NumberValidator.isInteger(5), 'Integer validation should work');
+                runner.assert(NumberValidator.isInRange(5, 0, 10), 'Range validation should work');
+                runner.assert(NumberValidator.isPositive(5), 'Positive number validation should work');
+                runner.assert(
+                    NumberValidator.isValidPhoneNumber('123-456-7890'),
+                    'Phone number validation should work'
+                );
+            });
+
+            // Test Module Organization
+            await runner.runTest('User Module - User Management', () => {
+                const user = new User(1, 'John', 'john@example.com');
+                user.updateProfile({ name: 'John Doe' });
+                runner.assertEqual(user.name, 'John Doe', 'Profile update should work');
+                runner.assert(
+                    User.validate({ name: 'John', email: 'john@example.com' }),
+                    'User validation should work'
+                );
+            });
+
+            await runner.runTest('Product Module - Product Management', () => {
+                const product = new Product(1, 'Test Product', 99.99, 'Electronics');
+                product.updatePrice(89.99);
+                runner.assertEqual(product.price, 89.99, 'Price update should work');
+                const results = Product.search('Test');
+                runner.assert(Array.isArray(results), 'Product search should work');
+            });
+
+            await runner.runTest('Shopping Cart - Cart Operations', () => {
+                const cart = new ShoppingCart();
+                const product = new Product(1, 'Test Product', 99.99, 'Electronics');
+                
+                cart.addItem(product, 2);
+                runner.assertEqual(cart.calculateTotal(), 199.98, 'Cart total should be correct');
+                
+                cart.removeItem(1);
+                runner.assertEqual(cart.calculateTotal(), 0, 'Cart should be empty after removal');
+            });
+
+            await runner.runTest('Order Module - Order Processing', () => {
+                const user = new User(1, 'John', 'john@example.com');
+                const cart = new ShoppingCart();
+                const order = new Order(cart, user);
+                
+                runner.assert(order.process(), 'Order processing should work');
+                const invoice = order.generateInvoice();
+                runner.assert(invoice, 'Invoice generation should work');
+            });
+
+            // Test Advanced Patterns
+            await runner.runTest('Factory Pattern - User Creation', () => {
+                const customer = UserFactory.createCustomer({ name: 'John' });
+                const admin = UserFactory.createAdmin({ name: 'Admin' });
+                const guest = UserFactory.createGuest();
+                
+                runner.assert(customer.type === 'customer', 'Customer creation should work');
+                runner.assert(admin.type === 'admin', 'Admin creation should work');
+                runner.assert(guest.type === 'guest', 'Guest creation should work');
+            });
+
+            await runner.runTest('Singleton Pattern - Database', () => {
+                const db1 = new Database();
+                const db2 = new Database();
+                runner.assert(db1 === db2, 'Database should be singleton');
+                
+                const result = db1.query('SELECT * FROM users');
+                runner.assert(result, 'Database query should work');
+            });
+
+            await runner.runTest('Observer Pattern - Event System', () => {
+                const events = new EventSystem();
+                let called = false;
+                
+                const callback = () => called = true;
+                events.subscribe('test', callback);
+                events.emit('test', {});
+                
+                runner.assert(called, 'Event subscription should work');
+                
+                events.unsubscribe('test', callback);
+                called = false;
+                events.emit('test', {});
+                runner.assert(!called, 'Event unsubscription should work');
+            });
+
+            await runner.runTest('Builder Pattern - Query Builder', () => {
+                const query = new QueryBuilder()
+                    .select(['id', 'name'])
+                    .where('age > 18')
+                    .build();
+                
+                runner.assert(
+                    query.includes('SELECT') && query.includes('WHERE'),
+                    'Query builder should work'
+                );
+            });
+
+            // Test Dynamic Loading
+            await runner.runTest('Dynamic Loading - Feature Loading', async () => {
+                const feature = await loadFeature('testFeature');
+                runner.assert(feature, 'Feature loading should work');
+            });
+
+            // Test Real Application
+            await runner.runTest('Core Application - Lifecycle', () => {
+                const app = new Core();
+                runner.assert(app.start(), 'Application should start');
+                runner.assert(app.stop(), 'Application should stop');
+            });
+
+            await runner.runTest('UI Components - Rendering', () => {
+                const ui = new UI();
+                const container = document.getElementById('app-container');
+                ui.render(container);
+                runner.assert(
+                    container.children.length > 0,
+                    'UI should render components'
+                );
+            });
+
+            // Display results
+            runner.displayResults();
+        });
+    </script>
+</body>
+</html> 

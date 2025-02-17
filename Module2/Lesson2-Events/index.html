@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Handling Practice</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .container {
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .event-box {
+            width: 200px;
+            height: 200px;
+            background-color: #f0f0f0;
+            margin: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .highlight {
+            background-color: yellow;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .error {
+            color: red;
+            font-size: 0.8em;
+            display: none;
+        }
+
+        .interactive-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .interactive-list li {
+            padding: 10px;
+            margin: 5px 0;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .menu {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .menu-item {
+            padding: 10px;
+            background-color: #f0f0f0;
+            margin: 2px 0;
+            cursor: pointer;
+        }
+
+        .submenu {
+            list-style-type: none;
+            padding-left: 20px;
+            display: none;
+        }
+
+        .active {
+            background-color: #e0e0e0;
+        }
+
+        .draggable {
+            cursor: move;
+        }
+
+        .custom-event-box {
+            padding: 20px;
+            margin: 10px;
+            background-color: #f0f0f0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Event Handling Practice</h1>
+
+    <!-- Exercise 1: Basic Event Handling -->
+    <div class="container">
+        <h2>Exercise 1: Basic Event Handling</h2>
+        <div id="event-practice">
+            <div id="event-box" class="event-box">
+                Interact with me!
+            </div>
+            <div id="event-log"></div>
+        </div>
+    </div>
+
+    <!-- Exercise 2: Form Validation -->
+    <div class="container">
+        <h2>Exercise 2: Form Validation</h2>
+        <form id="validation-form">
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+                <div class="error" id="username-error"></div>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+                <div class="error" id="email-error"></div>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+                <div class="error" id="password-error"></div>
+            </div>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <!-- Exercise 3: Interactive List -->
+    <div class="container">
+        <h2>Exercise 3: Interactive List</h2>
+        <div id="list-practice">
+            <input type="text" id="list-input" placeholder="Enter item and press Enter">
+            <ul id="interactive-list" class="interactive-list"></ul>
+        </div>
+    </div>
+
+    <!-- Exercise 4: Event Delegation -->
+    <div class="container">
+        <h2>Exercise 4: Event Delegation</h2>
+        <div id="menu-container">
+            <button id="add-menu-item">Add Menu Item</button>
+            <ul id="dynamic-menu" class="menu">
+                <li class="menu-item">Item 1
+                    <ul class="submenu">
+                        <li class="menu-item">Subitem 1.1</li>
+                        <li class="menu-item">Subitem 1.2</li>
+                    </ul>
+                </li>
+                <li class="menu-item">Item 2
+                    <ul class="submenu">
+                        <li class="menu-item">Subitem 2.1</li>
+                        <li class="menu-item">Subitem 2.2</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Exercise 5: Custom Events -->
+    <div class="container">
+        <h2>Exercise 5: Custom Events</h2>
+        <div id="custom-event-practice">
+            <div class="custom-event-box" id="publisher">
+                Publisher
+                <button id="trigger-event">Trigger Event</button>
+            </div>
+            <div class="custom-event-box" id="subscriber1">
+                Subscriber 1
+                <div class="event-data"></div>
+            </div>
+            <div class="custom-event-box" id="subscriber2">
+                Subscriber 2
+                <div class="event-data"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="exercises.js"></script>
+    <script>
+        // This script will show if the JavaScript file is properly connected
+        console.log('Event Practice page loaded!');
+    </script>
+</body>
+</html> 

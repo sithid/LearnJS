@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events - Tests</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .test-result {
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 4px;
+        }
+        .pass {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            border-left: 4px solid #2e7d32;
+        }
+        .fail {
+            background-color: #fbe9e7;
+            color: #c62828;
+            border-left: 4px solid #c62828;
+        }
+        .console-output {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        h1 {
+            color: #333;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+        .summary {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e3f2fd;
+            border-radius: 4px;
+        }
+        /* Test environment styles */
+        .test-environment {
+            display: none;
+        }
+        #event-box {
+            width: 200px;
+            height: 200px;
+            border: 1px solid #ccc;
+        }
+        #event-log {
+            margin-top: 10px;
+            padding: 10px;
+            border: 1px solid #eee;
+        }
+        .error {
+            color: red;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Events - Test Results</h1>
+        <div id="test-results"></div>
+        <div id="summary" class="summary"></div>
+    </div>
+
+    <!-- Test Environment (Hidden) -->
+    <div class="test-environment">
+        <!-- Exercise 1: Event Handling -->
+        <div id="event-box"></div>
+        <div id="event-log"></div>
+
+        <!-- Exercise 2: Form Validation -->
+        <form id="validation-form">
+            <div>
+                <input type="text" id="username" name="username">
+                <div id="username-error" class="error"></div>
+            </div>
+            <div>
+                <input type="email" id="email" name="email">
+                <div id="email-error" class="error"></div>
+            </div>
+            <div>
+                <input type="password" id="password" name="password">
+                <div id="password-error" class="error"></div>
+            </div>
+            <button type="submit">Submit</button>
+        </form>
+
+        <!-- Exercise 3: Interactive List -->
+        <div>
+            <input type="text" id="list-input">
+            <ul id="interactive-list"></ul>
+        </div>
+
+        <!-- Exercise 4: Event Delegation -->
+        <ul id="menu-container">
+            <li class="menu-item">Item 1</li>
+            <li class="menu-item">Item 2</li>
+        </ul>
+        <button id="add-menu-item">Add Item</button>
+
+        <!-- Exercise 5: Custom Events -->
+        <div id="publisher">Publisher</div>
+        <div id="subscriber1" class="subscriber">
+            <div class="event-data"></div>
+        </div>
+        <div id="subscriber2" class="subscriber">
+            <div class="event-data"></div>
+        </div>
+        <button id="trigger-event">Trigger Event</button>
+    </div>
+
+    <script type="module">
+        // Import student's code
+        import * as exercises from './exercises.js';
+
+        // Test runner
+        class TestRunner {
+            constructor() {
+                this.results = [];
+                this.passCount = 0;
+                this.totalTests = 0;
+            }
+
+            assert(condition, message) {
+                if (!condition) {
+                    throw new Error(message);
+                }
+            }
+
+            addResult(testName, passed, error = null) {
+                this.results.push({ testName, passed, error });
+                if (passed) this.passCount++;
+                this.totalTests++;
+            }
+
+            displayResults() {
+                const container = document.getElementById('test-results');
+                const summary = document.getElementById('summary');
+                
+                this.results.forEach(result => {
+                    const div = document.createElement('div');
+                    div.className = `test-result ${result.passed ? 'pass' : 'fail'}`;
+                    div.textContent = `${result.passed ? '✅' : '❌'} ${result.testName}`;
+                    
+                    if (!result.passed && result.error) {
+                        const errorDiv = document.createElement('div');
+                        errorDiv.className = 'console-output';
+                        errorDiv.textContent = result.error;
+                        div.appendChild(errorDiv);
+                    }
+                    
+                    container.appendChild(div);
+                });
+
+                summary.textContent = `Passed ${this.passCount} of ${this.totalTests} tests (${Math.round(this.passCount/this.totalTests*100)}%)`;
+            }
+
+            async runTest(testName, testFn) {
+                try {
+                    await testFn();
+                    this.addResult(testName, true);
+                } catch (error) {
+                    this.addResult(testName, false, error.message);
+                }
+            }
+
+            // Helper to simulate events
+            simulateEvent(element, eventType, options = {}) {
+                const event = new Event(eventType, { bubbles: true, ...options });
+                Object.assign(event, options);
+                element.dispatchEvent(event);
+                return event;
+            }
+        }
+
+        // Initialize test runner
+        const runner = new TestRunner();
+
+        // Run tests
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Initialize exercises
+            exercises.initializeEventHandling();
+            exercises.initializeFormValidation();
+            exercises.initializeInteractiveList();
+            exercises.initializeEventDelegation();
+            exercises.initializeCustomEvents();
+
+            // Test Event Handling
+            await runner.runTest('Event Handling - Click', () => {
+                const eventBox = document.getElementById('event-box');
+                const eventLog = document.getElementById('event-log');
+                const initialLogCount = eventLog.children.length;
+                
+                runner.simulateEvent(eventBox, 'click');
+                
+                runner.assert(
+                    eventLog.children.length > initialLogCount,
+                    'Click event should be logged'
+                );
+            });
+
+            await runner.runTest('Event Handling - Mouse Enter/Leave', () => {
+                const eventBox = document.getElementById('event-box');
+                const eventLog = document.getElementById('event-log');
+                const initialLogCount = eventLog.children.length;
+                
+                runner.simulateEvent(eventBox, 'mouseenter');
+                runner.simulateEvent(eventBox, 'mouseleave');
+                
+                runner.assert(
+                    eventLog.children.length > initialLogCount,
+                    'Mouse enter/leave events should be logged'
+                );
+            });
+
+            // Test Form Validation
+            await runner.runTest('Form Validation - Username', () => {
+                const usernameInput = document.getElementById('username');
+                const errorDiv = document.getElementById('username-error');
+                
+                usernameInput.value = 'a';
+                runner.simulateEvent(usernameInput, 'input');
+                
+                runner.assert(
+                    errorDiv.style.display === 'block',
+                    'Should show error for short username'
+                );
+                
+                usernameInput.value = 'validuser';
+                runner.simulateEvent(usernameInput, 'input');
+                
+                runner.assert(
+                    errorDiv.style.display === 'none',
+                    'Should hide error for valid username'
+                );
+            });
+
+            await runner.runTest('Form Validation - Email', () => {
+                const emailInput = document.getElementById('email');
+                const errorDiv = document.getElementById('email-error');
+                
+                emailInput.value = 'invalid-email';
+                runner.simulateEvent(emailInput, 'input');
+                
+                runner.assert(
+                    errorDiv.style.display === 'block',
+                    'Should show error for invalid email'
+                );
+                
+                emailInput.value = 'valid@email.com';
+                runner.simulateEvent(emailInput, 'input');
+                
+                runner.assert(
+                    errorDiv.style.display === 'none',
+                    'Should hide error for valid email'
+                );
+            });
+
+            // Test Interactive List
+            await runner.runTest('Interactive List - Add Item', () => {
+                const input = document.getElementById('list-input');
+                const list = document.getElementById('interactive-list');
+                const initialCount = list.children.length;
+                
+                input.value = 'New Item';
+                runner.simulateEvent(input, 'keypress', { key: 'Enter' });
+                
+                runner.assert(
+                    list.children.length > initialCount,
+                    'Should add new item on Enter'
+                );
+            });
+
+            await runner.runTest('Interactive List - Delete Item', () => {
+                const list = document.getElementById('interactive-list');
+                if (list.children.length === 0) {
+                    const input = document.getElementById('list-input');
+                    input.value = 'Test Item';
+                    runner.simulateEvent(input, 'keypress', { key: 'Enter' });
+                }
+                
+                const initialCount = list.children.length;
+                const deleteButton = list.querySelector('button');
+                
+                if (deleteButton) {
+                    runner.simulateEvent(deleteButton, 'click');
+                    runner.assert(
+                        list.children.length < initialCount,
+                        'Should remove item when delete button is clicked'
+                    );
+                }
+            });
+
+            // Test Event Delegation
+            await runner.runTest('Event Delegation - Menu Items', () => {
+                const menuContainer = document.getElementById('menu-container');
+                const menuItem = menuContainer.querySelector('.menu-item');
+                
+                let clicked = false;
+                menuContainer.addEventListener('click', () => clicked = true);
+                
+                runner.simulateEvent(menuItem, 'click');
+                
+                runner.assert(clicked, 'Menu item click should be handled');
+            });
+
+            // Test Custom Events
+            await runner.runTest('Custom Events - Event Dispatch', () => {
+                const triggerButton = document.getElementById('trigger-event');
+                const subscriber1 = document.getElementById('subscriber1');
+                const subscriber2 = document.getElementById('subscriber2');
+                
+                runner.simulateEvent(triggerButton, 'click');
+                
+                const data1 = subscriber1.querySelector('.event-data').textContent;
+                const data2 = subscriber2.querySelector('.event-data').textContent;
+                
+                runner.assert(
+                    data1 !== '' && data2 !== '',
+                    'Custom event should update subscribers'
+                );
+            });
+
+            // Display results
+            runner.displayResults();
+        });
+    </script>
+</body>
+</html> 

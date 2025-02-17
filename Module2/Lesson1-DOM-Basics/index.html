@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOM Manipulation Practice</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .container {
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .item {
+            background-color: #f0f0f0;
+            padding: 10px;
+            margin: 5px 0;
+        }
+
+        .highlight {
+            background-color: yellow;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .success {
+            color: green;
+        }
+
+        .error {
+            color: red;
+        }
+
+        #dynamic-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #dynamic-list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin: 5px 0;
+            background-color: #f0f0f0;
+        }
+
+        button {
+            padding: 5px 10px;
+            margin: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>DOM Manipulation Practice</h1>
+
+    <!-- Exercise 1: Element Selection -->
+    <div class="container">
+        <h2>Exercise 1: Element Selection</h2>
+        <div id="selection-practice">
+            <p class="item">Item 1</p>
+            <p class="item">Item 2</p>
+            <p class="item special">Item 3 (Special)</p>
+        </div>
+        <button onclick="testSelectors()">Test Selectors</button>
+    </div>
+
+    <!-- Exercise 2: Content Manipulation -->
+    <div class="container">
+        <h2>Exercise 2: Content Manipulation</h2>
+        <div id="content-practice">
+            <p id="text-content">Original Text</p>
+            <div id="html-content">Original HTML</div>
+            <div id="attribute-practice" class="normal">Attribute Practice</div>
+        </div>
+        <button onclick="testContentManipulation()">Test Content</button>
+    </div>
+
+    <!-- Exercise 3: DOM Creation -->
+    <div class="container">
+        <h2>Exercise 3: DOM Creation</h2>
+        <div id="creation-practice">
+            <div id="element-container"></div>
+        </div>
+        <button onclick="testDOMCreation()">Test Creation</button>
+    </div>
+
+    <!-- Exercise 4: Style Manipulation -->
+    <div class="container">
+        <h2>Exercise 4: Style Manipulation</h2>
+        <div id="style-practice">
+            <div id="style-target">Style Target</div>
+        </div>
+        <button onclick="testStyleManipulation()">Test Styles</button>
+    </div>
+
+    <!-- Exercise 5: Dynamic List -->
+    <div class="container">
+        <h2>Exercise 5: Dynamic List</h2>
+        <div id="list-practice">
+            <input type="text" id="item-input" placeholder="Enter item">
+            <button onclick="addItem()">Add Item</button>
+            <button onclick="sortItems()">Sort Items</button>
+            <ul id="dynamic-list"></ul>
+        </div>
+    </div>
+
+    <script src="exercises.js"></script>
+    <script>
+        // This script will show if the JavaScript file is properly connected
+        console.log('DOM Practice page loaded!');
+    </script>
+</body>
+</html> 

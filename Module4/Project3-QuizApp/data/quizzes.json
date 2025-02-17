@@ -1,0 +1,32 @@
+{
+    "categories": [
+        {
+            "id": "javascript-basics",
+            "title": "JavaScript Basics",
+            "description": "Test your knowledge of JavaScript fundamentals",
+            "icon": "fas fa-code",
+            "difficulties": ["easy", "medium", "hard"]
+        },
+        {
+            "id": "web-development",
+            "title": "Web Development",
+            "description": "Questions about HTML, CSS, and web concepts",
+            "icon": "fas fa-globe",
+            "difficulties": ["easy", "medium"]
+        },
+        {
+            "id": "data-structures",
+            "title": "Data Structures",
+            "description": "Arrays, objects, and common data structures",
+            "icon": "fas fa-database",
+            "difficulties": ["medium", "hard"]
+        },
+        {
+            "id": "algorithms",
+            "title": "Algorithms",
+            "description": "Common algorithms and problem-solving",
+            "icon": "fas fa-brain",
+            "difficulties": ["medium", "hard"]
+        }
+    ]
+} 
