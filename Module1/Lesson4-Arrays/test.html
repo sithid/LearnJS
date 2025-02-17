@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arrays and Data Structures - Tests</title>
+    <title>Arrays and Objects Tests</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -13,13 +13,16 @@
             background-color: #f5f5f5;
         }
         .test-container {
-            background: white;
+            background-color: white;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             margin-bottom: 20px;
         }
-        .test-result {
+        .test-results {
+            margin-top: 20px;
+        }
+        .test-case {
             padding: 10px;
             margin: 5px 0;
             border-radius: 4px;
@@ -27,274 +30,248 @@
         .pass {
             background-color: #e8f5e9;
             color: #2e7d32;
-            border-left: 4px solid #2e7d32;
         }
         .fail {
-            background-color: #fbe9e7;
+            background-color: #ffebee;
             color: #c62828;
-            border-left: 4px solid #c62828;
-        }
-        .console-output {
-            background-color: #f8f9fa;
-            padding: 10px;
-            border-radius: 4px;
-            margin-top: 5px;
-            font-family: monospace;
-            white-space: pre-wrap;
         }
         h1 {
             color: #333;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 10px;
+            text-align: center;
+        }
+        h2 {
+            color: #666;
+            margin-top: 30px;
         }
         .summary {
-            margin-top: 20px;
-            padding: 15px;
-            background: #e3f2fd;
+            text-align: center;
+            font-size: 1.2em;
+            margin: 20px 0;
+            padding: 10px;
             border-radius: 4px;
+        }
+        .summary.all-pass {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+        .summary.has-fail {
+            background-color: #ffebee;
+            color: #c62828;
         }
     </style>
 </head>
 <body>
     <div class="test-container">
-        <h1>Arrays and Data Structures - Test Results</h1>
-        <div id="test-results"></div>
+        <h1>Arrays and Objects Tests</h1>
+        <div id="testResults" class="test-results"></div>
         <div id="summary" class="summary"></div>
     </div>
 
     <script type="module">
-        // Import student's code
-        import * as exercises from './exercises.js';
+        import {
+            findMax,
+            removeDuplicates,
+            rotateArray,
+            formatUsers,
+            processProducts,
+            groupAndCount,
+            deepClone,
+            mergeObjects,
+            createHierarchy,
+            findIntersection,
+            validateObject,
+            transformData,
+            deepEqual,
+            createObservable,
+            createVersioned
+        } from './exercises.js';
 
-        // Test runner
-        class TestRunner {
-            constructor() {
-                this.results = [];
-                this.passCount = 0;
-                this.totalTests = 0;
-            }
-
-            assert(condition, message) {
-                if (!condition) {
-                    throw new Error(message);
+        function runTest(description, testFunction) {
+            const resultDiv = document.createElement('div');
+            try {
+                const result = testFunction();
+                if (result === true) {
+                    resultDiv.className = 'test-case pass';
+                    resultDiv.textContent = `✓ ${description}`;
+                } else {
+                    resultDiv.className = 'test-case fail';
+                    resultDiv.textContent = `✗ ${description}`;
                 }
+            } catch (error) {
+                resultDiv.className = 'test-case fail';
+                resultDiv.textContent = `✗ ${description} (Error: ${error.message})`;
             }
-
-            assertArrayEquals(actual, expected) {
-                const actualStr = JSON.stringify(actual);
-                const expectedStr = JSON.stringify(expected);
-                if (actualStr !== expectedStr) {
-                    throw new Error(`Expected ${expectedStr} but got ${actualStr}`);
-                }
-            }
-
-            addResult(testName, passed, error = null) {
-                this.results.push({ testName, passed, error });
-                if (passed) this.passCount++;
-                this.totalTests++;
-            }
-
-            displayResults() {
-                const container = document.getElementById('test-results');
-                const summary = document.getElementById('summary');
-                
-                this.results.forEach(result => {
-                    const div = document.createElement('div');
-                    div.className = `test-result ${result.passed ? 'pass' : 'fail'}`;
-                    div.textContent = `${result.passed ? '✅' : '❌'} ${result.testName}`;
-                    
-                    if (!result.passed && result.error) {
-                        const errorDiv = document.createElement('div');
-                        errorDiv.className = 'console-output';
-                        errorDiv.textContent = result.error;
-                        div.appendChild(errorDiv);
-                    }
-                    
-                    container.appendChild(div);
-                });
-
-                summary.textContent = `Passed ${this.passCount} of ${this.totalTests} tests (${Math.round(this.passCount/this.totalTests*100)}%)`;
-            }
-
-            runTest(testName, testFn) {
-                try {
-                    testFn();
-                    this.addResult(testName, true);
-                } catch (error) {
-                    this.addResult(testName, false, error.message);
-                }
-            }
+            document.getElementById('testResults').appendChild(resultDiv);
+            return resultDiv.className.includes('pass');
         }
 
-        // Initialize test runner
-        const runner = new TestRunner();
+        function arraysEqual(arr1, arr2) {
+            if (!Array.isArray(arr1) || !Array.isArray(arr2)) return false;
+            if (arr1.length !== arr2.length) return false;
+            return arr1.every((item, index) => {
+                if (Array.isArray(item) && Array.isArray(arr2[index])) {
+                    return arraysEqual(item, arr2[index]);
+                }
+                if (typeof item === 'object' && item !== null && 
+                    typeof arr2[index] === 'object' && arr2[index] !== null) {
+                    return objectsEqual(item, arr2[index]);
+                }
+                return item === arr2[index];
+            });
+        }
 
-        // Run tests
-        runner.runTest('Array Operations - Find Largest Number', () => {
-            runner.assert(exercises.findLargestNumber([5, 3, 9, 1, 7]) === 9, 'Should find largest number 9');
-            runner.assert(exercises.findLargestNumber([-1, -5, -2]) === -1, 'Should handle negative numbers');
-            runner.assert(exercises.findLargestNumber([1]) === 1, 'Should handle single number');
-        });
+        function objectsEqual(obj1, obj2) {
+            if (obj1 === null || obj2 === null) return obj1 === obj2;
+            const keys1 = Object.keys(obj1);
+            const keys2 = Object.keys(obj2);
+            if (keys1.length !== keys2.length) return false;
+            return keys1.every(key => {
+                if (Array.isArray(obj1[key]) && Array.isArray(obj2[key])) {
+                    return arraysEqual(obj1[key], obj2[key]);
+                }
+                if (typeof obj1[key] === 'object' && typeof obj2[key] === 'object') {
+                    return objectsEqual(obj1[key], obj2[key]);
+                }
+                return obj1[key] === obj2[key];
+            });
+        }
 
-        runner.runTest('Array Operations - Remove Duplicates', () => {
-            runner.assertArrayEquals(
-                exercises.removeDuplicates([1, 2, 2, 3, 3, 4]),
-                [1, 2, 3, 4]
-            );
-            runner.assertArrayEquals(
-                exercises.removeDuplicates([1, 1, 1]),
-                [1]
-            );
-            runner.assertArrayEquals(
-                exercises.removeDuplicates([1, 2, 3]),
-                [1, 2, 3]
-            );
-        });
-
-        runner.runTest('Array Operations - Custom Reverse', () => {
-            runner.assertArrayEquals(
-                exercises.customReverse([1, 2, 3, 4, 5]),
-                [5, 4, 3, 2, 1]
-            );
-            runner.assertArrayEquals(
-                exercises.customReverse([1]),
-                [1]
-            );
-            runner.assertArrayEquals(
-                exercises.customReverse([]),
-                []
-            );
-        });
-
-        runner.runTest('Shopping List - Add Items', () => {
-            exercises.shoppingList.items = []; // Reset list
-            exercises.shoppingList.addItem("Apples", 5);
-            exercises.shoppingList.addItem("Bananas");
+        const tests = [
+            // Exercise 1: Array Operations
+            () => runTest('findMax: basic array', () => 
+                findMax([1, 5, 3, 9, 2]) === 9),
+            () => runTest('findMax: empty array', () => 
+                findMax([]) === null),
+            () => runTest('findMax: invalid input', () => 
+                findMax(null) === null),
             
-            runner.assert(exercises.shoppingList.items.length === 2, 'Should have 2 items');
-            runner.assert(exercises.shoppingList.items.find(item => item.name === "Apples").quantity === 5,
-                'Apples quantity should be 5');
-            runner.assert(exercises.shoppingList.items.find(item => item.name === "Bananas").quantity === 1,
-                'Bananas should have default quantity 1');
-        });
-
-        runner.runTest('Shopping List - Update Quantity', () => {
-            exercises.shoppingList.items = [{ name: "Apples", quantity: 5 }];
-            exercises.shoppingList.updateQuantity("Apples", 7);
+            () => runTest('removeDuplicates: basic array', () => 
+                arraysEqual(removeDuplicates([1, 2, 2, 3, 3, 4]), [1, 2, 3, 4])),
+            () => runTest('removeDuplicates: empty array', () => 
+                arraysEqual(removeDuplicates([]), [])),
             
-            runner.assert(exercises.shoppingList.items[0].quantity === 7,
-                'Should update Apples quantity to 7');
-        });
+            () => runTest('rotateArray: basic rotation', () => 
+                arraysEqual(rotateArray([1, 2, 3, 4, 5], 2), [4, 5, 1, 2, 3])),
+            () => runTest('rotateArray: negative rotation', () => 
+                arraysEqual(rotateArray([1, 2, 3, 4, 5], -1), [2, 3, 4, 5, 1])),
 
-        runner.runTest('Shopping List - Remove Item', () => {
-            exercises.shoppingList.items = [
-                { name: "Apples", quantity: 5 },
-                { name: "Bananas", quantity: 3 }
-            ];
-            exercises.shoppingList.removeItem("Bananas");
+            // Exercise 2: Array Transformations
+            () => runTest('formatUsers: basic transformation', () => {
+                const input = [{name: 'John', age: 30}, {name: 'Jane', age: 25}];
+                const currentYear = new Date().getFullYear();
+                return arraysEqual(formatUsers(input), [
+                    {fullName: 'John', yearOfBirth: currentYear - 30},
+                    {fullName: 'Jane', yearOfBirth: currentYear - 25}
+                ]);
+            }),
             
-            runner.assert(exercises.shoppingList.items.length === 1,
-                'Should have 1 item after removal');
-            runner.assert(!exercises.shoppingList.items.find(item => item.name === "Bananas"),
-                'Bananas should be removed');
-        });
-
-        runner.runTest('Grade Tracker - Add Student', () => {
-            exercises.gradeTracker.students = []; // Reset tracker
-            exercises.gradeTracker.addStudent("John", [85, 90, 87]);
+            () => runTest('processProducts: with tax', () => {
+                const input = [
+                    {name: 'Book', price: 20, inStock: true},
+                    {name: 'Pen', price: 10, inStock: false}
+                ];
+                return arraysEqual(processProducts(input), [
+                    {name: 'Book', priceWithTax: 24}
+                ]);
+            }),
             
-            runner.assert(exercises.gradeTracker.students.length === 1,
-                'Should have 1 student');
-            runner.assertArrayEquals(
-                exercises.gradeTracker.students[0].grades,
-                [85, 90, 87]
-            );
-        });
+            () => runTest('groupAndCount: basic grouping', () => {
+                const input = [
+                    {name: 'Book', category: 'A'},
+                    {name: 'Pen', category: 'B'},
+                    {name: 'Pencil', category: 'B'}
+                ];
+                return objectsEqual(groupAndCount(input), {A: 1, B: 2});
+            }),
 
-        runner.runTest('Grade Tracker - Calculate Average', () => {
-            exercises.gradeTracker.students = [
-                { name: "John", grades: [85, 90, 87] }
-            ];
+            // Exercise 3: Object Manipulation
+            () => runTest('deepClone: nested object', () => {
+                const input = {a: 1, b: {c: 2, d: [3, 4]}};
+                const cloned = deepClone(input);
+                input.b.c = 5;
+                return cloned.b.c === 2;
+            }),
             
-            runner.assert(exercises.gradeTracker.calculateAverage("John") === 87.33333333333333,
-                'Should calculate correct average');
-        });
-
-        runner.runTest('Grade Tracker - Find Top Performer', () => {
-            exercises.gradeTracker.students = [
-                { name: "John", grades: [85, 90, 87] },
-                { name: "Jane", grades: [92, 88, 95] }
-            ];
+            () => runTest('mergeObjects: deep merge', () => {
+                const obj1 = {a: 1, b: {c: 2}};
+                const obj2 = {b: {d: 3}, e: 4};
+                return objectsEqual(mergeObjects(obj1, obj2), 
+                    {a: 1, b: {c: 2, d: 3}, e: 4});
+            }),
             
-            runner.assert(exercises.gradeTracker.findTopPerformer() === "Jane",
-                'Should find Jane as top performer');
-        });
+            () => runTest('createHierarchy: basic hierarchy', () => {
+                const input = [
+                    {id: 1, parent: null},
+                    {id: 2, parent: 1},
+                    {id: 3, parent: 1}
+                ];
+                return objectsEqual(createHierarchy(input), {
+                    id: 1,
+                    children: [
+                        {id: 2, children: []},
+                        {id: 3, children: []}
+                    ]
+                });
+            }),
 
-        runner.runTest('Library - Add Book', () => {
-            exercises.library.books = []; // Reset library
-            exercises.library.addBook("The Hobbit", "J.R.R. Tolkien", "Fantasy", "978-0547928227");
+            // Exercise 4: Advanced Operations
+            () => runTest('findIntersection: basic intersection', () => 
+                arraysEqual(findIntersection([1, 2, 3], [2, 3, 4]), [2, 3])),
             
-            runner.assert(exercises.library.books.length === 1,
-                'Should have 1 book');
-            runner.assert(exercises.library.books[0].title === "The Hobbit",
-                'Should store correct book title');
-        });
-
-        runner.runTest('Library - Search Books', () => {
-            exercises.library.books = [
-                { title: "The Hobbit", author: "J.R.R. Tolkien", genre: "Fantasy", isbn: "978-0547928227" },
-                { title: "1984", author: "George Orwell", genre: "Science Fiction", isbn: "978-0451524935" }
-            ];
+            () => runTest('validateObject: basic validation', () => {
+                const schema = {
+                    name: {type: 'string', required: true},
+                    age: {type: 'number'}
+                };
+                const obj = {name: 'John', age: '30'};
+                return arraysEqual(validateObject(obj, schema), 
+                    ['age should be of type number']);
+            }),
             
-            const fantasyBooks = exercises.library.searchBooks({ genre: "Fantasy" });
-            runner.assert(fantasyBooks.length === 1,
-                'Should find 1 Fantasy book');
-            runner.assert(fantasyBooks[0].title === "The Hobbit",
-                'Should find The Hobbit');
-        });
+            () => runTest('transformData: basic transformation', () => {
+                const data = [
+                    {name: 'John', age: 30},
+                    {name: 'Jane', age: 25}
+                ];
+                const transformations = ['sort:age', 'filter:age>25', 'map:name'];
+                return arraysEqual(transformData(data, transformations), ['John']);
+            }),
 
-        runner.runTest('Library - Borrow and Return Books', () => {
-            exercises.library.books = [
-                { title: "The Hobbit", author: "J.R.R. Tolkien", genre: "Fantasy", isbn: "978-0547928227", available: true }
-            ];
+            // Advanced Challenges
+            () => runTest('deepEqual: nested comparison', () => {
+                const obj1 = {a: 1, b: {c: [2, 3]}};
+                const obj2 = {a: 1, b: {c: [2, 3]}};
+                return deepEqual(obj1, obj2) === true;
+            }),
             
-            exercises.library.borrowBook("978-0547928227", "John Smith");
-            runner.assert(!exercises.library.books[0].available,
-                'Book should be marked as unavailable');
+            () => runTest('createObservable: property access', () => {
+                const obj = createObservable({a: 1});
+                let accessed = false;
+                obj.onGet = () => accessed = true;
+                const x = obj.a;
+                return accessed === true;
+            }),
             
-            exercises.library.returnBook("978-0547928227");
-            runner.assert(exercises.library.books[0].available,
-                'Book should be marked as available after return');
+            () => runTest('createVersioned: undo/redo', () => {
+                const obj = createVersioned({a: 1});
+                obj.value.a = 2;
+                obj.commit();
+                obj.value.a = 3;
+                obj.undo();
+                return obj.value.a === 2;
+            })
+        ];
+
+        // Run all tests
+        let passCount = 0;
+        tests.forEach(test => {
+            if (test()) passCount++;
         });
 
-        runner.runTest('Data Transformation - Filter by Category', () => {
-            const electronics = exercises.filterByCategory(exercises.salesData, "Electronics");
-            runner.assert(electronics.length === 2,
-                'Should find 2 Electronics items');
-            runner.assert(electronics.every(item => item.category === "Electronics"),
-                'All items should be Electronics');
-        });
-
-        runner.runTest('Data Transformation - Category Totals', () => {
-            const totals = exercises.calculateCategoryTotals(exercises.salesData);
-            runner.assert(totals.Electronics === 5299.85,
-                'Electronics total should be 5299.85');
-            runner.assert(totals.Furniture === 599.97,
-                'Furniture total should be 599.97');
-        });
-
-        runner.runTest('Data Transformation - Transform Data', () => {
-            const transformed = exercises.transformData(exercises.salesData);
-            runner.assert(transformed.Electronics.items.length === 2,
-                'Electronics should have 2 items');
-            runner.assert(transformed.Electronics.subtotal === 5299.85,
-                'Electronics subtotal should be 5299.85');
-            runner.assert(transformed.Furniture.items.length === 1,
-                'Furniture should have 1 item');
-        });
-
-        // Display results
-        runner.displayResults();
+        // Display summary
+        const summary = document.getElementById('summary');
+        summary.textContent = `Passed ${passCount} out of ${tests.length} tests`;
+        summary.className = `summary ${passCount === tests.length ? 'all-pass' : 'has-fail'}`;
     </script>
 </body>
 </html> 

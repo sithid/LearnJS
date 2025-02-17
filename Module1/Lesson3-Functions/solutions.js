@@ -1,158 +1,166 @@
-// Exercise 1: Function Types
-// 1. Function Declaration
-function calculateArea(width, height) {
+// Exercise 1: Basic Functions
+
+// 1. Calculate the area of a rectangle
+export function calculateRectangleArea(width, height) {
+    if (width <= 0 || height <= 0) return null;
     return width * height;
 }
 
-// 2. Function Expression
-const calculateAreaExpr = function(width, height) {
-    return width * height;
-};
-
-// 3. Arrow Function
-const calculateAreaArrow = (width, height) => width * height;
-
-// Test cases for Exercise 1
-console.log("Exercise 1: Function Types");
-console.log("Function Declaration:", calculateArea(5, 3));
-console.log("Function Expression:", calculateAreaExpr(5, 3));
-console.log("Arrow Function:", calculateAreaArrow(5, 3));
-
-// Exercise 2: Calculator Functions
-function add(a, b) {
-    if (typeof a !== 'number' || typeof b !== 'number') {
-        throw new Error('Both arguments must be numbers');
-    }
-    return a + b;
-}
-
-function subtract(a, b) {
-    if (typeof a !== 'number' || typeof b !== 'number') {
-        throw new Error('Both arguments must be numbers');
-    }
-    return a - b;
-}
-
-function multiply(a, b) {
-    if (typeof a !== 'number' || typeof b !== 'number') {
-        throw new Error('Both arguments must be numbers');
-    }
-    return a * b;
-}
-
-function divide(a, b) {
-    if (typeof a !== 'number' || typeof b !== 'number') {
-        throw new Error('Both arguments must be numbers');
-    }
-    if (b === 0) {
-        throw new Error('Division by zero is not allowed');
-    }
-    return a / b;
-}
-
-// Test cases for Exercise 2
-console.log("\nExercise 2: Calculator Functions");
-console.log("Addition:", add(10, 5));
-console.log("Subtraction:", subtract(10, 5));
-console.log("Multiplication:", multiply(10, 5));
-console.log("Division:", divide(10, 5));
-try {
-    console.log("Division by zero:", divide(10, 0));
-} catch (error) {
-    console.log("Error:", error.message);
-}
-
-// Exercise 3: Personal Information
-function createPerson(
-    name = "John Doe",
-    age = 30,
-    occupation = "Developer",
-    location = "New York"
-) {
-    return {
-        name,
-        age,
-        occupation,
-        location,
-        getInfo() {
-            return `${this.name} is a ${this.age}-year-old ${this.occupation} from ${this.location}`;
-        }
-    };
-}
-
-// Test cases for Exercise 3
-console.log("\nExercise 3: Personal Information");
-const defaultPerson = createPerson();
-const customPerson = createPerson("Jane Smith", 25, "Designer", "San Francisco");
-console.log("Default values:", defaultPerson.getInfo());
-console.log("Custom values:", customPerson.getInfo());
-
-// Exercise 4: Shopping Cart
-const shoppingCart = {
-    items: [],
-    
-    addItem(name, price, quantity = 1) {
-        this.items.push({ name, price, quantity });
-    },
-    
-    removeItem(name) {
-        const index = this.items.findIndex(item => item.name === name);
-        if (index !== -1) {
-            this.items.splice(index, 1);
-        }
-    },
-    
-    calculateTotal() {
-        return this.items.reduce((total, item) => total + (item.price * item.quantity), 0);
-    },
-    
-    applyDiscount(percentage) {
-        const total = this.calculateTotal();
-        const discount = (total * percentage) / 100;
-        return total - discount;
-    }
-};
-
-// Test cases for Exercise 4
-console.log("\nExercise 4: Shopping Cart");
-shoppingCart.addItem("Laptop", 999.99);
-shoppingCart.addItem("Mouse", 29.99, 2);
-console.log("Cart:", shoppingCart.items);
-console.log("Total:", shoppingCart.calculateTotal());
-console.log("Discounted Total:", shoppingCart.applyDiscount(10));
-shoppingCart.removeItem("Mouse");
-console.log("Updated Cart:", shoppingCart.items);
-
-// Exercise 5: Temperature Converter
-function celsiusToFahrenheit(celsius) {
+// 2. Convert Celsius to Fahrenheit
+export function celsiusToFahrenheit(celsius) {
+    if (typeof celsius !== 'number') return null;
     return (celsius * 9/5) + 32;
 }
 
-function fahrenheitToCelsius(fahrenheit) {
-    return (fahrenheit - 32) * 5/9;
+// 3. Find the longest word in a sentence
+export function findLongestWord(sentence) {
+    if (typeof sentence !== 'string') return '';
+    if (sentence.trim() === '') return '';
+    
+    const words = sentence.split(' ');
+    return words.reduce((longest, current) => 
+        current.length > longest.length ? current : longest
+    );
 }
 
-function celsiusToKelvin(celsius) {
-    return celsius + 273.15;
-}
+// Exercise 2: Arrow Functions
 
-// Test cases for Exercise 5
-console.log("\nExercise 5: Temperature Converter");
-console.log("0°C to Fahrenheit:", celsiusToFahrenheit(0));
-console.log("98.6°F to Celsius:", fahrenheitToCelsius(98.6));
-console.log("25°C to Kelvin:", celsiusToKelvin(25));
+// 1. Double all numbers in an array
+export const doubleNumbers = (numbers) => {
+    if (!Array.isArray(numbers)) return [];
+    return numbers.map(num => num * 2);
+};
 
-// Bonus Exercise: Closure Counter
-function createCounter(startValue = 0) {
+// 2. Filter even numbers
+export const filterEvenNumbers = (numbers) => {
+    if (!Array.isArray(numbers)) return [];
+    return numbers.filter(num => num % 2 === 0);
+};
+
+// 3. Calculate average
+export const calculateAverage = (numbers) => {
+    if (!Array.isArray(numbers) || numbers.length === 0) return null;
+    const sum = numbers.reduce((acc, num) => acc + num, 0);
+    return sum / numbers.length;
+};
+
+// Exercise 3: Closures and Scope
+
+// 1. Create a counter
+export function createCounter(startValue = 0) {
     let count = startValue;
-    return function() {
-        return ++count;
+    return {
+        increment: () => ++count,
+        decrement: () => --count,
+        getValue: () => count
     };
 }
 
-// Test cases for Bonus Exercise
-console.log("\nBonus Exercise: Closure Counter");
-const counter = createCounter(5);
-console.log(counter()); // 6
-console.log(counter()); // 7
-console.log(counter()); // 8 
+// 2. Create a private variable
+export function createPrivateVariable(initialValue) {
+    let value = initialValue;
+    return {
+        get: () => value,
+        set: (newValue) => { value = newValue; }
+    };
+}
+
+// 3. Function factory
+export function createMultiplier(factor) {
+    return (number) => number * factor;
+}
+
+// Exercise 4: Callbacks
+
+// 1. Implement forEach
+export function customForEach(array, callback) {
+    if (!Array.isArray(array) || typeof callback !== 'function') return;
+    
+    for (let i = 0; i < array.length; i++) {
+        callback(array[i], i, array);
+    }
+}
+
+// 2. Create an event system
+export function createEventSystem() {
+    const listeners = new Map();
+    
+    return {
+        on: (event, callback) => {
+            if (!listeners.has(event)) {
+                listeners.set(event, []);
+            }
+            listeners.get(event).push(callback);
+        },
+        off: (event, callback) => {
+            if (!listeners.has(event)) return;
+            const callbacks = listeners.get(event);
+            const index = callbacks.indexOf(callback);
+            if (index !== -1) {
+                callbacks.splice(index, 1);
+            }
+        },
+        trigger: (event, data) => {
+            if (!listeners.has(event)) return;
+            listeners.get(event).forEach(callback => callback(data));
+        }
+    };
+}
+
+// 3. Async operation handler
+export function createAsyncOperationManager() {
+    const operations = [];
+    
+    return {
+        addOperation: (operation) => {
+            operations.push(operation);
+        },
+        executeOperations: () => {
+            let index = 0;
+            
+            function executeNext() {
+                if (index >= operations.length) return;
+                
+                operations[index](() => {
+                    index++;
+                    executeNext();
+                });
+            }
+            
+            executeNext();
+        }
+    };
+}
+
+// Advanced Challenges
+
+// 1. Function composition
+export function compose(...functions) {
+    return (x) => functions.reduceRight((acc, fn) => fn(acc), x);
+}
+
+// 2. Memoization decorator
+export function memoize(fn) {
+    const cache = new Map();
+    
+    return (...args) => {
+        const key = JSON.stringify(args);
+        if (cache.has(key)) {
+            return cache.get(key);
+        }
+        
+        const result = fn(...args);
+        cache.set(key, result);
+        return result;
+    };
+}
+
+// 3. Currying function
+export function curry(fn) {
+    return function curried(...args) {
+        if (args.length >= fn.length) {
+            return fn(...args);
+        }
+        return (...moreArgs) => curried(...args, ...moreArgs);
+    };
+} 

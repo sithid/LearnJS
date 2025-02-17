@@ -2,184 +2,175 @@
 
 ## Learning Objectives
 By the end of this lesson, you will be able to:
-- Write conditional statements using if/else
-- Use comparison and logical operators
-- Implement switch statements
-- Create and control loops (for, while)
-- Apply control flow concepts to solve real problems
-- Test control flow logic effectively
+- Write and understand if/else statements
+- Use switch statements effectively
+- Implement different types of loops (for, while, do-while)
+- Work with logical operators
+- Handle conditional execution
+- Debug control flow issues
 
 ## Prerequisites
-- Basic understanding of JavaScript variables
-- Text editor installed
-- Modern web browser
-- Local development server running
+- Completion of Lesson 1: Variables and Data Types
+- Understanding of basic JavaScript syntax
+- Familiarity with boolean operations
 
 ## 1. Conditional Statements
 
-### if/else Statements
-Conditional statements help your code make decisions. The basic syntax is:
-
+### If/Else Statements
+The most basic form of control flow:
 ```javascript
 if (condition) {
-    // code to execute if condition is true
+    // code to run if condition is true
 } else {
-    // code to execute if condition is false
+    // code to run if condition is false
 }
 ```
 
-Example:
+### Multiple Conditions
+Using else if for multiple conditions:
 ```javascript
-let age = 18;
-
-if (age >= 18) {
-    console.log("You can vote!");
+if (condition1) {
+    // code for condition1
+} else if (condition2) {
+    // code for condition2
 } else {
-    console.log("Too young to vote.");
+    // default code
 }
 ```
 
-### else if Statements
-For multiple conditions:
-
+### Switch Statements
+For multiple specific cases:
 ```javascript
-let temperature = 75;
-
-if (temperature < 32) {
-    console.log("It's freezing!");
-} else if (temperature < 60) {
-    console.log("It's cool.");
-} else if (temperature < 80) {
-    console.log("It's perfect!");
-} else {
-    console.log("It's hot!");
+switch (value) {
+    case 'option1':
+        // code for option1
+        break;
+    case 'option2':
+        // code for option2
+        break;
+    default:
+        // default code
 }
 ```
 
-## 2. Comparison Operators
-- `==` Equal to (value only)
-- `===` Strict equal to (value and type)
-- `!=` Not equal to
-- `!==` Strict not equal to
-- `>` Greater than
-- `<` Less than
-- `>=` Greater than or equal to
-- `<=` Less than or equal to
+## 2. Loops
 
+### For Loop
 ```javascript
-let x = 5;
-let y = "5";
+for (let i = 0; i < 5; i++) {
+    // code to repeat
+}
+```
 
-console.log(x == y);   // true (value equality)
-console.log(x === y);  // false (strict equality)
+### While Loop
+```javascript
+while (condition) {
+    // code to repeat while condition is true
+}
+```
+
+### Do-While Loop
+```javascript
+do {
+    // code to repeat at least once
+} while (condition);
+```
+
+### For...of Loop (Arrays)
+```javascript
+for (const item of array) {
+    // code for each item
+}
+```
+
+### For...in Loop (Objects)
+```javascript
+for (const key in object) {
+    // code for each property
+}
 ```
 
 ## 3. Logical Operators
-- `&&` AND
-- `||` OR
-- `!` NOT
 
+### Basic Operators
+- AND (&&)
+- OR (||)
+- NOT (!)
+
+Example:
 ```javascript
-let isAdult = age >= 18;
-let hasID = true;
-
-if (isAdult && hasID) {
-    console.log("You can enter the venue.");
-}
-
-let isWeekend = true;
-let isHoliday = false;
-
-if (isWeekend || isHoliday) {
-    console.log("No work today!");
+if (age >= 18 && hasLicense) {
+    // can drive
 }
 ```
 
-## 4. Switch Statements
-Useful for multiple conditions checking against a single value:
-
+### Short-Circuit Evaluation
 ```javascript
-let day = "Monday";
-
-switch (day) {
-    case "Monday":
-        console.log("Start of work week");
-        break;
-    case "Friday":
-        console.log("TGIF!");
-        break;
-    case "Saturday":
-    case "Sunday":
-        console.log("Weekend!");
-        break;
-    default:
-        console.log("Regular work day");
-}
-```
-
-## 5. Loops
-
-### for Loop
-Used when you know how many iterations you need:
-
-```javascript
-for (let i = 0; i < 5; i++) {
-    console.log("Iteration: " + i);
-}
-```
-
-### while Loop
-Used when you don't know how many iterations you need:
-
-```javascript
-let count = 0;
-while (count < 5) {
-    console.log("Count: " + count);
-    count++;
-}
-```
-
-### do...while Loop
-Ensures the code runs at least once:
-
-```javascript
-let num = 0;
-do {
-    console.log("Number: " + num);
-    num++;
-} while (num < 3);
+const name = userInput || 'Default Name';
 ```
 
 ## Practice Exercises
 
-### Exercise 1: Age Checker
-Create a program that checks if someone can:
-- Vote (18+)
-- Rent a car (25+)
-- Get senior discount (65+)
+### Exercise 1: Basic Conditionals
+Write conditions for:
+```javascript
+// TODO: Create if/else statements for:
+// 1. Checking if a number is positive/negative
+// 2. Determining if a person can vote (18+ years)
+// 3. Checking if a year is a leap year
+```
 
-### Exercise 2: Grade Calculator
-Create a program that converts numerical grades to letters:
-- A: 90-100
-- B: 80-89
-- C: 70-79
-- D: 60-69
-- F: Below 60
+### Exercise 2: Switch Statements
+```javascript
+// TODO: Create a switch statement for:
+// 1. Days of the week
+// 2. Grade scoring (A, B, C, D, F)
+// 3. Basic calculator operations
+```
 
-### Exercise 3: FizzBuzz
-Write a program that prints numbers from 1 to 100:
-- For multiples of 3, print "Fizz"
-- For multiples of 5, print "Buzz"
-- For multiples of both 3 and 5, print "FizzBuzz"
+### Exercise 3: Loops
+```javascript
+// TODO: Implement loops for:
+// 1. Counting from 1 to 10
+// 2. Finding sum of numbers in an array
+// 3. Creating a multiplication table
+```
 
-## Key Takeaways
-- Always use `===` instead of `==` for comparison (strict equality)
-- Break complex conditions into smaller, readable parts
-- Use meaningful variable names in conditions
-- Don't forget `break` statements in switch cases
-- Choose the appropriate loop for your needs
+## Best Practices
+- Keep conditions simple and readable
+- Use switch for multiple specific cases
+- Avoid infinite loops
+- Use appropriate loop types
+- Include break and continue where needed
+- Add default cases in switch statements
+
+## Common Mistakes
+- Forgetting break in switch statements
+- Infinite loops
+- Complex nested conditions
+- Missing curly braces
+- Incorrect logical operators
+- Off-by-one errors in loops
+
+## Debugging Tips
+1. Use console.log() to track flow
+2. Check loop conditions
+3. Verify logical operators
+4. Test edge cases
+5. Use browser debugger
+
+## Additional Resources
+- MDN Control Flow
+- JavaScript.info Loops
+- Clean Code Conditionals
+- Loop Performance Guide
+- Debugging Strategies
 
 ## Next Steps
-- Complete the practice exercises
-- Try combining conditions in different ways
-- Move on to Lesson 3: Functions and Scope 
+1. Complete all exercises
+2. Pass all tests
+3. Review solutions
+4. Practice with real scenarios
+5. Move to Lesson 3: Functions
+
+Remember: Control flow is fundamental to programming. Take time to understand each concept thoroughly before moving on. 

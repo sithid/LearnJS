@@ -1,89 +1,134 @@
-// Exercise 1: Age Checker
-// Create a program that provides different messages based on age
-function checkAge(age) {
-    // TODO: Write your code here
-    // Check if the person can:
-    // 1. Vote (18+)
-    // 2. Rent a car (25+)
-    // 3. Get senior discount (65+)
+// Exercise 1: Basic Conditionals
+// Implement these functions using if/else statements
+
+// 1. Check if a number is positive, negative, or zero
+export function checkNumber(num) {
+    // TODO: Return:
+    // "positive" if num is greater than 0
+    // "negative" if num is less than 0
+    // "zero" if num is 0
+    return null;
 }
 
-// Test cases for Exercise 1
-console.log("Exercise 1: Age Checker");
-// TODO: Uncomment and test with different ages
-// checkAge(16);  // Should show: Too young to vote, drive, or rent a car
-// checkAge(20);  // Should show: Can vote, but cannot rent a car
-// checkAge(30);  // Should show: Can vote and rent a car
-// checkAge(70);  // Should show: Can vote, rent a car, and get senior discount
-
-// Exercise 2: Grade Calculator
-function calculateGrade(score) {
-    // TODO: Write your code here
-    // Convert numerical grade to letter grade
-    // A: 90-100
-    // B: 80-89
-    // C: 70-79
-    // D: 60-69
-    // F: Below 60
+// 2. Determine if someone can vote
+export function canVote(age) {
+    // TODO: Return true if age is 18 or higher, false otherwise
+    return null;
 }
 
-// Test cases for Exercise 2
-console.log("\nExercise 2: Grade Calculator");
-// TODO: Uncomment and test with different scores
-// console.log("Score 95:", calculateGrade(95));  // Should print A
-// console.log("Score 88:", calculateGrade(88));  // Should print B
-// console.log("Score 75:", calculateGrade(75));  // Should print C
-// console.log("Score 65:", calculateGrade(65));  // Should print D
-// console.log("Score 50:", calculateGrade(50));  // Should print F
-
-// Exercise 3: FizzBuzz
-function fizzBuzz() {
-    // TODO: Write your code here
-    // Print numbers from 1 to 100
-    // For multiples of 3, print "Fizz"
-    // For multiples of 5, print "Buzz"
-    // For multiples of both 3 and 5, print "FizzBuzz"
+// 3. Check if a year is a leap year
+export function isLeapYear(year) {
+    // TODO: Return true if year is a leap year, false otherwise
+    // Hint: A leap year is:
+    // - Divisible by 4 AND
+    // - Not divisible by 100 OR divisible by 400
+    return null;
 }
 
-// Test FizzBuzz
-console.log("\nExercise 3: FizzBuzz");
-// TODO: Uncomment to test FizzBuzz
-// fizzBuzz();
+// Exercise 2: Switch Statements
 
-// Exercise 4: Day of Week Message
-function getDayMessage(day) {
-    // TODO: Write your code here
-    // Use a switch statement to return a message for each day
-    // Monday - "Start of the work week"
-    // Friday - "TGIF!"
-    // Saturday/Sunday - "Weekend!"
-    // Other days - "Regular work day"
+// 1. Get the day type
+export function getDayType(dayName) {
+    // TODO: Use a switch statement to return:
+    // "weekend" for Saturday and Sunday
+    // "workday" for Monday through Friday
+    // "invalid" for any other input
+    return null;
 }
 
-// Test cases for Exercise 4
-console.log("\nExercise 4: Day of Week Message");
-// TODO: Uncomment and test with different days
-// console.log("Monday:", getDayMessage("Monday"));
-// console.log("Friday:", getDayMessage("Friday"));
-// console.log("Saturday:", getDayMessage("Saturday"));
-// console.log("Wednesday:", getDayMessage("Wednesday"));
-
-// Exercise 5: Number Guessing Game
-function guessNumber() {
-    // TODO: Write your code here
-    // Generate a random number between 1 and 10
-    // Give the user hints (too high/too low)
-    // Use a while loop to keep asking until they get it right
-    const targetNumber = Math.floor(Math.random() * 10) + 1;
-    let attempts = 0;
-    
-    // Your code here
+// 2. Convert number grade to letter grade
+export function getLetterGrade(score) {
+    // TODO: Use a switch statement to return:
+    // 'A' for 90-100
+    // 'B' for 80-89
+    // 'C' for 70-79
+    // 'D' for 60-69
+    // 'F' for below 60
+    // 'invalid' for scores above 100 or below 0
+    return null;
 }
 
-// Test the Number Guessing Game
-console.log("\nExercise 5: Number Guessing Game");
-// TODO: Uncomment to play the game
-// guessNumber();
+// 3. Basic calculator
+export function calculate(num1, num2, operation) {
+    // TODO: Use a switch statement to perform:
+    // "add" -> return num1 + num2
+    // "subtract" -> return num1 - num2
+    // "multiply" -> return num1 * num2
+    // "divide" -> return num1 / num2 (handle division by zero!)
+    // Return null for invalid operations
+    return null;
+}
 
-// Remember to test your code by uncommenting the test cases!
-// Happy coding! 🚀 
+// Exercise 3: Loops
+
+// 1. Sum numbers from 1 to n
+export function sumToN(n) {
+    // TODO: Use a for loop to sum numbers from 1 to n
+    // Return the sum
+    // Return 0 for negative numbers
+    return null;
+}
+
+// 2. Find the factorial of n
+export function factorial(n) {
+    // TODO: Use a while loop to calculate factorial
+    // Return null for negative numbers
+    // Return 1 for 0
+    return null;
+}
+
+// 3. Create multiplication table
+export function multiplicationTable(n) {
+    // TODO: Use nested loops to create a multiplication table
+    // Return an array of arrays, where each inner array
+    // represents one row of the multiplication table
+    // Example for n = 3:
+    // [[1,2,3], [2,4,6], [3,6,9]]
+    return null;
+}
+
+// Exercise 4: Advanced Challenges
+
+// 1. FizzBuzz
+export function fizzBuzz(n) {
+    // TODO: Use a loop to build an array where:
+    // - Numbers divisible by 3 are replaced with "Fizz"
+    // - Numbers divisible by 5 are replaced with "Buzz"
+    // - Numbers divisible by both 3 and 5 are replaced with "FizzBuzz"
+    // - All other numbers remain as numbers
+    // Return the array
+    return null;
+}
+
+// 2. Find prime numbers
+export function findPrimes(start, end) {
+    // TODO: Return an array of all prime numbers between start and end (inclusive)
+    // Use nested loops and conditions
+    return null;
+}
+
+// 3. Pattern printing
+export function createPattern(rows) {
+    // TODO: Create a pattern of asterisks like this (for rows=4):
+    // *
+    // **
+    // ***
+    // ****
+    // Return an array where each element is a string representing one row
+    return null;
+}
+
+// Remember to test your code!
+// You can uncomment these lines to test in the browser:
+/*
+console.log("Testing checkNumber:");
+console.log(checkNumber(5));    // should print "positive"
+console.log(checkNumber(-3));   // should print "negative"
+console.log(checkNumber(0));    // should print "zero"
+
+console.log("\nTesting canVote:");
+console.log(canVote(20));       // should print true
+console.log(canVote(17));       // should print false
+
+// Add more test cases for other functions
+*/ 

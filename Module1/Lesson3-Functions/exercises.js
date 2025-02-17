@@ -1,138 +1,137 @@
-// Exercise 1: Function Types
-// Implement the same functionality (calculating area of a rectangle) using different function types
+// Exercise 1: Basic Functions
 
-// TODO: 1. Function Declaration
-// function calculateArea(width, height) { ... }
-
-// TODO: 2. Function Expression
-// const calculateAreaExpr = function(width, height) { ... }
-
-// TODO: 3. Arrow Function
-// const calculateAreaArrow = (width, height) => ...
-
-// Test cases for Exercise 1
-console.log("Exercise 1: Function Types");
-// TODO: Uncomment and test your functions
-// console.log("Function Declaration:", calculateArea(5, 3));
-// console.log("Function Expression:", calculateAreaExpr(5, 3));
-// console.log("Arrow Function:", calculateAreaArrow(5, 3));
-
-// Exercise 2: Calculator Functions
-// TODO: Implement calculator functions with error handling
-
-function add(a, b) {
-    // Your code here
+// 1. Calculate the area of a rectangle
+export function calculateRectangleArea(width, height) {
+    // TODO: Return the area of the rectangle (width * height)
+    // Return null for invalid inputs (negative or zero)
+    return null;
 }
 
-function subtract(a, b) {
-    // Your code here
+// 2. Convert Celsius to Fahrenheit
+export function celsiusToFahrenheit(celsius) {
+    // TODO: Convert Celsius to Fahrenheit using the formula: (C × 9/5) + 32
+    // Return null for invalid inputs
+    return null;
 }
 
-function multiply(a, b) {
-    // Your code here
+// 3. Find the longest word in a sentence
+export function findLongestWord(sentence) {
+    // TODO: Return the longest word in the sentence
+    // Return empty string for invalid inputs
+    // Hint: Split the sentence into words and compare lengths
+    return null;
 }
 
-function divide(a, b) {
-    // Your code here
-    // Remember to handle division by zero!
-}
+// Exercise 2: Arrow Functions
 
-// Test cases for Exercise 2
-console.log("\nExercise 2: Calculator Functions");
-// TODO: Uncomment and test your calculator
-// console.log("Addition:", add(10, 5));
-// console.log("Subtraction:", subtract(10, 5));
-// console.log("Multiplication:", multiply(10, 5));
-// console.log("Division:", divide(10, 5));
-// console.log("Division by zero:", divide(10, 0));
-
-// Exercise 3: Personal Information
-// Create a function that returns an object with personal details
-function createPerson(
-    name = "John Doe",
-    age = 30,
-    occupation = "Developer",
-    location = "New York"
-) {
-    // Your code here
-    // Return an object with the personal information
-}
-
-// Test cases for Exercise 3
-console.log("\nExercise 3: Personal Information");
-// TODO: Uncomment and test the function
-// console.log("Default values:", createPerson());
-// console.log("Custom values:", createPerson("Jane Smith", 25, "Designer", "San Francisco"));
-
-// Exercise 4: Shopping Cart
-// TODO: Implement shopping cart functionality
-
-const shoppingCart = {
-    items: [],
-    
-    addItem(name, price, quantity = 1) {
-        // Your code here
-    },
-    
-    removeItem(name) {
-        // Your code here
-    },
-    
-    calculateTotal() {
-        // Your code here
-    },
-    
-    applyDiscount(percentage) {
-        // Your code here
-    }
+// 1. Double all numbers in an array
+export const doubleNumbers = (numbers) => {
+    // TODO: Use arrow function and map to double all numbers
+    // Return empty array for invalid input
+    return null;
 };
 
-// Test cases for Exercise 4
-console.log("\nExercise 4: Shopping Cart");
-// TODO: Uncomment and test the shopping cart
-// shoppingCart.addItem("Laptop", 999.99);
-// shoppingCart.addItem("Mouse", 29.99, 2);
-// console.log("Cart:", shoppingCart.items);
-// console.log("Total:", shoppingCart.calculateTotal());
-// console.log("Discounted Total:", shoppingCart.applyDiscount(10));
-// shoppingCart.removeItem("Mouse");
-// console.log("Updated Cart:", shoppingCart.items);
+// 2. Filter even numbers
+export const filterEvenNumbers = (numbers) => {
+    // TODO: Use arrow function and filter to keep only even numbers
+    // Return empty array for invalid input
+    return null;
+};
 
-// Exercise 5: Temperature Converter
-// TODO: Implement temperature conversion functions
+// 3. Calculate average
+export const calculateAverage = (numbers) => {
+    // TODO: Use arrow function to calculate average of numbers
+    // Return null for invalid input or empty array
+    return null;
+};
 
-function celsiusToFahrenheit(celsius) {
-    // Your code here
+// Exercise 3: Closures and Scope
+
+// 1. Create a counter
+export function createCounter(startValue = 0) {
+    // TODO: Return an object with increment(), decrement(), and getValue() functions
+    // Use closure to maintain the counter value
+    return null;
 }
 
-function fahrenheitToCelsius(fahrenheit) {
-    // Your code here
+// 2. Create a private variable
+export function createPrivateVariable(initialValue) {
+    // TODO: Return an object with get() and set() methods
+    // The variable should only be accessible through these methods
+    return null;
 }
 
-function celsiusToKelvin(celsius) {
-    // Your code here
+// 3. Function factory
+export function createMultiplier(factor) {
+    // TODO: Return a function that multiplies its input by factor
+    // Use closure to remember the factor
+    return null;
 }
 
-// Test cases for Exercise 5
-console.log("\nExercise 5: Temperature Converter");
-// TODO: Uncomment and test your conversion functions
-// console.log("0°C to Fahrenheit:", celsiusToFahrenheit(0));
-// console.log("98.6°F to Celsius:", fahrenheitToCelsius(98.6));
-// console.log("25°C to Kelvin:", celsiusToKelvin(25));
+// Exercise 4: Callbacks
 
-// Bonus Exercise: Closure Counter
-// TODO: Create a counter function that uses closure
-function createCounter(startValue = 0) {
-    // Your code here
+// 1. Implement forEach
+export function customForEach(array, callback) {
+    // TODO: Implement a simple version of forEach
+    // The callback should receive (element, index, array)
+    return null;
 }
 
-// Test cases for Bonus Exercise
-console.log("\nBonus Exercise: Closure Counter");
-// TODO: Uncomment and test your counter
-// const counter = createCounter(5);
-// console.log(counter()); // Should print 6
-// console.log(counter()); // Should print 7
-// console.log(counter()); // Should print 8
+// 2. Create an event system
+export function createEventSystem() {
+    // TODO: Return an object with on(), off(), and trigger() methods
+    // on(event, callback) - adds a callback for an event
+    // off(event, callback) - removes a callback for an event
+    // trigger(event, data) - calls all callbacks for an event with data
+    return null;
+}
+
+// 3. Async operation handler
+export function createAsyncOperationManager() {
+    // TODO: Return an object with addOperation() and executeOperations() methods
+    // addOperation(callback) - adds an operation to the queue
+    // executeOperations() - executes all operations in sequence
+    // Each operation should receive a done callback as parameter
+    return null;
+}
+
+// Advanced Challenges
+
+// 1. Function composition
+export function compose(...functions) {
+    // TODO: Implement function composition
+    // compose(f, g, h)(x) should return f(g(h(x)))
+    return null;
+}
+
+// 2. Memoization decorator
+export function memoize(fn) {
+    // TODO: Create a memoization decorator
+    // Cache results of the function for given inputs
+    return null;
+}
+
+// 3. Currying function
+export function curry(fn) {
+    // TODO: Implement a currying function
+    // Convert a function with multiple arguments into a series of functions
+    // with single arguments
+    return null;
+}
+
+// Remember to test your code!
+// You can uncomment these lines to test in the browser:
+/*
+console.log("Testing calculateRectangleArea:");
+console.log(calculateRectangleArea(5, 3));  // should print 15
+console.log(calculateRectangleArea(-1, 3)); // should print null
+
+console.log("\nTesting celsiusToFahrenheit:");
+console.log(celsiusToFahrenheit(0));   // should print 32
+console.log(celsiusToFahrenheit(100)); // should print 212
+
+// Add more test cases for other functions
+*/
 
 // Remember to test your code by uncommenting the test cases!
 // Happy coding! 🚀 
