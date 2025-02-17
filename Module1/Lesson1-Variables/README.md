@@ -2,22 +2,28 @@
 
 ## Learning Objectives
 By the end of this lesson, you will be able to:
-- Declare variables using `var`, `let`, and `const`
-- Understand the differences between variable declaration methods
-- Work with basic JavaScript data types
-- Use proper naming conventions for variables
+- Declare variables using `let` and `const`
+- Understand modern variable declaration best practices
+- Work with JavaScript data types
+- Use proper naming conventions
+- Test variable declarations and operations
+
+## Prerequisites
+- Basic understanding of programming concepts
+- Text editor installed
+- Modern web browser
+- Local development server running
 
 ## 1. Introduction to Variables
 
-Variables are containers for storing data values. Think of them as labeled boxes where you can store different types of information.
+Variables are containers for storing data values. In modern JavaScript, we primarily use `let` and `const` for variable declarations.
 
 ### Variable Declaration
 
-In JavaScript, we have three ways to declare variables:
+Modern JavaScript variable declaration:
 ```javascript
-var oldWay = "I'm the old way";      // Old way, avoid using
-let modern = "I'm modern";           // Modern way, use this
-const constant = "I never change";   // For values that shouldn't change
+let changeable = "I can be changed";    // Use for values that will change
+const constant = "I never change";      // Use for values that shouldn't change
 ```
 
 ### Rules for Variable Names
@@ -25,17 +31,16 @@ const constant = "I never change";   // For values that shouldn't change
 - Can contain letters, numbers, underscores, or dollar signs
 - Are case-sensitive
 - Cannot use reserved JavaScript keywords
+- Use camelCase for variable names
 
 Good examples:
 ```javascript
 let firstName = "John";
-let user_age = 25;
-let $price = 99.99;
+let userAge = 25;
+const API_KEY = "abc123";
 ```
 
 ## 2. Data Types
-
-JavaScript has several basic data types:
 
 ### Primitive Types
 1. **String**
@@ -52,8 +57,8 @@ JavaScript has several basic data types:
 
 3. **Boolean**
    ```javascript
-   let isStudent = true;
-   let isEmployed = false;
+   let isActive = true;
+   let isLoggedIn = false;
    ```
 
 4. **Undefined**
@@ -73,68 +78,91 @@ let negativeInfinity = -Infinity;
 let notANumber = NaN;
 ```
 
+## Testing Your Code
+
+### Running Tests
+1. Open `test.html` in your browser
+2. Write your code in `exercises.js`
+3. Tests run automatically
+4. Fix any failing tests
+5. Verify all tests pass
+
+### Test Cases Cover
+- Variable declaration
+- Type checking
+- Value assignment
+- Scope rules
+- Type conversion
+
 ## Practice Exercises
 
 ### Exercise 1: Variable Declaration
 Create variables for the following scenarios:
-1. Create a variable for your name
-2. Create a variable for your age
-3. Create a constant for your birth year
-4. Create a variable for your favorite hobby
-
 ```javascript
-// Write your code here
-let myName = "Your Name";
-let myAge = 25;
-const birthYear = 1998;
-let hobby = "coding";
+// TODO: Create variables for:
+// 1. Your name (string)
+// 2. Your age (number)
+// 3. Your birth year (constant)
+// 4. Your favorite hobby (string)
 ```
 
 ### Exercise 2: Data Types
-Identify the data type of each value:
+Identify and create variables of different types:
 ```javascript
-let value1 = "Hello";           // What type is this?
-let value2 = 42;                // What type is this?
-let value3 = true;              // What type is this?
-let value4;                     // What type is this?
-let value5 = null;              // What type is this?
-let value6 = 123.45;            // What type is this?
+// TODO: Create variables demonstrating each data type
+// 1. String
+// 2. Number
+// 3. Boolean
+// 4. Undefined
+// 5. Null
 ```
 
-## Mini-Project: Personal Info Card
-
-Create variables to store information for a personal info card. Include:
-- Name
-- Age
-- Occupation
-- Is Available for Work
-- Hourly Rate
-
+### Exercise 3: Type Conversion
+Practice type conversion operations:
 ```javascript
-// Create your variables here
-const name = "John Doe";
-let age = 30;
-let occupation = "Web Developer";
-let isAvailableForWork = true;
-const hourlyRate = 50;
-
-// Print the information
-console.log("Name:", name);
-console.log("Age:", age);
-console.log("Occupation:", occupation);
-console.log("Available for Work:", isAvailableForWork);
-console.log("Hourly Rate: $" + hourlyRate);
+// TODO: Convert between different types
+// 1. String to Number
+// 2. Number to String
+// 3. Boolean to String
+// 4. String to Boolean
 ```
 
-## Key Takeaways
-- Use `let` for variables that will change
-- Use `const` for variables that won't change
-- Avoid using `var` (it's outdated)
-- JavaScript has 5 primitive data types: string, number, boolean, undefined, and null
-- Always use meaningful variable names
-- Use camelCase for variable names
+## Best Practices
+- Always use `const` by default
+- Use `let` only when reassignment is needed
+- Never use `var`
+- Use meaningful variable names
+- Follow consistent naming conventions
+- Initialize variables when declared
+- Use strict mode ('use strict')
+
+## Common Mistakes
+- Using `var` instead of `let/const`
+- Not initializing variables
+- Using confusing variable names
+- Forgetting to declare variables
+- Incorrect type conversion
+- Ignoring scope rules
+
+## Debugging Tips
+1. Check variable declarations
+2. Verify data types
+3. Use console.log()
+4. Check for typos
+5. Run tests frequently
+
+## Additional Resources
+- MDN Variables Guide
+- JavaScript.info Data Types
+- Clean Code JavaScript
+- Testing Documentation
+- ES6+ Features Guide
 
 ## Next Steps
-- Complete the practice exercises
-- Try the mini-project
-- Move on to Lesson 2: Control Flow 
+1. Complete all exercises
+2. Pass all tests
+3. Review solutions
+4. Practice concepts
+5. Move to Lesson 2: Control Flow
+
+Remember to run the tests frequently and ensure all test cases pass before moving on. 

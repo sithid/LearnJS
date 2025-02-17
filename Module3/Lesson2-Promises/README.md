@@ -1,218 +1,184 @@
-# Lesson 2: Promises and Async/Await
+# Lesson 2: Promises and Async Programming
 
 ## Learning Objectives
 By the end of this lesson, you will be able to:
-- Understand asynchronous programming concepts
-- Create and handle Promises
-- Use async/await syntax
-- Handle errors in asynchronous code
-- Chain multiple asynchronous operations
-- Implement concurrent operations
+- Master asynchronous programming concepts
+- Create and handle Promises effectively
+- Implement async/await patterns
+- Handle errors in async code
+- Test asynchronous operations
+- Apply async best practices
 
-## 1. Understanding Asynchronous Programming
+## Prerequisites
+- Understanding of ES6+ features
+- Completion of previous lessons
+- Modern browser with Promise support
+- Local development environment
 
-### Synchronous vs Asynchronous
-```javascript
-// Synchronous
-console.log('Start');
-console.log('Middle');
-console.log('End');
-
-// Asynchronous
-console.log('Start');
-setTimeout(() => {
-    console.log('Middle');
-}, 1000);
-console.log('End');
-```
-
-### Callback Pattern (Old Way)
-```javascript
-function fetchData(callback) {
-    setTimeout(() => {
-        const data = { id: 1, name: 'John' };
-        callback(null, data);
-    }, 1000);
-}
-
-fetchData((error, data) => {
-    if (error) {
-        console.error('Error:', error);
-    } else {
-        console.log('Data:', data);
-    }
-});
-```
-
-## 2. Promises
+## 1. Promise Basics
 
 ### Creating Promises
 ```javascript
+// Basic Promise
 const promise = new Promise((resolve, reject) => {
     // Async operation
-    setTimeout(() => {
-        const success = true;
-        if (success) {
-            resolve('Operation completed');
-        } else {
-            reject(new Error('Operation failed'));
-        }
-    }, 1000);
+    if (success) {
+        resolve(result);
+    } else {
+        reject(error);
+    }
+});
+
+// Promise with timeout
+const timeoutPromise = new Promise((resolve) => {
+    setTimeout(() => resolve('Done!'), 1000);
 });
 ```
 
-### Promise States
-- Pending: Initial state
-- Fulfilled: Operation completed successfully
-- Rejected: Operation failed
-
-### Handling Promises
+### Promise Methods
 ```javascript
+// Then/Catch chain
 promise
-    .then(result => {
-        console.log('Success:', result);
+    .then(result => processResult(result))
+    .catch(error => handleError(error))
+    .finally(() => cleanup());
+
+// Multiple handlers
+promise
+    .then(successHandler)
+    .then(nextHandler)
+    .catch(errorHandler);
+```
+
+## 2. Promise Operations
+
+### Promise.all
+```javascript
+const promises = [
+    fetch('/api/users'),
+    fetch('/api/posts'),
+    fetch('/api/comments')
+];
+
+Promise.all(promises)
+    .then(([users, posts, comments]) => {
+        // Process all results
     })
     .catch(error => {
-        console.error('Error:', error);
-    })
-    .finally(() => {
-        console.log('Cleanup');
+        // Handle any error
     });
+```
+
+### Promise.race and allSettled
+```javascript
+// Race - first to complete
+Promise.race([
+    fetch('/api/fast'),
+    fetch('/api/slow')
+]).then(result => console.log('First response:', result));
+
+// AllSettled - wait for all
+Promise.allSettled([
+    Promise.resolve(1),
+    Promise.reject('error'),
+    Promise.resolve(3)
+]).then(results => {
+    // Process all results, including rejections
+});
 ```
 
 ## 3. Async/Await
 
-### Basic Syntax
+### Basic Usage
 ```javascript
-async function getData() {
+async function fetchUserData() {
     try {
-        const result = await promise;
-        console.log(result);
-    } catch (error) {
-        console.error(error);
-    }
-}
-```
-
-### Converting Callbacks to Promises
-```javascript
-// Callback version
-function oldFunction(callback) {
-    setTimeout(() => callback(null, 'data'), 1000);
-}
-
-// Promise version
-function newFunction() {
-    return new Promise((resolve) => {
-        setTimeout(() => resolve('data'), 1000);
-    });
-}
-
-// Usage with async/await
-async function example() {
-    const data = await newFunction();
-    console.log(data);
-}
-```
-
-## 4. Promise Chaining
-
-### Sequential Operations
-```javascript
-async function processData() {
-    const data = await fetchData();
-    const processed = await processStep1(data);
-    const result = await processStep2(processed);
-    return result;
-}
-```
-
-### Parallel Operations
-```javascript
-async function fetchAllData() {
-    const results = await Promise.all([
-        fetch('url1'),
-        fetch('url2'),
-        fetch('url3')
-    ]);
-    return results;
-}
-```
-
-## 5. Error Handling
-
-### Using try/catch
-```javascript
-async function handleErrors() {
-    try {
-        const data = await riskyOperation();
+        const response = await fetch('/api/user');
+        const data = await response.json();
         return data;
     } catch (error) {
         console.error('Error:', error);
-        throw new Error('Operation failed');
+        throw error;
     }
 }
 ```
 
-### Promise Error Handling
+### Advanced Patterns
 ```javascript
-Promise.all([
-    fetch('url1'),
-    fetch('url2')
-])
-.then(results => {
-    // Handle results
-})
-.catch(error => {
-    // Handle any error from any promise
-});
+// Parallel execution
+async function fetchAllData() {
+    const [users, posts] = await Promise.all([
+        fetchUsers(),
+        fetchPosts()
+    ]);
+    
+    return { users, posts };
+}
+
+// Sequential execution
+async function processSequential() {
+    const result1 = await step1();
+    const result2 = await step2(result1);
+    return await step3(result2);
+}
 ```
+
+## Testing Your Code
+
+### Running Tests
+1. Open test.html in your browser
+2. Complete exercises in exercises.js
+3. Run tests to verify your solutions
+4. Check solutions.js for reference
+
+### Test Cases Cover
+- Promise creation
+- Error handling
+- Async/await usage
+- Promise methods
+- Error scenarios
+- Timing issues
 
 ## Practice Exercises
 
-### Exercise 1: Basic Promises
-Create functions that return promises for:
-- Delayed execution
-- Random success/failure
-- Chained operations
-- Error handling
+### Exercise 1: Promise Basics
+1. Create promises
+2. Handle resolution
+3. Handle rejection
 
-### Exercise 2: Async/Await
-Convert callback-based code to async/await:
-- File operations
-- API calls
-- Database operations
-- User authentication
+### Exercise 2: Promise Operations
+1. Promise.all usage
+2. Promise.race implementation
+3. Error handling
 
-### Exercise 3: Promise Patterns
-Implement common promise patterns:
-- Sequential execution
-- Parallel execution
+### Exercise 3: Async/Await
+1. Basic async functions
+2. Error handling
+3. Parallel operations
+
+### Exercise 4: Real-world Tasks
+1. API requests
+2. File operations
+3. Timer functions
+
+## Best Practices
+- Handle all errors
+- Use try/catch blocks
+- Avoid callback hell
+- Implement proper cleanup
+- Consider performance
+- Write clean async code
+
+## Common Mistakes
+- Missing error handling
+- Promise chain breaks
+- Async/await misuse
+- Memory leaks
 - Race conditions
-- Timeout handling
-
-### Exercise 4: Error Handling
-Create robust error handling for:
-- Network requests
-- Data validation
-- Resource cleanup
-- Retry logic
-
-### Exercise 5: Real-world Application
-Build a mini-application that:
-- Fetches data from an API
-- Processes the results
-- Handles errors gracefully
-- Shows loading states
-
-## Key Takeaways
-- Promises provide a clean way to handle async operations
-- Async/await makes async code look synchronous
-- Error handling is crucial in async programming
-- Promise chaining helps manage complex operations
-- Parallel execution can improve performance
+- Unhandled rejections
 
 ## Next Steps
-- Complete the practice exercises
-- Experiment with different promise patterns
-- Move on to Lesson 3: Modules 
+- Complete all exercises
+- Ensure all tests pass
+- Review solutions
+- Move to next lesson

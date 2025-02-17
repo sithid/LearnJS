@@ -1,202 +1,284 @@
-# Lesson 2: Event Handling in JavaScript
+# Lesson 2: Events in JavaScript
 
 ## Learning Objectives
 By the end of this lesson, you will be able to:
-- Understand different types of events
-- Add and remove event listeners
-- Work with the event object
-- Handle form events
+- Master event handling techniques
 - Implement event delegation
-- Manage event propagation
+- Create custom events
+- Handle browser events effectively
+- Test event-driven code
+- Apply event best practices
+- Ensure accessibility in event handling
 
-## 1. Understanding Events
+## Prerequisites
+- Understanding of DOM manipulation
+- Completion of Lesson 1
+- Modern browser with DevTools
+- Local development environment
 
-Events are actions or occurrences that happen in a web page, such as:
-- User interactions (clicks, key presses, mouse movements)
-- Document loading
-- Form submissions
-- Window resizing
+## 1. Event Fundamentals
 
-### Common Event Types
+### Event Listeners
 ```javascript
-// Mouse Events
-element.addEventListener('click', handler);
-element.addEventListener('dblclick', handler);
-element.addEventListener('mouseenter', handler);
-element.addEventListener('mouseleave', handler);
-
-// Keyboard Events
-element.addEventListener('keydown', handler);
-element.addEventListener('keyup', handler);
-element.addEventListener('keypress', handler);
-
-// Form Events
-element.addEventListener('submit', handler);
-element.addEventListener('change', handler);
-element.addEventListener('input', handler);
-
-// Document/Window Events
-window.addEventListener('load', handler);
-window.addEventListener('resize', handler);
-document.addEventListener('DOMContentLoaded', handler);
-```
-
-## 2. Event Listeners
-
-### Adding Event Listeners
-```javascript
-// Basic syntax
-element.addEventListener(eventType, handlerFunction);
-
-// With options
-element.addEventListener(eventType, handlerFunction, options);
-
-// Example
-const button = document.getElementById('myButton');
-button.addEventListener('click', function(event) {
-    console.log('Button clicked!');
+// Basic event listener
+element.addEventListener('click', (event) => {
+    console.log('Clicked!', event);
 });
-```
 
-### Removing Event Listeners
-```javascript
-// Must use the same function reference
-function handleClick(event) {
-    console.log('Clicked!');
-}
+// Multiple events
+const handleHover = (event) => {
+    const { type, target } = event;
+    console.log(`${type} event on`, target);
+};
 
-element.addEventListener('click', handleClick);
+element.addEventListener('mouseenter', handleHover);
+element.addEventListener('mouseleave', handleHover);
+
+// Remove listener
 element.removeEventListener('click', handleClick);
 ```
 
-## 3. The Event Object
-
 ### Event Object Properties
 ```javascript
-element.addEventListener('click', function(event) {
-    // Event type
-    console.log(event.type);  // 'click'
+function handleEvent(event) {
+    // Common properties
+    const {
+        type,        // Event type
+        target,      // Element that triggered the event
+        currentTarget, // Element handling the event
+        timeStamp,   // When the event occurred
+        bubbles,     // Whether event bubbles
+        cancelable   // Whether event can be canceled
+    } = event;
     
-    // Target element
-    console.log(event.target);  // The clicked element
+    // Mouse event properties
+    const {
+        clientX, clientY,   // Coordinates relative to viewport
+        pageX, pageY,       // Coordinates relative to document
+        button              // Mouse button pressed
+    } = event;
     
-    // Current target (element with listener)
-    console.log(event.currentTarget);
-    
-    // Mouse coordinates
-    console.log(event.clientX, event.clientY);
-    
-    // Keyboard info
-    console.log(event.key, event.keyCode);
-});
+    // Keyboard event properties
+    const {
+        key,        // Key pressed
+        code,       // Physical key code
+        altKey,     // Whether Alt was pressed
+        ctrlKey,    // Whether Ctrl was pressed
+        shiftKey    // Whether Shift was pressed
+    } = event;
+}
 ```
 
-### Preventing Default Behavior
+## 2. Event Delegation
+
+### Implementation
 ```javascript
-form.addEventListener('submit', function(event) {
-    // Prevent form submission
-    event.preventDefault();
-    
-    // Your custom handling code
-});
-
-link.addEventListener('click', function(event) {
-    // Prevent navigation
-    event.preventDefault();
-});
-```
-
-## 4. Event Propagation
-
-### Bubbling and Capturing
-Events in the DOM bubble up through the ancestor elements:
-```javascript
-// Bubbling (default)
-element.addEventListener('click', handler);
-
-// Capturing
-element.addEventListener('click', handler, { capture: true });
-
-// Stop propagation
-element.addEventListener('click', function(event) {
-    event.stopPropagation();
-});
-```
-
-### Event Delegation
-Handle events on multiple elements using a single listener:
-```javascript
-// Instead of adding listeners to each button
-document.getElementById('button-container').addEventListener('click', function(event) {
-    if (event.target.matches('button')) {
-        console.log('Button clicked:', event.target.textContent);
+// Event delegation pattern
+document.querySelector('.list').addEventListener('click', (event) => {
+    if (event.target.matches('.list-item')) {
+        handleItemClick(event);
+    } else if (event.target.matches('.delete-button')) {
+        handleDeleteClick(event);
     }
 });
+
+// Dynamic content handling
+function setupDynamicList() {
+    const list = document.querySelector('.dynamic-list');
+    
+    list.addEventListener('click', handleListClick);
+    
+    function handleListClick(event) {
+        const button = event.target.closest('.action-button');
+        if (!button) return;
+        
+        const action = button.dataset.action;
+        const item = button.closest('.list-item');
+        
+        actions[action]?.(item);
+    }
+}
 ```
 
-## 5. Custom Events
+### Event Bubbling and Capturing
+```javascript
+// Event phases
+element.addEventListener('click', (event) => {
+    console.log('Bubbling phase');
+}, false); // default
+
+element.addEventListener('click', (event) => {
+    console.log('Capture phase');
+}, true);
+
+// Stop propagation
+element.addEventListener('click', (event) => {
+    event.stopPropagation();
+    // Handle event
+});
+```
+
+## 3. Custom Events
 
 ### Creating Custom Events
 ```javascript
-// Create event
-const customEvent = new CustomEvent('myEvent', {
-    detail: { message: 'Hello!' }
+// Custom event creation
+const customEvent = new CustomEvent('userAction', {
+    bubbles: true,
+    cancelable: true,
+    detail: {
+        userId: 123,
+        action: 'save'
+    }
 });
 
 // Dispatch event
 element.dispatchEvent(customEvent);
 
 // Listen for custom event
-element.addEventListener('myEvent', function(event) {
-    console.log(event.detail.message);
+element.addEventListener('userAction', (event) => {
+    const { userId, action } = event.detail;
+    console.log(`User ${userId} performed ${action}`);
 });
 ```
 
+### Event Communication
+```javascript
+class EventBus {
+    constructor() {
+        this.events = new Map();
+    }
+    
+    on(event, callback) {
+        if (!this.events.has(event)) {
+            this.events.set(event, []);
+        }
+        this.events.get(event).push(callback);
+    }
+    
+    emit(event, data) {
+        if (this.events.has(event)) {
+            this.events.get(event).forEach(callback => {
+                callback(data);
+            });
+        }
+    }
+}
+```
+
+## 4. Form Events
+
+### Form Handling
+```javascript
+// Form submission
+form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    
+    const formData = new FormData(event.target);
+    const data = Object.fromEntries(formData.entries());
+    
+    try {
+        await submitForm(data);
+        showSuccess('Form submitted successfully');
+    } catch (error) {
+        showError('Form submission failed');
+    }
+});
+
+// Input validation
+input.addEventListener('input', (event) => {
+    const value = event.target.value;
+    const isValid = validateInput(value);
+    
+    updateValidationUI(event.target, isValid);
+});
+```
+
+## Testing Your Code
+
+### Running Tests
+1. Open `test.html` in your browser
+2. Write your code in `exercises.js`
+3. Tests run automatically
+4. Fix any failing tests
+5. Verify all tests pass
+
+### Test Cases Cover
+- Event listener handling
+- Event delegation
+- Custom events
+- Form validation
+- Error scenarios
+- Event bubbling
+- Performance impact
+
 ## Practice Exercises
 
-### Exercise 1: Basic Event Handling
-Create handlers for:
+### Exercise 1: Event Basics
+Implement event handlers:
 - Click events
-- Mouse movement
-- Keyboard input
-- Window resize
+- Mouse events
+- Keyboard events
+- Form events
 
-### Exercise 2: Form Validation
-Build a form that:
-- Validates input in real-time
-- Prevents submission if invalid
-- Shows error messages
-- Handles different input types
+### Exercise 2: Event Delegation
+Create delegation systems:
+- Dynamic lists
+- Complex UIs
+- Nested elements
+- Performance optimization
 
-### Exercise 3: Interactive List
-Create a list where you can:
-- Add items with enter key
-- Remove items with delete button
-- Edit items with double-click
-- Drag and drop to reorder
+### Exercise 3: Custom Events
+Build event systems:
+- Custom event creation
+- Event communication
+- State management
+- Error handling
 
-### Exercise 4: Event Delegation
-Build a dynamic menu system:
-- Handle clicks on all menu items
-- Add/remove items dynamically
-- Toggle submenus
-- Track active items
+### Exercise 4: Form Handling
+Implement form features:
+- Real-time validation
+- Submit handling
+- File uploads
+- Error display
 
-### Exercise 5: Custom Event System
-Create a pub/sub system:
-- Define custom events
-- Dispatch events with data
-- Handle events in different components
-- Clean up event listeners
+## Best Practices
+- Use event delegation
+- Remove unused listeners
+- Optimize event handlers
+- Handle errors properly
+- Consider performance
+- Ensure accessibility
+- Test thoroughly
 
-## Key Takeaways
-- Events are fundamental to interactive web pages
-- Event listeners should be properly managed
-- Event delegation improves performance
-- The event object provides useful information
-- Custom events enable component communication
+## Common Mistakes
+- Memory leaks
+- Missing cleanup
+- Event bubbling issues
+- Performance problems
+- Accessibility oversights
+- Poor error handling
+
+## Debugging Tips
+1. Use browser DevTools
+2. Monitor event listeners
+3. Check event propagation
+4. Test performance
+5. Verify accessibility
+6. Inspect event objects
+
+## Additional Resources
+- MDN Events Guide
+- Event Performance Tips
+- Accessibility Guidelines
+- Testing Event Handlers
+- Browser DevTools Guide
 
 ## Next Steps
-- Complete the practice exercises
-- Experiment with different event types
-- Move on to Lesson 3: Forms and Validation 
+1. Complete all exercises
+2. Pass all tests
+3. Review solutions
+4. Practice patterns
+5. Move to Lesson 3: Forms
+
+Remember to clean up event listeners and ensure proper error handling.
