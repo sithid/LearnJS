@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Control Flow - Tests</title>
+    <title>Control Flow Tests</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -13,13 +13,16 @@
             background-color: #f5f5f5;
         }
         .test-container {
-            background: white;
+            background-color: white;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             margin-bottom: 20px;
         }
-        .test-result {
+        .test-results {
+            margin-top: 20px;
+        }
+        .test-case {
             padding: 10px;
             margin: 5px 0;
             border-radius: 4px;
@@ -27,211 +30,166 @@
         .pass {
             background-color: #e8f5e9;
             color: #2e7d32;
-            border-left: 4px solid #2e7d32;
         }
         .fail {
-            background-color: #fbe9e7;
+            background-color: #ffebee;
             color: #c62828;
-            border-left: 4px solid #c62828;
-        }
-        .console-output {
-            background-color: #f8f9fa;
-            padding: 10px;
-            border-radius: 4px;
-            margin-top: 5px;
-            font-family: monospace;
-            white-space: pre-wrap;
         }
         h1 {
             color: #333;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 10px;
+            text-align: center;
+        }
+        h2 {
+            color: #666;
+            margin-top: 30px;
         }
         .summary {
-            margin-top: 20px;
-            padding: 15px;
-            background: #e3f2fd;
+            text-align: center;
+            font-size: 1.2em;
+            margin: 20px 0;
+            padding: 10px;
             border-radius: 4px;
+        }
+        .summary.all-pass {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+        .summary.has-fail {
+            background-color: #ffebee;
+            color: #c62828;
         }
     </style>
 </head>
 <body>
     <div class="test-container">
-        <h1>Control Flow - Test Results</h1>
-        <div id="test-results"></div>
+        <h1>Control Flow Tests</h1>
+        <div id="testResults" class="test-results"></div>
         <div id="summary" class="summary"></div>
     </div>
 
     <script type="module">
-        // Import student's code
-        import { checkAge, calculateGrade, fizzBuzz, getDayMessage, guessNumber } from './exercises.js';
+        import {
+            checkNumber,
+            canVote,
+            isLeapYear,
+            getDayType,
+            getLetterGrade,
+            calculate,
+            sumToN,
+            factorial,
+            multiplicationTable,
+            fizzBuzz,
+            findPrimes,
+            createPattern
+        } from './exercises.js';
 
-        // Test runner
-        class TestRunner {
-            constructor() {
-                this.results = [];
-                this.passCount = 0;
-                this.totalTests = 0;
-                this.consoleOutput = [];
-                
-                // Mock console.log to capture output
-                this.originalLog = console.log;
-                console.log = (...args) => {
-                    this.consoleOutput.push(args.join(' '));
-                    this.originalLog.apply(console, args);
-                };
-            }
-
-            assert(condition, message) {
-                if (!condition) {
-                    throw new Error(message);
+        function runTest(description, testFunction) {
+            const resultDiv = document.createElement('div');
+            try {
+                const result = testFunction();
+                if (result === true) {
+                    resultDiv.className = 'test-case pass';
+                    resultDiv.textContent = `✓ ${description}`;
+                } else {
+                    resultDiv.className = 'test-case fail';
+                    resultDiv.textContent = `✗ ${description}`;
                 }
+            } catch (error) {
+                resultDiv.className = 'test-case fail';
+                resultDiv.textContent = `✗ ${description} (Error: ${error.message})`;
             }
-
-            clearConsole() {
-                this.consoleOutput = [];
-            }
-
-            getConsoleOutput() {
-                return this.consoleOutput.join('\n');
-            }
-
-            addResult(testName, passed, error = null, output = null) {
-                this.results.push({ testName, passed, error, output });
-                if (passed) this.passCount++;
-                this.totalTests++;
-            }
-
-            displayResults() {
-                const container = document.getElementById('test-results');
-                const summary = document.getElementById('summary');
-                
-                this.results.forEach(result => {
-                    const div = document.createElement('div');
-                    div.className = `test-result ${result.passed ? 'pass' : 'fail'}`;
-                    div.textContent = `${result.passed ? '✅' : '❌'} ${result.testName}`;
-                    
-                    if (!result.passed && result.error) {
-                        const errorDiv = document.createElement('div');
-                        errorDiv.className = 'console-output';
-                        errorDiv.textContent = result.error;
-                        div.appendChild(errorDiv);
-                    }
-
-                    if (result.output) {
-                        const outputDiv = document.createElement('div');
-                        outputDiv.className = 'console-output';
-                        outputDiv.textContent = result.output;
-                        div.appendChild(outputDiv);
-                    }
-                    
-                    container.appendChild(div);
-                });
-
-                summary.textContent = `Passed ${this.passCount} of ${this.totalTests} tests (${Math.round(this.passCount/this.totalTests*100)}%)`;
-            }
-
-            runTest(testName, testFn) {
-                this.clearConsole();
-                try {
-                    testFn();
-                    const output = this.getConsoleOutput();
-                    this.addResult(testName, true, null, output);
-                } catch (error) {
-                    const output = this.getConsoleOutput();
-                    this.addResult(testName, false, error.message, output);
-                }
-            }
+            document.getElementById('testResults').appendChild(resultDiv);
+            return resultDiv.className.includes('pass');
         }
 
-        // Initialize test runner
-        const runner = new TestRunner();
+        const tests = [
+            // Exercise 1: Basic Conditionals
+            () => runTest('checkNumber: positive numbers', () => 
+                checkNumber(5) === 'positive'),
+            () => runTest('checkNumber: negative numbers', () => 
+                checkNumber(-3) === 'negative'),
+            () => runTest('checkNumber: zero', () => 
+                checkNumber(0) === 'zero'),
+            
+            () => runTest('canVote: adult', () => 
+                canVote(18) === true),
+            () => runTest('canVote: minor', () => 
+                canVote(17) === false),
+            
+            () => runTest('isLeapYear: regular leap year', () => 
+                isLeapYear(2024) === true),
+            () => runTest('isLeapYear: century not leap year', () => 
+                isLeapYear(1900) === false),
+            () => runTest('isLeapYear: special leap year', () => 
+                isLeapYear(2000) === true),
 
-        // Run tests
-        runner.runTest('Age Checker - Under 18', () => {
-            const result = checkAge(16);
-            runner.assert(result && result.toLowerCase().includes('young'), 'Should indicate person is too young to vote');
+            // Exercise 2: Switch Statements
+            () => runTest('getDayType: weekend', () => 
+                getDayType('Saturday') === 'weekend' && getDayType('Sunday') === 'weekend'),
+            () => runTest('getDayType: workday', () => 
+                getDayType('Monday') === 'workday' && getDayType('Friday') === 'workday'),
+            () => runTest('getDayType: invalid', () => 
+                getDayType('InvalidDay') === 'invalid'),
+
+            () => runTest('getLetterGrade: A grade', () => 
+                getLetterGrade(95) === 'A'),
+            () => runTest('getLetterGrade: F grade', () => 
+                getLetterGrade(55) === 'F'),
+            () => runTest('getLetterGrade: invalid score', () => 
+                getLetterGrade(101) === 'invalid'),
+
+            () => runTest('calculate: addition', () => 
+                calculate(5, 3, 'add') === 8),
+            () => runTest('calculate: division', () => 
+                calculate(6, 2, 'divide') === 3),
+            () => runTest('calculate: division by zero', () => 
+                calculate(5, 0, 'divide') === null),
+
+            // Exercise 3: Loops
+            () => runTest('sumToN: positive number', () => 
+                sumToN(5) === 15),
+            () => runTest('sumToN: negative number', () => 
+                sumToN(-5) === 0),
+
+            () => runTest('factorial: positive number', () => 
+                factorial(5) === 120),
+            () => runTest('factorial: zero', () => 
+                factorial(0) === 1),
+            () => runTest('factorial: negative number', () => 
+                factorial(-5) === null),
+
+            () => runTest('multiplicationTable: 2x2', () => {
+                const result = multiplicationTable(2);
+                return JSON.stringify(result) === JSON.stringify([[1,2],[2,4]]);
+            }),
+
+            // Exercise 4: Advanced Challenges
+            () => runTest('fizzBuzz: basic test', () => {
+                const result = fizzBuzz(5);
+                return JSON.stringify(result) === JSON.stringify([1,2,'Fizz',4,'Buzz']);
+            }),
+
+            () => runTest('findPrimes: small range', () => {
+                const result = findPrimes(1, 10);
+                return JSON.stringify(result) === JSON.stringify([2,3,5,7]);
+            }),
+
+            () => runTest('createPattern: 3 rows', () => {
+                const result = createPattern(3);
+                return JSON.stringify(result) === JSON.stringify(['*','**','***']);
+            })
+        ];
+
+        // Run all tests
+        let passCount = 0;
+        tests.forEach(test => {
+            if (test()) passCount++;
         });
 
-        runner.runTest('Age Checker - 20 years old', () => {
-            const result = checkAge(20);
-            runner.assert(result && result.toLowerCase().includes('vote') && !result.toLowerCase().includes('rent'), 
-                'Should indicate person can vote but not rent a car');
-        });
-
-        runner.runTest('Age Checker - 30 years old', () => {
-            const result = checkAge(30);
-            runner.assert(result && result.toLowerCase().includes('vote') && result.toLowerCase().includes('rent'), 
-                'Should indicate person can vote and rent a car');
-        });
-
-        runner.runTest('Age Checker - Senior', () => {
-            const result = checkAge(70);
-            runner.assert(result && result.toLowerCase().includes('senior'), 
-                'Should indicate person is eligible for senior discount');
-        });
-
-        runner.runTest('Grade Calculator - A Grade', () => {
-            runner.assert(calculateGrade(95) === 'A', 'Score 95 should be an A');
-        });
-
-        runner.runTest('Grade Calculator - B Grade', () => {
-            runner.assert(calculateGrade(85) === 'B', 'Score 85 should be a B');
-        });
-
-        runner.runTest('Grade Calculator - C Grade', () => {
-            runner.assert(calculateGrade(75) === 'C', 'Score 75 should be a C');
-        });
-
-        runner.runTest('Grade Calculator - D Grade', () => {
-            runner.assert(calculateGrade(65) === 'D', 'Score 65 should be a D');
-        });
-
-        runner.runTest('Grade Calculator - F Grade', () => {
-            runner.assert(calculateGrade(55) === 'F', 'Score 55 should be an F');
-        });
-
-        runner.runTest('FizzBuzz Test', () => {
-            fizzBuzz();
-            const output = runner.getConsoleOutput();
-            runner.assert(output.includes('Fizz') && output.includes('Buzz') && output.includes('FizzBuzz'),
-                'FizzBuzz should output Fizz, Buzz, and FizzBuzz');
-        });
-
-        runner.runTest('Day Message - Monday', () => {
-            runner.assert(getDayMessage('Monday').toLowerCase().includes('start'),
-                'Monday should mention start of work week');
-        });
-
-        runner.runTest('Day Message - Friday', () => {
-            runner.assert(getDayMessage('Friday').toLowerCase().includes('tgif'),
-                'Friday should include TGIF');
-        });
-
-        runner.runTest('Day Message - Weekend', () => {
-            runner.assert(getDayMessage('Saturday').toLowerCase().includes('weekend'),
-                'Saturday should mention weekend');
-            runner.assert(getDayMessage('Sunday').toLowerCase().includes('weekend'),
-                'Sunday should mention weekend');
-        });
-
-        runner.runTest('Day Message - Regular Day', () => {
-            runner.assert(getDayMessage('Wednesday').toLowerCase().includes('regular'),
-                'Wednesday should be a regular work day');
-        });
-
-        // Note: We can't effectively test the guessNumber function automatically
-        // since it involves user input, but we can test if it's defined
-        runner.runTest('Number Guessing Game - Function Check', () => {
-            runner.assert(typeof guessNumber === 'function',
-                'guessNumber should be defined as a function');
-        });
-
-        // Display results
-        runner.displayResults();
-
-        // Restore original console.log
-        console.log = runner.originalLog;
+        // Display summary
+        const summary = document.getElementById('summary');
+        summary.textContent = `Passed ${passCount} out of ${tests.length} tests`;
+        summary.className = `summary ${passCount === tests.length ? 'all-pass' : 'has-fail'}`;
     </script>
 </body>
 </html> 

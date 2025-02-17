@@ -2,222 +2,204 @@
 
 ## Learning Objectives
 By the end of this lesson, you will be able to:
-- Master modern array methods and operations
-- Work with complex data structures
-- Implement object manipulation techniques
-- Use modern array/object features
-- Test array and object operations
-- Apply best practices for data handling
+- Create and manipulate arrays and objects
+- Use array methods effectively (map, filter, reduce, etc.)
+- Work with object properties and methods
+- Understand array and object destructuring
+- Implement common array/object algorithms
+- Handle nested data structures
+- Debug array and object operations
 
 ## Prerequisites
-- Understanding of basic JavaScript
-- Completion of previous lessons
-- Modern browser with ES6+ support
-- Local development environment
+- Completion of Lesson 1: Variables and Data Types
+- Completion of Lesson 2: Control Flow
+- Completion of Lesson 3: Functions
+- Understanding of basic JavaScript syntax
 
-## 1. Modern Array Methods
+## 1. Arrays
 
-### Array Creation and Manipulation
+### Array Creation and Access
 ```javascript
-// Creating arrays
-const numbers = [1, 2, 3, 4, 5];
-const fruits = Array.from('🍎🍌🍇');
-const range = Array.from({ length: 5 }, (_, i) => i + 1);
+// Array literal
+const fruits = ['apple', 'banana', 'orange'];
 
-// Array spreading
-const combined = [...numbers, ...range];
-const copy = [...numbers];
+// Array constructor
+const numbers = new Array(1, 2, 3);
+
+// Accessing elements
+console.log(fruits[0]);        // 'apple'
+console.log(fruits.length);    // 3
 ```
 
-### Transformation Methods
+### Array Methods
+
+#### Adding/Removing Elements
 ```javascript
+const arr = ['a', 'b', 'c'];
+
+// Add to end
+arr.push('d');           // ['a', 'b', 'c', 'd']
+
+// Remove from end
+arr.pop();              // ['a', 'b', 'c']
+
+// Add to beginning
+arr.unshift('x');       // ['x', 'a', 'b', 'c']
+
+// Remove from beginning
+arr.shift();            // ['a', 'b', 'c']
+
+// Splice
+arr.splice(1, 1, 'y');  // ['a', 'y', 'c']
+```
+
+#### Transformation Methods
+```javascript
+const numbers = [1, 2, 3, 4, 5];
+
 // Map
-const doubled = numbers.map(num => num * 2);
+const doubled = numbers.map(n => n * 2);
 
 // Filter
-const evenNumbers = numbers.filter(num => num % 2 === 0);
+const evens = numbers.filter(n => n % 2 === 0);
 
 // Reduce
-const sum = numbers.reduce((total, num) => total + num, 0);
+const sum = numbers.reduce((acc, n) => acc + n, 0);
 
-// Chain operations
-const processedNumbers = numbers
-    .filter(num => num > 2)
-    .map(num => num * 2)
-    .reduce((sum, num) => sum + num, 0);
+// Sort
+numbers.sort((a, b) => a - b);
 ```
 
-### Search and Sort
+## 2. Objects
+
+### Object Creation and Access
 ```javascript
-// Find elements
-const firstEven = numbers.find(num => num % 2 === 0);
-const hasNegative = numbers.some(num => num < 0);
-const allPositive = numbers.every(num => num > 0);
-
-// Sorting
-const sorted = [...numbers].sort((a, b) => a - b);
-const sortedObjects = items.sort((a, b) => 
-    a.name.localeCompare(b.name)
-);
-```
-
-## 2. Object Operations
-
-### Object Creation
-```javascript
-// Object literal with computed properties
-const key = 'dynamic';
-const obj = {
+// Object literal
+const person = {
     name: 'John',
-    [key]: 'value',
-    method() {
-        return this.name;
+    age: 30,
+    greet() {
+        return `Hello, I'm ${this.name}`;
     }
 };
 
-// Object spreading
-const defaults = { theme: 'light', size: 'medium' };
-const custom = { ...defaults, theme: 'dark' };
+// Accessing properties
+console.log(person.name);          // Dot notation
+console.log(person['age']);        // Bracket notation
 ```
 
 ### Object Methods
-```javascript
-// Object manipulation
-const keys = Object.keys(obj);
-const values = Object.values(obj);
-const entries = Object.entries(obj);
 
-// Transform entries
-const transformed = Object.fromEntries(
-    entries.map(([key, value]) => [key, value.toUpperCase()])
-);
+#### Object Operations
+```javascript
+// Add/modify properties
+person.location = 'New York';
+person['email'] = 'john@example.com';
+
+// Delete properties
+delete person.age;
+
+// Check property existence
+console.log('name' in person);
+console.log(person.hasOwnProperty('age'));
 ```
 
-## 3. Complex Data Structures
-
-### Nested Objects
+#### Object Methods
 ```javascript
-const user = {
-    id: 1,
-    name: 'John',
-    address: {
-        street: '123 Main St',
-        city: 'Boston',
-        coordinates: {
-            lat: 42.3601,
-            lng: -71.0589
-        }
-    },
-    orders: [
-        { id: 1, total: 29.99 },
-        { id: 2, total: 39.99 }
-    ]
-};
+// Object.keys()
+const keys = Object.keys(person);
+
+// Object.values()
+const values = Object.values(person);
+
+// Object.entries()
+const entries = Object.entries(person);
 ```
 
-### Working with Nested Data
-```javascript
-// Destructuring nested data
-const { 
-    name, 
-    address: { city, coordinates: { lat, lng } },
-    orders: [firstOrder, ...otherOrders]
-} = user;
+## 3. Destructuring
 
-// Updating nested data
-const updatedUser = {
-    ...user,
-    address: {
-        ...user.address,
-        city: 'New York'
-    }
-};
+### Array Destructuring
+```javascript
+const [first, second, ...rest] = [1, 2, 3, 4, 5];
+console.log(first);  // 1
+console.log(rest);   // [3, 4, 5]
 ```
 
-## Testing Your Code
-
-### Running Tests
-1. Open `test.html` in your browser
-2. Write your code in `exercises.js`
-3. Tests run automatically
-4. Fix any failing tests
-5. Verify all tests pass
-
-### Test Cases Cover
-- Array method operations
-- Object manipulations
-- Data structure operations
-- Error handling
-- Edge cases
-- Performance considerations
+### Object Destructuring
+```javascript
+const { name, age, location = 'Unknown' } = person;
+console.log(name);     // 'John'
+console.log(location); // 'Unknown' (default value)
+```
 
 ## Practice Exercises
 
 ### Exercise 1: Array Operations
-Implement array utilities:
-- Custom map/filter/reduce
-- Array transformations
-- Search operations
-- Sorting algorithms
+```javascript
+// 1. Find maximum value in array
+// 2. Remove duplicates from array
+// 3. Rotate array by k positions
+```
 
-### Exercise 2: Object Manipulation
-Create object utilities:
-- Deep cloning
-- Object merging
-- Property validation
-- Data transformation
+### Exercise 2: Array Transformations
+```javascript
+// 1. Map array of objects
+// 2. Filter and transform data
+// 3. Complex data aggregation
+```
 
-### Exercise 3: Data Processing
-Build data processing functions:
-- Filter and sort collections
-- Group and aggregate data
-- Transform data structures
-- Handle nested updates
+### Exercise 3: Object Manipulation
+```javascript
+// 1. Deep clone an object
+// 2. Merge objects
+// 3. Create object hierarchy
+```
 
 ### Exercise 4: Advanced Operations
-Implement complex operations:
-- Deep object comparison
-- Custom sorting algorithms
-- Data structure conversions
-- Performance optimizations
+```javascript
+// 1. Implement array intersection
+// 2. Create object validator
+// 3. Build data transformer
+```
 
 ## Best Practices
-- Use modern array methods
-- Avoid mutating data
-- Implement proper error handling
-- Consider performance
-- Write comprehensive tests
-- Handle edge cases
-- Use appropriate methods
+- Use array methods over loops when possible
+- Keep objects focused and cohesive
+- Use meaningful property names
+- Handle edge cases (empty arrays, null values)
+- Consider immutability
+- Use destructuring for cleaner code
+- Document complex data structures
 
 ## Common Mistakes
-- Mutating original arrays
-- Incorrect array method usage
-- Deep clone issues
-- Performance bottlenecks
-- Missing error handling
-- Improper comparisons
+- Mutating arrays/objects unintentionally
+- Not handling array bounds
+- Incorrect use of array methods
+- Deep vs shallow copying
+- Property access on null/undefined
+- Forgetting to check for existence
 
 ## Debugging Tips
-1. Use console.table for arrays
-2. Inspect object structure
-3. Check method returns
+1. Use console.table for arrays/objects
+2. Check array lengths and object keys
+3. Verify data types
 4. Test edge cases
-5. Monitor performance
-6. Use browser DevTools
+5. Use browser debugger
+6. Add data validation
 
 ## Additional Resources
 - MDN Array Documentation
-- JavaScript.Info Arrays
-- Object Manipulation Guide
-- Performance Best Practices
-- Testing Data Structures
+- MDN Object Documentation
+- JavaScript.info Arrays
+- JavaScript.info Objects
+- Clean Code Data Structures
+- Array Methods Cheatsheet
 
 ## Next Steps
 1. Complete all exercises
 2. Pass all tests
 3. Review solutions
-4. Practice concepts
+4. Practice with real data
 5. Move to Module 2: DOM Manipulation
 
-Remember to test your code thoroughly and handle edge cases properly.
+Remember: Arrays and objects are fundamental data structures in JavaScript. Understanding how to work with them effectively is crucial for becoming a proficient developer.

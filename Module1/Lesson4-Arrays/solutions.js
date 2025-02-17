@@ -1,225 +1,255 @@
 // Exercise 1: Array Operations
 
-function findLargestNumber(numbers) {
-    let largest = numbers[0];
-    for (let i = 1; i < numbers.length; i++) {
-        if (numbers[i] > largest) {
-            largest = numbers[i];
-        }
-    }
-    return largest;
+// 1. Find maximum value in array
+export function findMax(numbers) {
+    if (!Array.isArray(numbers) || numbers.length === 0) return null;
+    return Math.max(...numbers);
 }
 
-function removeDuplicates(array) {
-    let result = [];
-    for (let item of array) {
-        if (!result.includes(item)) {
-            result.push(item);
-        }
-    }
-    return result;
+// 2. Remove duplicates from array
+export function removeDuplicates(array) {
+    if (!Array.isArray(array)) return [];
+    return [...new Set(array)];
 }
 
-function customReverse(array) {
-    let result = [];
-    for (let i = array.length - 1; i >= 0; i--) {
-        result.push(array[i]);
-    }
-    return result;
+// 3. Rotate array by k positions
+export function rotateArray(array, k) {
+    if (!Array.isArray(array) || array.length === 0) return null;
+    if (typeof k !== 'number') return null;
+    
+    const normalizedK = ((k % array.length) + array.length) % array.length;
+    return [...array.slice(-normalizedK), ...array.slice(0, -normalizedK)];
 }
 
-// Test cases for Exercise 1
-console.log("Exercise 1: Array Operations");
-console.log("Largest number:", findLargestNumber([5, 3, 9, 1, 7]));
-console.log("Remove duplicates:", removeDuplicates([1, 2, 2, 3, 3, 4]));
-console.log("Custom reverse:", customReverse([1, 2, 3, 4, 5]));
+// Exercise 2: Array Transformations
 
-// Exercise 2: Shopping List Manager
-const shoppingList = {
-    items: [],
-
-    addItem(name, quantity = 1) {
-        const existingItem = this.items.find(item => item.name === name);
-        if (existingItem) {
-            existingItem.quantity += quantity;
-        } else {
-            this.items.push({ name, quantity });
-        }
-    },
-
-    removeItem(name) {
-        const index = this.items.findIndex(item => item.name === name);
-        if (index !== -1) {
-            this.items.splice(index, 1);
-        }
-    },
-
-    updateQuantity(name, newQuantity) {
-        const item = this.items.find(item => item.name === name);
-        if (item) {
-            item.quantity = newQuantity;
-        }
-    },
-
-    listItems() {
-        return this.items.map(item => 
-            `${item.name}: ${item.quantity}`
-        ).join('\n');
-    }
-};
-
-// Test cases for Exercise 2
-console.log("\nExercise 2: Shopping List Manager");
-shoppingList.addItem("Apples", 5);
-shoppingList.addItem("Bananas", 3);
-console.log(shoppingList.listItems());
-shoppingList.updateQuantity("Apples", 7);
-console.log(shoppingList.listItems());
-shoppingList.removeItem("Bananas");
-console.log(shoppingList.listItems());
-
-// Exercise 3: Student Grade Tracker
-const gradeTracker = {
-    students: [],
-
-    addStudent(name, grades) {
-        this.students.push({ name, grades });
-    },
-
-    calculateAverage(studentName) {
-        const student = this.students.find(s => s.name === studentName);
-        if (!student) return null;
-        const sum = student.grades.reduce((total, grade) => total + grade, 0);
-        return sum / student.grades.length;
-    },
-
-    findTopPerformer() {
-        return this.students.reduce((top, current) => {
-            const currentAvg = this.calculateAverage(current.name);
-            const topAvg = top ? this.calculateAverage(top.name) : 0;
-            return currentAvg > topAvg ? current : top;
-        }, null);
-    },
-
-    generateReport() {
-        return this.students.map(student => ({
-            name: student.name,
-            average: this.calculateAverage(student.name)
-        }));
-    }
-};
-
-// Test cases for Exercise 3
-console.log("\nExercise 3: Student Grade Tracker");
-gradeTracker.addStudent("John", [85, 90, 87]);
-gradeTracker.addStudent("Jane", [92, 88, 95]);
-console.log("John's average:", gradeTracker.calculateAverage("John"));
-console.log("Top performer:", gradeTracker.findTopPerformer().name);
-console.log("Class report:", gradeTracker.generateReport());
-
-// Exercise 4: Library Catalog
-const library = {
-    books: [],
-
-    addBook(title, author, genre, isbn) {
-        this.books.push({
-            title,
-            author,
-            genre,
-            isbn,
-            borrowed: false,
-            borrower: null
-        });
-    },
-
-    searchBooks(criteria) {
-        return this.books.filter(book => {
-            return Object.entries(criteria).every(([key, value]) => 
-                book[key].toLowerCase().includes(value.toLowerCase())
-            );
-        });
-    },
-
-    borrowBook(isbn, borrower) {
-        const book = this.books.find(b => b.isbn === isbn);
-        if (book && !book.borrowed) {
-            book.borrowed = true;
-            book.borrower = borrower;
-            return true;
-        }
-        return false;
-    },
-
-    returnBook(isbn) {
-        const book = this.books.find(b => b.isbn === isbn);
-        if (book && book.borrowed) {
-            book.borrowed = false;
-            book.borrower = null;
-            return true;
-        }
-        return false;
-    },
-
-    generateReport() {
-        return this.books.map(book => ({
-            title: book.title,
-            status: book.borrowed ? `Borrowed by ${book.borrower}` : 'Available'
-        }));
-    }
-};
-
-// Test cases for Exercise 4
-console.log("\nExercise 4: Library Catalog");
-library.addBook("The Hobbit", "J.R.R. Tolkien", "Fantasy", "978-0547928227");
-library.addBook("1984", "George Orwell", "Science Fiction", "978-0451524935");
-console.log("Fantasy books:", library.searchBooks({ genre: "Fantasy" }));
-library.borrowBook("978-0547928227", "John Smith");
-console.log("Library report:", library.generateReport());
-
-// Exercise 5: Data Transformation
-const salesData = [
-    { product: "Laptop", price: 999.99, quantity: 5, category: "Electronics" },
-    { product: "Mouse", price: 29.99, quantity: 10, category: "Electronics" },
-    { product: "Desk", price: 199.99, quantity: 3, category: "Furniture" }
-];
-
-function filterByCategory(data, category) {
-    return data.filter(item => item.category === category);
-}
-
-function calculateCategoryTotals(data) {
-    return data.reduce((totals, item) => {
-        const total = item.price * item.quantity;
-        totals[item.category] = (totals[item.category] || 0) + total;
-        return totals;
-    }, {});
-}
-
-function transformData(data) {
-    const groupedData = data.reduce((result, item) => {
-        if (!result[item.category]) {
-            result[item.category] = {
-                items: [],
-                subtotal: 0
-            };
-        }
-        result[item.category].items.push({
-            product: item.product,
-            total: item.price * item.quantity
-        });
-        result[item.category].subtotal += item.price * item.quantity;
-        return result;
-    }, {});
-
-    return Object.entries(groupedData).map(([category, data]) => ({
-        category,
-        items: data.items,
-        subtotal: data.subtotal
+// 1. Transform user objects
+export function formatUsers(users) {
+    if (!Array.isArray(users)) return [];
+    
+    const currentYear = new Date().getFullYear();
+    return users.map(user => ({
+        fullName: user.name,
+        yearOfBirth: currentYear - user.age
     }));
 }
 
-// Test cases for Exercise 5
-console.log("\nExercise 5: Data Transformation");
-console.log("Electronics items:", filterByCategory(salesData, "Electronics"));
-console.log("Category totals:", calculateCategoryTotals(salesData));
-console.log("Transformed data:", transformData(salesData)); 
+// 2. Filter and transform products
+export function processProducts(products) {
+    if (!Array.isArray(products)) return [];
+    
+    return products
+        .filter(product => product.inStock)
+        .map(product => ({
+            name: product.name,
+            priceWithTax: product.price * 1.2
+        }));
+}
+
+// 3. Group and count items
+export function groupAndCount(items) {
+    if (!Array.isArray(items)) return {};
+    
+    return items.reduce((groups, item) => {
+        const category = item.category;
+        groups[category] = (groups[category] || 0) + 1;
+        return groups;
+    }, {});
+}
+
+// Exercise 3: Object Manipulation
+
+// 1. Deep clone object
+export function deepClone(obj) {
+    if (obj === null || typeof obj !== 'object') return obj;
+    
+    if (Array.isArray(obj)) {
+        return obj.map(item => deepClone(item));
+    }
+    
+    return Object.fromEntries(
+        Object.entries(obj).map(([key, value]) => [key, deepClone(value)])
+    );
+}
+
+// 2. Merge objects
+export function mergeObjects(obj1, obj2) {
+    if (typeof obj1 !== 'object' || typeof obj2 !== 'object') return null;
+    if (obj1 === null || obj2 === null) return null;
+    
+    const merged = { ...obj1 };
+    
+    for (const [key, value] of Object.entries(obj2)) {
+        if (typeof value === 'object' && value !== null && 
+            typeof merged[key] === 'object' && merged[key] !== null) {
+            merged[key] = mergeObjects(merged[key], value);
+        } else {
+            merged[key] = value;
+        }
+    }
+    
+    return merged;
+}
+
+// 3. Create object hierarchy
+export function createHierarchy(data) {
+    if (!Array.isArray(data)) return null;
+    
+    const nodeMap = new Map();
+    const rootNodes = [];
+    
+    // Create nodes
+    data.forEach(item => {
+        nodeMap.set(item.id, { ...item, children: [] });
+    });
+    
+    // Build hierarchy
+    data.forEach(item => {
+        const node = nodeMap.get(item.id);
+        if (item.parent === null) {
+            rootNodes.push(node);
+        } else {
+            const parent = nodeMap.get(item.parent);
+            if (parent) {
+                parent.children.push(node);
+            }
+        }
+    });
+    
+    return rootNodes[0] || null;
+}
+
+// Exercise 4: Advanced Operations
+
+// 1. Array intersection
+export function findIntersection(arr1, arr2) {
+    if (!Array.isArray(arr1) || !Array.isArray(arr2)) return [];
+    
+    const set1 = new Set(arr1);
+    return [...new Set(arr2.filter(item => set1.has(item)))];
+}
+
+// 2. Object validator
+export function validateObject(obj, schema) {
+    if (typeof obj !== 'object' || typeof schema !== 'object') return null;
+    if (obj === null || schema === null) return null;
+    
+    const errors = [];
+    
+    for (const [key, rules] of Object.entries(schema)) {
+        // Check required fields
+        if (rules.required && !(key in obj)) {
+            errors.push(`${key} is required`);
+            continue;
+        }
+        
+        // Skip if field is not present and not required
+        if (!(key in obj)) continue;
+        
+        // Type validation
+        const value = obj[key];
+        if (rules.type && typeof value !== rules.type) {
+            errors.push(`${key} should be of type ${rules.type}`);
+        }
+    }
+    
+    return errors;
+}
+
+// 3. Data transformer
+export function transformData(data, transformations) {
+    if (!Array.isArray(data) || !Array.isArray(transformations)) return null;
+    
+    return transformations.reduce((result, transformation) => {
+        const [operation, param] = transformation.split(':');
+        
+        switch (operation) {
+            case 'sort':
+                return [...result].sort((a, b) => a[param] - b[param]);
+            case 'filter':
+                const [field, value] = param.split('>');
+                return result.filter(item => item[field] > Number(value));
+            case 'map':
+                return result.map(item => item[param]);
+            default:
+                return result;
+        }
+    }, data);
+}
+
+// Advanced Challenges
+
+// 1. Implement deep equality
+export function deepEqual(value1, value2) {
+    if (value1 === value2) return true;
+    
+    if (typeof value1 !== 'object' || typeof value2 !== 'object') return false;
+    if (value1 === null || value2 === null) return false;
+    
+    const keys1 = Object.keys(value1);
+    const keys2 = Object.keys(value2);
+    
+    if (keys1.length !== keys2.length) return false;
+    
+    return keys1.every(key => 
+        key in value2 && deepEqual(value1[key], value2[key])
+    );
+}
+
+// 2. Create object observer
+export function createObservable(obj) {
+    const handlers = {
+        get: [],
+        set: []
+    };
+    
+    return new Proxy(obj, {
+        get(target, property) {
+            handlers.get.forEach(handler => handler(property));
+            return target[property];
+        },
+        set(target, property, value) {
+            const oldValue = target[property];
+            target[property] = value;
+            handlers.set.forEach(handler => 
+                handler(property, value, oldValue)
+            );
+            return true;
+        },
+        onGet(handler) {
+            handlers.get.push(handler);
+        },
+        onSet(handler) {
+            handlers.set.push(handler);
+        }
+    });
+}
+
+// 3. Implement undo/redo
+export function createVersioned(obj) {
+    const history = [deepClone(obj)];
+    let currentIndex = 0;
+    
+    return {
+        get value() {
+            return history[currentIndex];
+        },
+        commit() {
+            // Remove any forward history
+            history.splice(currentIndex + 1);
+            // Add new version
+            history.push(deepClone(this.value));
+            currentIndex++;
+        },
+        undo() {
+            if (currentIndex > 0) {
+                currentIndex--;
+            }
+        },
+        redo() {
+            if (currentIndex < history.length - 1) {
+                currentIndex++;
+            }
+        }
+    };
+} 
