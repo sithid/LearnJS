@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forms - Tests</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .test-result {
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 4px;
+        }
+        .pass {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            border-left: 4px solid #2e7d32;
+        }
+        .fail {
+            background-color: #fbe9e7;
+            color: #c62828;
+            border-left: 4px solid #c62828;
+        }
+        .console-output {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        h1 {
+            color: #333;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+        .summary {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e3f2fd;
+            border-radius: 4px;
+        }
+        /* Test environment styles */
+        .test-environment {
+            display: none;
+        }
+        .strength-meter {
+            width: 100%;
+            height: 10px;
+            background: #eee;
+        }
+        .strength-meter-fill {
+            height: 100%;
+            width: 0;
+            transition: width 0.3s, background-color 0.3s;
+        }
+        .error {
+            color: red;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Forms - Test Results</h1>
+        <div id="test-results"></div>
+        <div id="summary" class="summary"></div>
+    </div>
+
+    <!-- Test Environment (Hidden) -->
+    <div class="test-environment">
+        <!-- Exercise 1: Registration Form -->
+        <form id="registration-form">
+            <div>
+                <input type="text" id="username" name="username">
+                <div class="error" id="username-error"></div>
+            </div>
+            <div>
+                <input type="email" id="email" name="email">
+                <div class="error" id="email-error"></div>
+            </div>
+            <div>
+                <input type="password" id="password" name="password">
+                <div class="strength-meter">
+                    <div class="strength-meter-fill"></div>
+                </div>
+                <div class="error" id="password-error"></div>
+            </div>
+            <div>
+                <input type="password" id="confirm-password" name="confirm-password">
+                <div class="error" id="confirm-password-error"></div>
+            </div>
+            <button type="submit">Register</button>
+        </form>
+
+        <!-- Exercise 2: Payment Form -->
+        <form id="payment-form">
+            <div>
+                <input type="text" id="card-number" name="card-number">
+                <div class="error" id="card-error"></div>
+            </div>
+            <div>
+                <input type="text" id="expiry" name="expiry">
+                <div class="error" id="expiry-error"></div>
+            </div>
+            <div>
+                <input type="text" id="cvv" name="cvv">
+                <div class="error" id="cvv-error"></div>
+            </div>
+            <div>
+                <input type="text" id="postal-code" name="postal-code">
+                <div class="error" id="postal-error"></div>
+            </div>
+            <button type="submit">Pay</button>
+        </form>
+
+        <!-- Exercise 3: Survey Form -->
+        <form id="survey-form">
+            <div id="survey-progress"></div>
+            <div>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div id="satisfaction-rating">
+                <button type="button" data-rating="1">1</button>
+                <button type="button" data-rating="2">2</button>
+                <button type="button" data-rating="3">3</button>
+                <button type="button" data-rating="4">4</button>
+                <button type="button" data-rating="5">5</button>
+            </div>
+            <button type="submit">Submit Survey</button>
+        </form>
+
+        <!-- Exercise 4: File Upload -->
+        <form id="upload-form">
+            <input type="file" id="file-upload" name="file-upload">
+            <div id="file-preview"></div>
+            <div id="upload-progress"></div>
+            <button type="submit">Upload</button>
+        </form>
+
+        <!-- Exercise 5: Dynamic Form -->
+        <form id="dynamic-form">
+            <div id="form-fields"></div>
+            <button type="button" id="add-field">Add Field</button>
+            <button type="button" id="prev-step">Previous</button>
+            <button type="button" id="next-step">Next</button>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <script type="module">
+        // Import student's code
+        import * as exercises from './exercises.js';
+
+        // Test runner
+        class TestRunner {
+            constructor() {
+                this.results = [];
+                this.passCount = 0;
+                this.totalTests = 0;
+            }
+
+            assert(condition, message) {
+                if (!condition) {
+                    throw new Error(message);
+                }
+            }
+
+            addResult(testName, passed, error = null) {
+                this.results.push({ testName, passed, error });
+                if (passed) this.passCount++;
+                this.totalTests++;
+            }
+
+            displayResults() {
+                const container = document.getElementById('test-results');
+                const summary = document.getElementById('summary');
+                
+                this.results.forEach(result => {
+                    const div = document.createElement('div');
+                    div.className = `test-result ${result.passed ? 'pass' : 'fail'}`;
+                    div.textContent = `${result.passed ? '✅' : '❌'} ${result.testName}`;
+                    
+                    if (!result.passed && result.error) {
+                        const errorDiv = document.createElement('div');
+                        errorDiv.className = 'console-output';
+                        errorDiv.textContent = result.error;
+                        div.appendChild(errorDiv);
+                    }
+                    
+                    container.appendChild(div);
+                });
+
+                summary.textContent = `Passed ${this.passCount} of ${this.totalTests} tests (${Math.round(this.passCount/this.totalTests*100)}%)`;
+            }
+
+            async runTest(testName, testFn) {
+                try {
+                    await testFn();
+                    this.addResult(testName, true);
+                } catch (error) {
+                    this.addResult(testName, false, error.message);
+                }
+            }
+
+            simulateEvent(element, eventType, options = {}) {
+                const event = new Event(eventType, { bubbles: true, ...options });
+                Object.assign(event, options);
+                element.dispatchEvent(event);
+                return event;
+            }
+        }
+
+        // Initialize test runner
+        const runner = new TestRunner();
+
+        // Run tests
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Initialize exercises
+            exercises.initializeRegistrationForm();
+            exercises.initializePaymentForm();
+            exercises.initializeSurveyForm();
+            exercises.initializeFileUpload();
+            exercises.initializeDynamicForm();
+
+            // Test Registration Form
+            await runner.runTest('Registration - Password Strength', () => {
+                const password = document.getElementById('password');
+                const strengthMeter = document.querySelector('.strength-meter-fill');
+                
+                password.value = 'weak';
+                runner.simulateEvent(password, 'input');
+                runner.assert(
+                    strengthMeter.style.width !== '100%',
+                    'Weak password should not show full strength'
+                );
+                
+                password.value = 'StrongP@ssw0rd';
+                runner.simulateEvent(password, 'input');
+                runner.assert(
+                    strengthMeter.style.width === '100%',
+                    'Strong password should show full strength'
+                );
+            });
+
+            await runner.runTest('Registration - Password Match', () => {
+                const password = document.getElementById('password');
+                const confirm = document.getElementById('confirm-password');
+                const error = document.getElementById('confirm-password-error');
+                
+                password.value = 'Password123';
+                confirm.value = 'Password124';
+                runner.simulateEvent(confirm, 'input');
+                
+                runner.assert(
+                    error.style.display === 'block',
+                    'Should show error when passwords do not match'
+                );
+            });
+
+            // Test Payment Form
+            await runner.runTest('Payment - Card Number Format', () => {
+                const cardNumber = document.getElementById('card-number');
+                
+                cardNumber.value = '4111111111111111';
+                runner.simulateEvent(cardNumber, 'input');
+                
+                runner.assert(
+                    cardNumber.value.includes(' '),
+                    'Card number should be formatted with spaces'
+                );
+            });
+
+            await runner.runTest('Payment - Expiry Format', () => {
+                const expiry = document.getElementById('expiry');
+                
+                expiry.value = '1223';
+                runner.simulateEvent(expiry, 'input');
+                
+                runner.assert(
+                    expiry.value.includes('/'),
+                    'Expiry date should be formatted with slash'
+                );
+            });
+
+            // Test Survey Form
+            await runner.runTest('Survey - Rating Selection', () => {
+                const ratingButton = document.querySelector('[data-rating="4"]');
+                runner.simulateEvent(ratingButton, 'click');
+                
+                runner.assert(
+                    ratingButton.classList.contains('selected'),
+                    'Rating button should be marked as selected'
+                );
+            });
+
+            await runner.runTest('Survey - Progress Bar', () => {
+                const name = document.getElementById('name');
+                const progressBar = document.getElementById('survey-progress');
+                
+                name.value = 'Test User';
+                runner.simulateEvent(name, 'input');
+                
+                runner.assert(
+                    progressBar.style.width !== '0%',
+                    'Progress bar should update when fields are filled'
+                );
+            });
+
+            // Test File Upload
+            await runner.runTest('File Upload - Preview', () => {
+                const fileInput = document.getElementById('file-upload');
+                const preview = document.getElementById('file-preview');
+                
+                const file = new File([''], 'test.jpg', { type: 'image/jpeg' });
+                Object.defineProperty(fileInput, 'files', {
+                    value: [file]
+                });
+                
+                runner.simulateEvent(fileInput, 'change');
+                
+                runner.assert(
+                    preview.children.length > 0,
+                    'Should create preview for uploaded file'
+                );
+            });
+
+            // Test Dynamic Form
+            await runner.runTest('Dynamic Form - Add Field', () => {
+                const addButton = document.getElementById('add-field');
+                const fieldsContainer = document.getElementById('form-fields');
+                const initialCount = fieldsContainer.children.length;
+                
+                runner.simulateEvent(addButton, 'click');
+                
+                runner.assert(
+                    fieldsContainer.children.length > initialCount,
+                    'Should add new field when button is clicked'
+                );
+            });
+
+            await runner.runTest('Dynamic Form - Navigation', () => {
+                const nextButton = document.getElementById('next-step');
+                const form = document.getElementById('dynamic-form');
+                
+                runner.simulateEvent(nextButton, 'click');
+                
+                runner.assert(
+                    form.dataset.step === '2',
+                    'Should navigate to next step'
+                );
+            });
+
+            // Display results
+            runner.displayResults();
+        });
+    </script>
+</body>
+</html> 

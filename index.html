@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Learning Path</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #1976d2;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .module {
+            margin-bottom: 40px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .module h2 {
+            color: #2196f3;
+            border-bottom: 2px solid #e3f2fd;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .lesson-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .lesson-item {
+            margin-bottom: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+
+        .lesson-item:hover {
+            background: #e3f2fd;
+        }
+
+        .lesson-title {
+            font-weight: bold;
+            color: #1976d2;
+            margin-bottom: 5px;
+        }
+
+        .lesson-links {
+            margin-top: 10px;
+        }
+
+        .lesson-links a {
+            display: inline-block;
+            margin-right: 15px;
+            color: #2196f3;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+
+        .lesson-links a:hover {
+            background: #bbdefb;
+        }
+
+        .test-link {
+            color: #4caf50 !important;
+        }
+
+        .project {
+            background: #e8f5e9;
+        }
+
+        .progress-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+
+        .not-started { background: #ffebee; }
+        .in-progress { background: #fff3e0; }
+        .completed { background: #e8f5e9; }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>JavaScript Learning Path</h1>
+
+        <!-- Module 1: JavaScript Basics -->
+        <div class="module">
+            <h2>Module 1: JavaScript Basics</h2>
+            <ul class="lesson-list">
+                <li class="lesson-item">
+                    <div class="lesson-title">
+                        <span class="progress-indicator completed"></span>
+                        Lesson 1: Variables and Data Types
+                    </div>
+                    <div class="lesson-links">
+                        <a href="Module1/Lesson1-Variables/README.md">Instructions</a>
+                        <a href="Module1/Lesson1-Variables/exercises.js">Exercises</a>
+                        <a href="Module1/Lesson1-Variables/solutions.js">Solutions</a>
+                    </div>
+                </li>
+                <li class="lesson-item">
+                    <div class="lesson-title">
+                        <span class="progress-indicator completed"></span>
+                        Lesson 2: Control Flow
+                    </div>
+                    <div class="lesson-links">
+                        <a href="Module1/Lesson2-ControlFlow/README.md">Instructions</a>
+                        <a href="Module1/Lesson2-ControlFlow/exercises.js">Exercises</a>
+                        <a href="Module1/Lesson2-ControlFlow/solutions.js">Solutions</a>
+                    </div>
+                </li>
+                <li class="lesson-item">
+                    <div class="lesson-title">
+                        <span class="progress-indicator completed"></span>
+                        Lesson 3: Functions
+                    </div>
+                    <div class="lesson-links">
+                        <a href="Module1/Lesson3-Functions/README.md">Instructions</a>
+                        <a href="Module1/Lesson3-Functions/exercises.js">Exercises</a>
+                        <a href="Module1/Lesson3-Functions/solutions.js">Solutions</a>
+                    </div>
+                </li>
+                <li class="lesson-item">
+                    <div class="lesson-title">
+                        <span class="progress-indicator completed"></span>
+                        Lesson 4: Arrays and Objects
+                    </div>
+                    <div class="lesson-links">
+                        <a href="Module1/Lesson4-Arrays/README.md">Instructions</a>
+                        <a href="Module1/Lesson4-Arrays/exercises.js">Exercises</a>
+                        <a href="Module1/Lesson4-Arrays/solutions.js">Solutions</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Module 2: DOM Manipulation -->
+        <div class="module">
+            <h2>Module 2: DOM Manipulation</h2>
+            <ul class="lesson-list">
+                <li class="lesson-item">
+                    <div class="lesson-title">
+                        <span class="progress-indicator completed"></span>
+                        Lesson 1: DOM Basics
+                    </div>
+                    <div class="lesson-links">
+                        <a href="Module2/Lesson1-DOM-Basics/README.md">Instructions</a>
+                        <a href="Module2/Lesson1-DOM-Basics/exercises.js">Exercises</a>
+                        <a href="Module2/Lesson1-DOM-Basics/test.html" class="test-link">Run Tests</a>
+                    </div>
+                </li>
+                <li class="lesson-item">
+                    <div class="lesson-title">
+                        <span class="progress-indicator completed"></span>
+                        Lesson 2: Events
+                    </div>
+                    <div class="lesson-links">
+                        <a href="Module2/Lesson2-Events/README.md">Instructions</a>
+                        <a href="Module2/Lesson2-Events/exercises.js">Exercises</a>
+                        <a href="Module2/Lesson2-Events/test.html" class="test-link">Run Tests</a>
+                    </div>
+                </li>
+                <li class="lesson-item">
+                    <div class="lesson-title">
+                        <span class="progress-indicator completed"></span>
+                        Lesson 3: Forms
+                    </div>
+                    <div class="lesson-links">
+                        <a href="Module2/Lesson3-Forms/README.md">Instructions</a>
+                        <a href="Module2/Lesson3-Forms/exercises.js">Exercises</a>
+                        <a href="Module2/Lesson3-Forms/test.html" class="test-link">Run Tests</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Module 3: Modern JavaScript -->
+        <div class="module">
+            <h2>Module 3: Modern JavaScript</h2>
+            <ul class="lesson-list">
+                <li class="lesson-item">
+                    <div class="lesson-title">
+                        <span class="progress-indicator completed"></span>
+                        Lesson 1: ES6+ Features
+                    </div>
+                    <div class="lesson-links">
+                        <a href="Module3/Lesson1-ES6/README.md">Instructions</a>
+                        <a href="Module3/Lesson1-ES6/exercises.js">Exercises</a>
+                        <a href="Module3/Lesson1-ES6/test.html" class="test-link">Run Tests</a>
+                    </div>
+                </li>
+                <li class="lesson-item">
+                    <div class="lesson-title">
+                        <span class="progress-indicator completed"></span>
+                        Lesson 2: Promises and Async/Await
+                    </div>
+                    <div class="lesson-links">
+                        <a href="Module3/Lesson2-Promises/README.md">Instructions</a>
+                        <a href="Module3/Lesson2-Promises/exercises.js">Exercises</a>
+                        <a href="Module3/Lesson2-Promises/test.html" class="test-link">Run Tests</a>
+                    </div>
+                </li>
+                <li class="lesson-item">
+                    <div class="lesson-title">
+                        <span class="progress-indicator completed"></span>
+                        Lesson 3: Modules
+                    </div>
+                    <div class="lesson-links">
+                        <a href="Module3/Lesson3-Modules/README.md">Instructions</a>
+                        <a href="Module3/Lesson3-Modules/exercises.js">Exercises</a>
+                        <a href="Module3/Lesson3-Modules/test.html" class="test-link">Run Tests</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Module 4: Projects -->
+        <div class="module">
+            <h2>Module 4: Projects</h2>
+            <ul class="lesson-list">
+                <li class="lesson-item project">
+                    <div class="lesson-title">
+                        <span class="progress-indicator completed"></span>
+                        Project 1: Todo List
+                    </div>
+                    <div class="lesson-links">
+                        <a href="Module4/Project1-TodoList/README.md">Instructions</a>
+                        <a href="Module4/Project1-TodoList/index.html">View Project</a>
+                        <a href="Module4/Project1-TodoList/tests/test.html" class="test-link">Run Tests</a>
+                    </div>
+                </li>
+                <li class="lesson-item project">
+                    <div class="lesson-title">
+                        <span class="progress-indicator completed"></span>
+                        Project 2: Weather App
+                    </div>
+                    <div class="lesson-links">
+                        <a href="Module4/Project2-WeatherApp/README.md">Instructions</a>
+                        <a href="Module4/Project2-WeatherApp/index.html">View Project</a>
+                        <a href="Module4/Project2-WeatherApp/tests/test.html" class="test-link">Run Tests</a>
+                    </div>
+                </li>
+                <li class="lesson-item project">
+                    <div class="lesson-title">
+                        <span class="progress-indicator completed"></span>
+                        Project 3: Quiz App
+                    </div>
+                    <div class="lesson-links">
+                        <a href="Module4/Project3-QuizApp/README.md">Instructions</a>
+                        <a href="Module4/Project3-QuizApp/index.html">View Project</a>
+                        <a href="Module4/Project3-QuizApp/tests/test.html" class="test-link">Run Tests</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <footer>
+            <p>Start your JavaScript journey today! 🚀</p>
+            <p>Remember to run <code>python -m http.server 8000</code> to start the local server.</p>
+        </footer>
+    </div>
+</body>
+</html>

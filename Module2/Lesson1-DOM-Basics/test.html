@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOM Basics - Tests</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .test-result {
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 4px;
+        }
+        .pass {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            border-left: 4px solid #2e7d32;
+        }
+        .fail {
+            background-color: #fbe9e7;
+            color: #c62828;
+            border-left: 4px solid #c62828;
+        }
+        .console-output {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        h1 {
+            color: #333;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+        .summary {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e3f2fd;
+            border-radius: 4px;
+        }
+        /* Test environment styles */
+        .test-environment {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>DOM Basics - Test Results</h1>
+        <div id="test-results"></div>
+        <div id="summary" class="summary"></div>
+    </div>
+
+    <!-- Test Environment (Hidden) -->
+    <div class="test-environment">
+        <!-- Exercise 1: Element Selection -->
+        <div id="selection-practice">
+            <p class="item">Item 1</p>
+            <p class="item special">Item 2</p>
+            <p class="item">Item 3</p>
+        </div>
+
+        <!-- Exercise 2: Content Manipulation -->
+        <div id="text-content">Original Text</div>
+        <div id="html-content">Original HTML</div>
+        <div id="attribute-practice">Attribute Testing</div>
+
+        <!-- Exercise 3: DOM Creation -->
+        <div id="element-container"></div>
+
+        <!-- Exercise 4: Style Manipulation -->
+        <div id="style-target">Style Target</div>
+
+        <!-- Exercise 5: Dynamic List -->
+        <div id="list-container">
+            <input type="text" id="item-input">
+            <button onclick="addItem()">Add Item</button>
+            <button onclick="sortItems()">Sort Items</button>
+            <ul id="item-list"></ul>
+        </div>
+    </div>
+
+    <script type="module">
+        // Import student's code
+        import * as exercises from './exercises.js';
+
+        // Test runner
+        class TestRunner {
+            constructor() {
+                this.results = [];
+                this.passCount = 0;
+                this.totalTests = 0;
+            }
+
+            assert(condition, message) {
+                if (!condition) {
+                    throw new Error(message);
+                }
+            }
+
+            addResult(testName, passed, error = null) {
+                this.results.push({ testName, passed, error });
+                if (passed) this.passCount++;
+                this.totalTests++;
+            }
+
+            displayResults() {
+                const container = document.getElementById('test-results');
+                const summary = document.getElementById('summary');
+                
+                this.results.forEach(result => {
+                    const div = document.createElement('div');
+                    div.className = `test-result ${result.passed ? 'pass' : 'fail'}`;
+                    div.textContent = `${result.passed ? '✅' : '❌'} ${result.testName}`;
+                    
+                    if (!result.passed && result.error) {
+                        const errorDiv = document.createElement('div');
+                        errorDiv.className = 'console-output';
+                        errorDiv.textContent = result.error;
+                        div.appendChild(errorDiv);
+                    }
+                    
+                    container.appendChild(div);
+                });
+
+                summary.textContent = `Passed ${this.passCount} of ${this.totalTests} tests (${Math.round(this.passCount/this.totalTests*100)}%)`;
+            }
+
+            runTest(testName, testFn) {
+                try {
+                    testFn();
+                    this.addResult(testName, true);
+                } catch (error) {
+                    this.addResult(testName, false, error.message);
+                }
+            }
+        }
+
+        // Initialize test runner
+        const runner = new TestRunner();
+
+        // Run tests
+        runner.runTest('Element Selection - ID', () => {
+            exercises.testSelectors();
+            const element = document.querySelector('#selection-practice');
+            runner.assert(element, 'Should be able to select element by ID');
+        });
+
+        runner.runTest('Element Selection - Class', () => {
+            exercises.testSelectors();
+            const elements = document.querySelectorAll('.item');
+            runner.assert(elements.length === 3, 'Should find 3 elements with class "item"');
+        });
+
+        runner.runTest('Element Selection - Tag', () => {
+            exercises.testSelectors();
+            const elements = document.querySelectorAll('p');
+            runner.assert(elements.length === 3, 'Should find 3 paragraph elements');
+        });
+
+        runner.runTest('Element Selection - Complex', () => {
+            exercises.testSelectors();
+            const element = document.querySelector('.item.special');
+            runner.assert(element, 'Should find element with both classes');
+        });
+
+        runner.runTest('Content Manipulation - Text', () => {
+            exercises.testContentManipulation();
+            const element = document.getElementById('text-content');
+            runner.assert(element.textContent !== 'Original Text', 'Text content should be changed');
+        });
+
+        runner.runTest('Content Manipulation - HTML', () => {
+            exercises.testContentManipulation();
+            const element = document.getElementById('html-content');
+            runner.assert(element.innerHTML !== 'Original HTML', 'HTML content should be changed');
+        });
+
+        runner.runTest('Content Manipulation - Attributes', () => {
+            exercises.testContentManipulation();
+            const element = document.getElementById('attribute-practice');
+            runner.assert(element.classList.contains('highlight'), 'Element should have highlight class');
+        });
+
+        runner.runTest('DOM Creation - New Element', () => {
+            const initialCount = document.getElementById('element-container').children.length;
+            exercises.testDOMCreation();
+            const newCount = document.getElementById('element-container').children.length;
+            runner.assert(newCount > initialCount, 'Should add new elements to container');
+        });
+
+        runner.runTest('Style Manipulation - Color', () => {
+            exercises.testStyleManipulation();
+            const element = document.getElementById('style-target');
+            runner.assert(element.style.color !== '', 'Element should have color style');
+        });
+
+        runner.runTest('Style Manipulation - Dimensions', () => {
+            exercises.testStyleManipulation();
+            const element = document.getElementById('style-target');
+            runner.assert(
+                element.style.width !== '' || element.style.height !== '',
+                'Element should have dimension styles'
+            );
+        });
+
+        runner.runTest('Dynamic List - Add Item', () => {
+            const input = document.getElementById('item-input');
+            input.value = 'Test Item';
+            exercises.addItem();
+            runner.assert(exercises.items.length > 0, 'Should add item to array');
+            const list = document.getElementById('item-list');
+            runner.assert(list.children.length > 0, 'Should add item to DOM');
+        });
+
+        runner.runTest('Dynamic List - Remove Item', () => {
+            const initialLength = exercises.items.length;
+            if (initialLength > 0) {
+                exercises.removeItem(0);
+                runner.assert(
+                    exercises.items.length === initialLength - 1,
+                    'Should remove item from array'
+                );
+            }
+        });
+
+        runner.runTest('Dynamic List - Sort Items', () => {
+            exercises.items = ['c', 'a', 'b'];
+            exercises.sortItems();
+            runner.assert(
+                JSON.stringify(exercises.items) === JSON.stringify(['a', 'b', 'c']),
+                'Should sort items alphabetically'
+            );
+        });
+
+        // Display results
+        runner.displayResults();
+    </script>
+</body>
+</html> 

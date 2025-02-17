@@ -1,0 +1,146 @@
+{
+    "title": "Algorithms",
+    "category": "algorithms",
+    "description": "Test your knowledge of common algorithms and problem-solving",
+    "difficulty": "hard",
+    "timeLimit": 1500,
+    "questions": [
+        {
+            "text": "What is the time complexity of QuickSort in the average case?",
+            "type": "multiple-choice",
+            "answers": [
+                "O(n)",
+                "O(n log n)",
+                "O(n²)",
+                "O(log n)"
+            ],
+            "correctAnswer": 1,
+            "points": 1,
+            "explanation": "QuickSort has an average time complexity of O(n log n), making it one of the most efficient sorting algorithms in practice."
+        },
+        {
+            "text": "Which sorting algorithm is stable by nature?",
+            "type": "multiple-choice",
+            "answers": [
+                "QuickSort",
+                "Merge Sort",
+                "Heap Sort",
+                "Selection Sort"
+            ],
+            "correctAnswer": 1,
+            "points": 1,
+            "explanation": "Merge Sort is naturally stable, meaning it preserves the relative order of equal elements in the sorted output."
+        },
+        {
+            "text": "Select all divide-and-conquer algorithms:",
+            "type": "multiple-select",
+            "answers": [
+                "Merge Sort",
+                "Bubble Sort",
+                "Binary Search",
+                "Quick Sort",
+                "Selection Sort",
+                "Strassen's Matrix Multiplication"
+            ],
+            "correctAnswer": [0, 2, 3, 5],
+            "points": 2,
+            "explanation": "Merge Sort, Binary Search, Quick Sort, and Strassen's Matrix Multiplication use the divide-and-conquer strategy. Bubble Sort and Selection Sort are iterative algorithms."
+        },
+        {
+            "text": "Dynamic Programming always provides an optimal solution when applicable.",
+            "type": "true-false",
+            "answers": [
+                "True",
+                "False"
+            ],
+            "correctAnswer": 0,
+            "points": 1,
+            "explanation": "When applicable, Dynamic Programming guarantees an optimal solution by breaking down problems into smaller subproblems and storing their solutions."
+        },
+        {
+            "text": "What will this algorithm calculate?",
+            "type": "multiple-choice",
+            "answers": [
+                "Factorial",
+                "Fibonacci",
+                "Power",
+                "Sum of numbers"
+            ],
+            "correctAnswer": 1,
+            "points": 2,
+            "media": {
+                "type": "code",
+                "language": "javascript",
+                "content": "function calculate(n) {\n  if (n <= 1) return n;\n  return calculate(n-1) + calculate(n-2);\n}"
+            },
+            "explanation": "This is a recursive implementation of the Fibonacci sequence, where each number is the sum of the two preceding ones."
+        },
+        {
+            "text": "Which algorithm would be most efficient for finding the shortest path in an unweighted graph?",
+            "type": "multiple-choice",
+            "answers": [
+                "Depth-First Search",
+                "Breadth-First Search",
+                "Dijkstra's Algorithm",
+                "Floyd-Warshall Algorithm"
+            ],
+            "correctAnswer": 1,
+            "points": 2,
+            "explanation": "BFS is ideal for finding shortest paths in unweighted graphs as it explores nodes level by level, guaranteeing the first path found is the shortest."
+        },
+        {
+            "text": "Select all characteristics of a greedy algorithm:",
+            "type": "multiple-select",
+            "answers": [
+                "Makes locally optimal choices",
+                "Always provides globally optimal solution",
+                "Never backtracks",
+                "Considers all possible solutions",
+                "Simple to implement",
+                "Uses dynamic programming"
+            ],
+            "correctAnswer": [0, 2, 4],
+            "points": 2,
+            "explanation": "Greedy algorithms make locally optimal choices, never backtrack, and are typically simple to implement. They don't always provide globally optimal solutions and don't consider all possibilities."
+        },
+        {
+            "text": "What search algorithm is used in binary search trees for finding a value?",
+            "type": "fill-in",
+            "correctAnswer": "binary",
+            "points": 1,
+            "explanation": "Binary search is used in BSTs, where at each step, the algorithm decides whether to go left or right based on the comparison with the current node's value."
+        },
+        {
+            "text": "Analyze the time complexity of this code:",
+            "type": "multiple-choice",
+            "answers": [
+                "O(n)",
+                "O(n²)",
+                "O(n³)",
+                "O(log n)"
+            ],
+            "correctAnswer": 2,
+            "points": 2,
+            "media": {
+                "type": "code",
+                "language": "javascript",
+                "content": "for(let i = 0; i < n; i++) {\n  for(let j = 0; j < n; j++) {\n    for(let k = 0; k < n; k++) {\n      sum += arr[i][j][k];\n    }\n  }\n}"
+            },
+            "explanation": "This code has three nested loops, each running n times, resulting in a time complexity of O(n³)."
+        },
+        {
+            "text": "Which statements about Binary Search are true?",
+            "type": "multiple-select",
+            "answers": [
+                "Requires sorted input",
+                "Has O(log n) time complexity",
+                "Works on linked lists efficiently",
+                "Can find all occurrences of an element",
+                "Uses divide-and-conquer strategy"
+            ],
+            "correctAnswer": [0, 1, 4],
+            "points": 2,
+            "explanation": "Binary Search requires sorted input, has O(log n) time complexity, and uses divide-and-conquer. It's not efficient on linked lists and typically finds only one occurrence."
+        }
+    ]
+} 

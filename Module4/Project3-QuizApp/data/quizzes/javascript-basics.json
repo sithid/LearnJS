@@ -1,0 +1,139 @@
+{
+    "title": "JavaScript Basics",
+    "category": "javascript-basics",
+    "description": "Test your knowledge of JavaScript fundamentals",
+    "difficulty": "medium",
+    "timeLimit": 1200,
+    "questions": [
+        {
+            "text": "Which keyword is used to declare a variable that can be reassigned?",
+            "type": "multiple-choice",
+            "answers": [
+                "let",
+                "const",
+                "var",
+                "def"
+            ],
+            "correctAnswer": 0,
+            "points": 1,
+            "explanation": "The 'let' keyword is used to declare variables that can be reassigned. 'const' is for constants, 'var' is outdated, and 'def' is not a JavaScript keyword."
+        },
+        {
+            "text": "What is the output of: console.log(typeof [])?",
+            "type": "multiple-choice",
+            "answers": [
+                "array",
+                "object",
+                "list",
+                "undefined"
+            ],
+            "correctAnswer": 1,
+            "points": 1,
+            "explanation": "In JavaScript, arrays are actually objects, so typeof [] returns 'object'."
+        },
+        {
+            "text": "Select all primitive data types in JavaScript:",
+            "type": "multiple-select",
+            "answers": [
+                "String",
+                "Array",
+                "Number",
+                "Object",
+                "Boolean",
+                "Undefined"
+            ],
+            "correctAnswer": [0, 2, 4, 5],
+            "points": 2,
+            "explanation": "Primitive data types in JavaScript are: String, Number, Boolean, Undefined, Null, and Symbol. Arrays and Objects are reference types."
+        },
+        {
+            "text": "JavaScript is a case-sensitive language.",
+            "type": "true-false",
+            "answers": [
+                "True",
+                "False"
+            ],
+            "correctAnswer": 0,
+            "points": 1,
+            "explanation": "JavaScript is case-sensitive. For example, 'myVariable' and 'myvariable' are treated as different variables."
+        },
+        {
+            "text": "What will be the output of: console.log(2 + '2')?",
+            "type": "multiple-choice",
+            "answers": [
+                "4",
+                "22",
+                "NaN",
+                "Error"
+            ],
+            "correctAnswer": 1,
+            "points": 1,
+            "explanation": "When adding a number and a string, JavaScript converts the number to a string and performs concatenation."
+        },
+        {
+            "text": "Examine this code snippet and identify the error:",
+            "type": "multiple-choice",
+            "answers": [
+                "Missing semicolon",
+                "Incorrect function syntax",
+                "Cannot use const with arrays",
+                "No error, the code is valid"
+            ],
+            "correctAnswer": 3,
+            "points": 2,
+            "media": {
+                "type": "code",
+                "language": "javascript",
+                "content": "const arr = [];\narr.push(1);\nconsole.log(arr);"
+            },
+            "explanation": "This code is valid. While const prevents reassignment of the variable, you can still modify the array using methods like push()."
+        },
+        {
+            "text": "What is the scope of a variable declared with 'let' inside a block?",
+            "type": "multiple-choice",
+            "answers": [
+                "Global scope",
+                "Function scope",
+                "Block scope",
+                "Module scope"
+            ],
+            "correctAnswer": 2,
+            "points": 1,
+            "explanation": "Variables declared with 'let' have block scope, meaning they are only accessible within the block they are declared in (between { and })."
+        },
+        {
+            "text": "Which of these are valid ways to create a function in JavaScript?",
+            "type": "multiple-select",
+            "answers": [
+                "function myFunc() {}",
+                "const myFunc = function() {}",
+                "const myFunc = () => {}",
+                "def myFunc() {}",
+                "new Function()"
+            ],
+            "correctAnswer": [0, 1, 2, 4],
+            "points": 2,
+            "explanation": "Functions can be created using function declarations, function expressions, arrow functions, and the Function constructor. 'def' is not valid JavaScript syntax."
+        },
+        {
+            "text": "What is the value of 'this' in an arrow function?",
+            "type": "multiple-choice",
+            "answers": [
+                "The global object",
+                "The object that owns the function",
+                "The value of 'this' in the enclosing scope",
+                "undefined"
+            ],
+            "correctAnswer": 2,
+            "points": 2,
+            "explanation": "Arrow functions do not have their own 'this'. They inherit 'this' from the enclosing scope where they are defined."
+        },
+        {
+            "text": "Fill in the correct method name: array._____(item => item > 5)",
+            "type": "fill-in",
+            "correctAnswer": "filter",
+            "points": 2,
+            "explanation": "The filter() method creates a new array with all elements that pass the test implemented by the provided function."
+        }
+    ]
+} 

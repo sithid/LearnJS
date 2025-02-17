@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/weather-icons/2.0.10/css/weather-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <header>
+            <h1>Weather App</h1>
+            <div class="header-controls">
+                <button id="unit-toggle" class="btn-icon" title="Toggle temperature unit">°C</button>
+                <button id="theme-toggle" class="btn-icon" title="Toggle theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Location Search -->
+        <section class="search-section">
+            <div class="search-container">
+                <input type="text" id="location-search" placeholder="Search location...">
+                <button id="search-btn" class="btn-icon">
+                    <i class="fas fa-search"></i>
+                </button>
+                <button id="geolocation-btn" class="btn-icon" title="Use current location">
+                    <i class="fas fa-location-crosshairs"></i>
+                </button>
+            </div>
+            <div id="search-results" class="search-results hidden"></div>
+        </section>
+
+        <!-- Favorite Locations -->
+        <section class="favorites-section">
+            <div id="favorites-list" class="favorites-list"></div>
+        </section>
+
+        <!-- Current Weather -->
+        <section class="current-weather">
+            <div class="weather-card">
+                <div class="location-info">
+                    <h2 id="location-name">Loading...</h2>
+                    <p id="location-date"></p>
+                </div>
+                <div class="weather-info">
+                    <div class="temperature-container">
+                        <i id="weather-icon" class="wi"></i>
+                        <div class="temperature">
+                            <span id="current-temp">--</span>
+                            <span class="unit">°C</span>
+                        </div>
+                    </div>
+                    <p id="weather-description">--</p>
+                    <div class="weather-details">
+                        <div class="detail">
+                            <i class="wi wi-thermometer"></i>
+                            <span>High: <span id="temp-high">--</span>°</span>
+                        </div>
+                        <div class="detail">
+                            <i class="wi wi-thermometer-exterior"></i>
+                            <span>Low: <span id="temp-low">--</span>°</span>
+                        </div>
+                        <div class="detail">
+                            <i class="wi wi-humidity"></i>
+                            <span>Humidity: <span id="humidity">--</span>%</span>
+                        </div>
+                        <div class="detail">
+                            <i class="wi wi-strong-wind"></i>
+                            <span>Wind: <span id="wind-speed">--</span> km/h</span>
+                        </div>
+                    </div>
+                </div>
+                <button id="add-favorite" class="btn-icon favorite-btn" title="Add to favorites">
+                    <i class="far fa-heart"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- Forecast -->
+        <section class="forecast-section">
+            <h3>5-Day Forecast</h3>
+            <div id="forecast-container" class="forecast-container">
+                <!-- Forecast cards will be inserted here -->
+            </div>
+        </section>
+
+        <!-- Weather Charts -->
+        <section class="charts-section">
+            <div class="chart-container">
+                <canvas id="temperature-chart"></canvas>
+            </div>
+            <div class="chart-container">
+                <canvas id="precipitation-chart"></canvas>
+            </div>
+        </section>
+
+        <!-- Weather Alerts -->
+        <section id="weather-alerts" class="weather-alerts hidden">
+            <!-- Weather alerts will be inserted here -->
+        </section>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay hidden">
+        <div class="spinner"></div>
+        <p>Loading weather data...</p>
+    </div>
+
+    <!-- Error Toast -->
+    <div id="error-toast" class="toast error hidden">
+        <i class="fas fa-exclamation-circle"></i>
+        <span id="error-message"></span>
+    </div>
+
+    <!-- Templates -->
+    <template id="forecast-card-template">
+        <div class="forecast-card">
+            <p class="forecast-date"></p>
+            <i class="wi"></i>
+            <div class="forecast-temps">
+                <span class="temp-high"></span>° / <span class="temp-low"></span>°
+            </div>
+            <p class="forecast-description"></p>
+        </div>
+    </template>
+
+    <template id="favorite-location-template">
+        <div class="favorite-location">
+            <span class="location-name"></span>
+            <div class="favorite-weather">
+                <span class="favorite-temp"></span>
+                <i class="wi"></i>
+            </div>
+            <button class="btn-icon remove-favorite">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </template>
+
+    <!-- Scripts -->
+    <script type="module" src="js/app.js"></script>
+</body>
+</html> 
