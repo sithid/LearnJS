@@ -1,0 +1,140 @@
+{
+    "title": "Web Development",
+    "category": "web-development",
+    "description": "Test your knowledge of HTML, CSS, and web concepts",
+    "difficulty": "easy",
+    "timeLimit": 900,
+    "questions": [
+        {
+            "text": "What does HTML stand for?",
+            "type": "multiple-choice",
+            "answers": [
+                "Hyper Text Markup Language",
+                "High Tech Modern Language",
+                "Hyper Transfer Markup Language",
+                "Hybrid Text Management Language"
+            ],
+            "correctAnswer": 0,
+            "points": 1,
+            "explanation": "HTML stands for Hyper Text Markup Language, which is the standard markup language for creating web pages."
+        },
+        {
+            "text": "Which CSS property is used to change the text color of an element?",
+            "type": "multiple-choice",
+            "answers": [
+                "text-color",
+                "font-color",
+                "color",
+                "text-style"
+            ],
+            "correctAnswer": 2,
+            "points": 1,
+            "explanation": "The 'color' property is used to specify the color of text in CSS."
+        },
+        {
+            "text": "Select all valid HTML5 semantic elements:",
+            "type": "multiple-select",
+            "answers": [
+                "header",
+                "article",
+                "container",
+                "section",
+                "content",
+                "footer"
+            ],
+            "correctAnswer": [0, 1, 3, 5],
+            "points": 2,
+            "explanation": "header, article, section, and footer are semantic elements introduced in HTML5. container and content are not standard HTML elements."
+        },
+        {
+            "text": "The CSS 'box-sizing: border-box' property includes padding and border in the element's total width and height.",
+            "type": "true-false",
+            "answers": [
+                "True",
+                "False"
+            ],
+            "correctAnswer": 0,
+            "points": 1,
+            "explanation": "When box-sizing is set to border-box, the padding and border are included in the element's total width and height calculations."
+        },
+        {
+            "text": "What is the correct HTML for creating a hyperlink?",
+            "type": "multiple-choice",
+            "answers": [
+                "<link href='url'>",
+                "<a url='http://example.com'>",
+                "<a href='http://example.com'>",
+                "<hyperlink>http://example.com</hyperlink>"
+            ],
+            "correctAnswer": 2,
+            "points": 1,
+            "explanation": "The <a> tag with the href attribute is used to create hyperlinks in HTML."
+        },
+        {
+            "text": "Identify the issue in this CSS code:",
+            "type": "multiple-choice",
+            "answers": [
+                "Invalid property name",
+                "Missing semicolon",
+                "Incorrect value format",
+                "No issues"
+            ],
+            "correctAnswer": 1,
+            "points": 2,
+            "media": {
+                "type": "code",
+                "language": "css",
+                "content": ".container {\n  width: 100px;\n  height: 100px\n  background: blue;\n}"
+            },
+            "explanation": "There's a missing semicolon after 'height: 100px'. In CSS, each declaration should end with a semicolon."
+        },
+        {
+            "text": "Which CSS display property makes an element a flex container?",
+            "type": "fill-in",
+            "correctAnswer": "flex",
+            "points": 1,
+            "explanation": "Setting display: flex creates a flex container, enabling flexbox layout for its children."
+        },
+        {
+            "text": "Select all ways to include CSS in an HTML document:",
+            "type": "multiple-select",
+            "answers": [
+                "External stylesheet using <link>",
+                "Internal stylesheet using <style>",
+                "Inline styles using style attribute",
+                "Using the <css> tag",
+                "Import statement in HTML"
+            ],
+            "correctAnswer": [0, 1, 2],
+            "points": 2,
+            "explanation": "CSS can be included via external stylesheets (<link>), internal stylesheets (<style>), and inline styles. The <css> tag and import statement in HTML are not valid methods."
+        },
+        {
+            "text": "What is the purpose of the alt attribute in an <img> tag?",
+            "type": "multiple-choice",
+            "answers": [
+                "To make the image load faster",
+                "To provide alternative text when the image cannot be displayed",
+                "To specify the image source",
+                "To set the image dimensions"
+            ],
+            "correctAnswer": 1,
+            "points": 1,
+            "explanation": "The alt attribute provides alternative text that is displayed when the image cannot be loaded or for accessibility purposes."
+        },
+        {
+            "text": "Which of these units are relative units in CSS?",
+            "type": "multiple-select",
+            "answers": [
+                "px",
+                "em",
+                "rem",
+                "vh",
+                "pt"
+            ],
+            "correctAnswer": [1, 2, 3],
+            "points": 2,
+            "explanation": "em (relative to parent font size), rem (relative to root font size), and vh (relative to viewport height) are relative units. px and pt are absolute units."
+        }
+    ]
+} 

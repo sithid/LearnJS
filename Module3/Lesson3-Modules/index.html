@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Modules Practice</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .exercise-container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        .button-container {
+            margin-top: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .output {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 10px;
+            margin-top: 10px;
+            min-height: 100px;
+            white-space: pre-wrap;
+            font-family: monospace;
+        }
+
+        .loading {
+            display: none;
+            margin: 10px 0;
+            color: #666;
+        }
+
+        .error {
+            color: #dc3545;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .success {
+            color: #28a745;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background-color: #4CAF50;
+            width: 0;
+            transition: width 0.3s ease-in-out;
+        }
+
+        .input-group {
+            margin: 10px 0;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #666;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <h1>JavaScript Modules Practice</h1>
+
+    <!-- Exercise 1: Basic Modules -->
+    <div class="exercise-container">
+        <h2>Exercise 1: Basic Modules</h2>
+        
+        <div class="button-container">
+            <button onclick="testMathOperations()">Test Math Operations</button>
+            <button onclick="testStringUtils()">Test String Utils</button>
+            <button onclick="testDateFormatter()">Test Date Formatter</button>
+            <button onclick="testNumberValidator()">Test Number Validator</button>
+        </div>
+
+        <div class="input-group">
+            <label for="math-input">Numbers (comma-separated):</label>
+            <input type="text" id="math-input" placeholder="Enter numbers (e.g., 5,3)">
+        </div>
+        
+        <div id="exercise1-loading" class="loading">Processing...</div>
+        <div id="exercise1-error" class="error"></div>
+        <div id="exercise1-success" class="success"></div>
+        <div id="exercise1-output" class="output"></div>
+    </div>
+
+    <!-- Exercise 2: Module Organization -->
+    <div class="exercise-container">
+        <h2>Exercise 2: Module Organization</h2>
+        
+        <div class="button-container">
+            <button onclick="testUserModule()">Test User Management</button>
+            <button onclick="testProductModule()">Test Product Catalog</button>
+            <button onclick="testShoppingCart()">Test Shopping Cart</button>
+            <button onclick="testOrderProcessing()">Test Order Processing</button>
+        </div>
+        
+        <div id="exercise2-loading" class="loading">Processing...</div>
+        <div id="exercise2-error" class="error"></div>
+        <div id="exercise2-success" class="success"></div>
+        <div id="exercise2-output" class="output"></div>
+    </div>
+
+    <!-- Exercise 3: Advanced Patterns -->
+    <div class="exercise-container">
+        <h2>Exercise 3: Advanced Patterns</h2>
+        
+        <div class="button-container">
+            <button onclick="testFactory()">Test Factory Pattern</button>
+            <button onclick="testSingleton()">Test Singleton Pattern</button>
+            <button onclick="testObserver()">Test Observer Pattern</button>
+            <button onclick="testBuilder()">Test Builder Pattern</button>
+        </div>
+        
+        <div id="exercise3-loading" class="loading">Processing...</div>
+        <div id="exercise3-error" class="error"></div>
+        <div id="exercise3-success" class="success"></div>
+        <div id="exercise3-output" class="output"></div>
+    </div>
+
+    <!-- Exercise 4: Dynamic Loading -->
+    <div class="exercise-container">
+        <h2>Exercise 4: Dynamic Loading</h2>
+        
+        <div class="button-container">
+            <button onclick="loadFeatureModule('feature1')">Load Feature 1</button>
+            <button onclick="loadFeatureModule('feature2')">Load Feature 2</button>
+            <button onclick="loadFeatureModule('feature3')">Load Feature 3</button>
+        </div>
+        
+        <div class="progress-bar" id="loading-progress">
+            <div class="progress-bar-fill"></div>
+        </div>
+        
+        <div id="exercise4-loading" class="loading">Loading module...</div>
+        <div id="exercise4-error" class="error"></div>
+        <div id="exercise4-success" class="success"></div>
+        <div id="exercise4-output" class="output"></div>
+    </div>
+
+    <!-- Exercise 5: Real Application -->
+    <div class="exercise-container">
+        <h2>Exercise 5: Real Application</h2>
+        
+        <div class="button-container">
+            <button onclick="startApplication()">Start Application</button>
+            <button onclick="stopApplication()">Stop Application</button>
+            <button onclick="testDataOperations()">Test Data Operations</button>
+            <button onclick="testUIComponents()">Test UI Components</button>
+        </div>
+        
+        <div id="exercise5-loading" class="loading">Processing...</div>
+        <div id="exercise5-error" class="error"></div>
+        <div id="exercise5-success" class="success"></div>
+        <div id="app-container"></div>
+        <div id="exercise5-output" class="output"></div>
+    </div>
+
+    <script type="module">
+        // Import modules
+        import { MathOperations } from './exercises.js';
+        import { StringUtils } from './exercises.js';
+        import { DateFormatter } from './exercises.js';
+        import { NumberValidator } from './exercises.js';
+        import { User, Product, ShoppingCart, Order } from './exercises.js';
+        import { UserFactory, Database, EventSystem, QueryBuilder } from './exercises.js';
+        import { loadFeature, Core, UI, DataManager, Utils } from './exercises.js';
+
+        // Make functions available globally
+        window.testMathOperations = async () => {
+            showLoading(1);
+            try {
+                const input = document.getElementById('math-input').value;
+                const [a, b] = input.split(',').map(Number);
+                
+                const results = {
+                    addition: MathOperations.add(a, b),
+                    subtraction: MathOperations.subtract(a, b),
+                    multiplication: MathOperations.multiply(a, b),
+                    division: MathOperations.divide(a, b)
+                };
+
+                showSuccess(1, 'Math operations completed');
+                updateOutput(1, results);
+            } catch (error) {
+                showError(1, error.message);
+            } finally {
+                hideLoading(1);
+            }
+        };
+
+        window.testStringUtils = () => {
+            showLoading(1);
+            try {
+                const results = {
+                    capitalize: StringUtils.capitalize('hello world'),
+                    reverse: StringUtils.reverse('JavaScript'),
+                    wordCount: StringUtils.countWords('This is a test sentence'),
+                    format: StringUtils.format('Hello {0}, welcome to {1}!', 'User', 'JavaScript')
+                };
+
+                showSuccess(1, 'String utilities tested');
+                updateOutput(1, results);
+            } catch (error) {
+                showError(1, error.message);
+            } finally {
+                hideLoading(1);
+            }
+        };
+
+        window.testDateFormatter = () => {
+            showLoading(1);
+            try {
+                const now = new Date();
+                const past = new Date(Date.now() - 3600000); // 1 hour ago
+
+                const results = {
+                    currentDate: DateFormatter.formatDate(now),
+                    currentTime: DateFormatter.formatTime(now),
+                    relativeTime: DateFormatter.getRelativeTime(past)
+                };
+
+                showSuccess(1, 'Date formatting tested');
+                updateOutput(1, results);
+            } catch (error) {
+                showError(1, error.message);
+            } finally {
+                hideLoading(1);
+            }
+        };
+
+        window.testNumberValidator = () => {
+            showLoading(1);
+            try {
+                const results = {
+                    isInteger: NumberValidator.isInteger(42),
+                    isInRange: NumberValidator.isInRange(15, 0, 100),
+                    isPositive: NumberValidator.isPositive(7),
+                    isValidPhone: NumberValidator.isValidPhoneNumber('+1-234-567-8900')
+                };
+
+                showSuccess(1, 'Number validation tested');
+                updateOutput(1, results);
+            } catch (error) {
+                showError(1, error.message);
+            } finally {
+                hideLoading(1);
+            }
+        };
+
+        // Helper functions
+        function showLoading(exerciseNum) {
+            document.getElementById(`exercise${exerciseNum}-loading`).style.display = 'block';
+            document.getElementById(`exercise${exerciseNum}-error`).style.display = 'none';
+            document.getElementById(`exercise${exerciseNum}-success`).style.display = 'none';
+        }
+
+        function hideLoading(exerciseNum) {
+            document.getElementById(`exercise${exerciseNum}-loading`).style.display = 'none';
+        }
+
+        function showError(exerciseNum, message) {
+            const errorDiv = document.getElementById(`exercise${exerciseNum}-error`);
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        }
+
+        function showSuccess(exerciseNum, message) {
+            const successDiv = document.getElementById(`exercise${exerciseNum}-success`);
+            successDiv.textContent = message;
+            successDiv.style.display = 'block';
+        }
+
+        function updateOutput(exerciseNum, content) {
+            document.getElementById(`exercise${exerciseNum}-output`).textContent = 
+                typeof content === 'object' ? JSON.stringify(content, null, 2) : content;
+        }
+
+        // Initialize module load progress listener
+        document.addEventListener('moduleLoadProgress', (event) => {
+            const { featureName, progress } = event.detail;
+            const progressBar = document.querySelector('.progress-bar-fill');
+            progressBar.style.width = `${progress}%`;
+            
+            if (progress === 100) {
+                setTimeout(() => {
+                    document.getElementById('loading-progress').style.display = 'none';
+                }, 1000);
+            } else {
+                document.getElementById('loading-progress').style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html> 

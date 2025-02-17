@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Functions - Tests</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .test-result {
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 4px;
+        }
+        .pass {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            border-left: 4px solid #2e7d32;
+        }
+        .fail {
+            background-color: #fbe9e7;
+            color: #c62828;
+            border-left: 4px solid #c62828;
+        }
+        .console-output {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        h1 {
+            color: #333;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+        .summary {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e3f2fd;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Functions - Test Results</h1>
+        <div id="test-results"></div>
+        <div id="summary" class="summary"></div>
+    </div>
+
+    <script type="module">
+        // Import student's code
+        import * as exercises from './exercises.js';
+
+        // Test runner
+        class TestRunner {
+            constructor() {
+                this.results = [];
+                this.passCount = 0;
+                this.totalTests = 0;
+            }
+
+            assert(condition, message) {
+                if (!condition) {
+                    throw new Error(message);
+                }
+            }
+
+            assertClose(actual, expected, delta = 0.001) {
+                if (Math.abs(actual - expected) > delta) {
+                    throw new Error(`Expected ${expected} but got ${actual}`);
+                }
+            }
+
+            addResult(testName, passed, error = null) {
+                this.results.push({ testName, passed, error });
+                if (passed) this.passCount++;
+                this.totalTests++;
+            }
+
+            displayResults() {
+                const container = document.getElementById('test-results');
+                const summary = document.getElementById('summary');
+                
+                this.results.forEach(result => {
+                    const div = document.createElement('div');
+                    div.className = `test-result ${result.passed ? 'pass' : 'fail'}`;
+                    div.textContent = `${result.passed ? '✅' : '❌'} ${result.testName}`;
+                    
+                    if (!result.passed && result.error) {
+                        const errorDiv = document.createElement('div');
+                        errorDiv.className = 'console-output';
+                        errorDiv.textContent = result.error;
+                        div.appendChild(errorDiv);
+                    }
+                    
+                    container.appendChild(div);
+                });
+
+                summary.textContent = `Passed ${this.passCount} of ${this.totalTests} tests (${Math.round(this.passCount/this.totalTests*100)}%)`;
+            }
+
+            runTest(testName, testFn) {
+                try {
+                    testFn();
+                    this.addResult(testName, true);
+                } catch (error) {
+                    this.addResult(testName, false, error.message);
+                }
+            }
+        }
+
+        // Initialize test runner
+        const runner = new TestRunner();
+
+        // Run tests
+        runner.runTest('Function Types - Declaration', () => {
+            runner.assert(typeof exercises.calculateArea === 'function', 'calculateArea should be defined as a function');
+            runner.assert(exercises.calculateArea(5, 3) === 15, 'calculateArea should return correct area');
+        });
+
+        runner.runTest('Function Types - Expression', () => {
+            runner.assert(typeof exercises.calculateAreaExpr === 'function', 'calculateAreaExpr should be defined as a function');
+            runner.assert(exercises.calculateAreaExpr(5, 3) === 15, 'calculateAreaExpr should return correct area');
+        });
+
+        runner.runTest('Function Types - Arrow', () => {
+            runner.assert(typeof exercises.calculateAreaArrow === 'function', 'calculateAreaArrow should be defined as a function');
+            runner.assert(exercises.calculateAreaArrow(5, 3) === 15, 'calculateAreaArrow should return correct area');
+        });
+
+        runner.runTest('Calculator - Addition', () => {
+            runner.assert(exercises.add(10, 5) === 15, 'add(10, 5) should return 15');
+            runner.assert(exercises.add(-3, 7) === 4, 'add(-3, 7) should return 4');
+        });
+
+        runner.runTest('Calculator - Subtraction', () => {
+            runner.assert(exercises.subtract(10, 5) === 5, 'subtract(10, 5) should return 5');
+            runner.assert(exercises.subtract(3, 7) === -4, 'subtract(3, 7) should return -4');
+        });
+
+        runner.runTest('Calculator - Multiplication', () => {
+            runner.assert(exercises.multiply(10, 5) === 50, 'multiply(10, 5) should return 50');
+            runner.assert(exercises.multiply(-3, 7) === -21, 'multiply(-3, 7) should return -21');
+        });
+
+        runner.runTest('Calculator - Division', () => {
+            runner.assert(exercises.divide(10, 5) === 2, 'divide(10, 5) should return 2');
+            runner.assert(exercises.divide(10, 0) === null || exercises.divide(10, 0) === undefined, 
+                'divide(10, 0) should handle division by zero');
+        });
+
+        runner.runTest('Personal Information - Default Values', () => {
+            const person = exercises.createPerson();
+            runner.assert(person.name === 'John Doe', 'Default name should be "John Doe"');
+            runner.assert(person.age === 30, 'Default age should be 30');
+            runner.assert(person.occupation === 'Developer', 'Default occupation should be "Developer"');
+            runner.assert(person.location === 'New York', 'Default location should be "New York"');
+        });
+
+        runner.runTest('Personal Information - Custom Values', () => {
+            const person = exercises.createPerson('Jane Smith', 25, 'Designer', 'San Francisco');
+            runner.assert(person.name === 'Jane Smith', 'Custom name should be set correctly');
+            runner.assert(person.age === 25, 'Custom age should be set correctly');
+            runner.assert(person.occupation === 'Designer', 'Custom occupation should be set correctly');
+            runner.assert(person.location === 'San Francisco', 'Custom location should be set correctly');
+        });
+
+        runner.runTest('Shopping Cart - Add Items', () => {
+            exercises.shoppingCart.items = []; // Reset cart
+            exercises.shoppingCart.addItem('Laptop', 999.99);
+            exercises.shoppingCart.addItem('Mouse', 29.99, 2);
+            
+            runner.assert(exercises.shoppingCart.items.length === 2, 'Cart should have 2 items');
+            runner.assert(exercises.shoppingCart.items.find(item => item.name === 'Mouse').quantity === 2,
+                'Mouse quantity should be 2');
+        });
+
+        runner.runTest('Shopping Cart - Calculate Total', () => {
+            exercises.shoppingCart.items = [
+                { name: 'Laptop', price: 999.99, quantity: 1 },
+                { name: 'Mouse', price: 29.99, quantity: 2 }
+            ];
+            
+            runner.assertClose(exercises.shoppingCart.calculateTotal(), 1059.97);
+        });
+
+        runner.runTest('Shopping Cart - Apply Discount', () => {
+            exercises.shoppingCart.items = [
+                { name: 'Laptop', price: 999.99, quantity: 1 }
+            ];
+            
+            runner.assertClose(exercises.shoppingCart.applyDiscount(10), 899.991);
+        });
+
+        runner.runTest('Shopping Cart - Remove Item', () => {
+            exercises.shoppingCart.items = [
+                { name: 'Laptop', price: 999.99, quantity: 1 },
+                { name: 'Mouse', price: 29.99, quantity: 2 }
+            ];
+            
+            exercises.shoppingCart.removeItem('Mouse');
+            runner.assert(exercises.shoppingCart.items.length === 1, 'Cart should have 1 item after removal');
+            runner.assert(!exercises.shoppingCart.items.find(item => item.name === 'Mouse'),
+                'Mouse should be removed from cart');
+        });
+
+        runner.runTest('Temperature - Celsius to Fahrenheit', () => {
+            runner.assertClose(exercises.celsiusToFahrenheit(0), 32);
+            runner.assertClose(exercises.celsiusToFahrenheit(100), 212);
+        });
+
+        runner.runTest('Temperature - Fahrenheit to Celsius', () => {
+            runner.assertClose(exercises.fahrenheitToCelsius(32), 0);
+            runner.assertClose(exercises.fahrenheitToCelsius(212), 100);
+        });
+
+        runner.runTest('Temperature - Celsius to Kelvin', () => {
+            runner.assertClose(exercises.celsiusToKelvin(0), 273.15);
+            runner.assertClose(exercises.celsiusToKelvin(100), 373.15);
+        });
+
+        runner.runTest('Counter - Closure', () => {
+            const counter = exercises.createCounter(5);
+            runner.assert(counter() === 6, 'First call should return 6');
+            runner.assert(counter() === 7, 'Second call should return 7');
+            runner.assert(counter() === 8, 'Third call should return 8');
+        });
+
+        // Display results
+        runner.displayResults();
+    </script>
+</body>
+</html> 

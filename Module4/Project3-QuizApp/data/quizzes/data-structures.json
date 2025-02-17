@@ -1,0 +1,141 @@
+{
+    "title": "Data Structures",
+    "category": "data-structures",
+    "description": "Test your knowledge of arrays, objects, and common data structures",
+    "difficulty": "medium",
+    "timeLimit": 1200,
+    "questions": [
+        {
+            "text": "Which data structure follows the Last-In-First-Out (LIFO) principle?",
+            "type": "multiple-choice",
+            "answers": [
+                "Queue",
+                "Stack",
+                "Linked List",
+                "Binary Tree"
+            ],
+            "correctAnswer": 1,
+            "points": 1,
+            "explanation": "A Stack follows the LIFO principle, where the last element added is the first one to be removed."
+        },
+        {
+            "text": "What is the time complexity of searching for an element in a sorted array using binary search?",
+            "type": "multiple-choice",
+            "answers": [
+                "O(n)",
+                "O(log n)",
+                "O(n²)",
+                "O(1)"
+            ],
+            "correctAnswer": 1,
+            "points": 1,
+            "explanation": "Binary search has a time complexity of O(log n) as it divides the search space in half with each iteration."
+        },
+        {
+            "text": "Select all linear data structures:",
+            "type": "multiple-select",
+            "answers": [
+                "Array",
+                "Binary Tree",
+                "Linked List",
+                "Queue",
+                "Graph",
+                "Stack"
+            ],
+            "correctAnswer": [0, 2, 3, 5],
+            "points": 2,
+            "explanation": "Linear data structures store elements sequentially. Arrays, Linked Lists, Queues, and Stacks are linear, while Binary Trees and Graphs are non-linear."
+        },
+        {
+            "text": "A Hash Table provides constant time O(1) lookup in the average case.",
+            "type": "true-false",
+            "answers": [
+                "True",
+                "False"
+            ],
+            "correctAnswer": 0,
+            "points": 1,
+            "explanation": "Hash Tables provide O(1) average case time complexity for lookups, insertions, and deletions, though worst case can be O(n)."
+        },
+        {
+            "text": "What will be the output of this code?",
+            "type": "multiple-choice",
+            "answers": [
+                "[1, 2, 3]",
+                "[3, 2, 1]",
+                "Error",
+                "[2, 1, 3]"
+            ],
+            "correctAnswer": 1,
+            "points": 2,
+            "media": {
+                "type": "code",
+                "language": "javascript",
+                "content": "const stack = [];\nstack.push(1);\nstack.push(2);\nstack.push(3);\nconst result = [];\nwhile(stack.length > 0) {\n    result.push(stack.pop());\n}\nconsole.log(result);"
+            },
+            "explanation": "The code implements a stack using an array. When elements are popped from the stack, they come out in reverse order (LIFO)."
+        },
+        {
+            "text": "Which data structure would be most efficient for implementing a spell checker?",
+            "type": "multiple-choice",
+            "answers": [
+                "Array",
+                "Linked List",
+                "Hash Table",
+                "Queue"
+            ],
+            "correctAnswer": 2,
+            "points": 2,
+            "explanation": "A Hash Table is ideal for spell checkers due to its O(1) average lookup time and efficient storage of a large dictionary of words."
+        },
+        {
+            "text": "Select all operations that can be performed on a Queue:",
+            "type": "multiple-select",
+            "answers": [
+                "enqueue",
+                "push",
+                "dequeue",
+                "peek",
+                "pop",
+                "isEmpty"
+            ],
+            "correctAnswer": [0, 2, 3, 5],
+            "points": 2,
+            "explanation": "Standard queue operations include enqueue (add), dequeue (remove), peek (view front), and isEmpty. push and pop are stack operations."
+        },
+        {
+            "text": "What type of tree has at most two children per node?",
+            "type": "fill-in",
+            "correctAnswer": "binary",
+            "points": 1,
+            "explanation": "A binary tree is a tree data structure where each node has at most two children, referred to as left and right children."
+        },
+        {
+            "text": "Identify the correct implementation of a Node class for a singly linked list:",
+            "type": "multiple-choice",
+            "answers": [
+                "class Node { constructor(data) { this.data = data; } }",
+                "class Node { constructor(data) { this.data = data; this.next = null; } }",
+                "class Node { constructor(data) { this.data = data; this.prev = null; } }",
+                "class Node { constructor(data) { this.value = data; } }"
+            ],
+            "correctAnswer": 1,
+            "points": 2,
+            "explanation": "A Node in a singly linked list needs two properties: data to store the value, and next to reference the next node in the list."
+        },
+        {
+            "text": "Which statements about Binary Search Trees (BST) are true?",
+            "type": "multiple-select",
+            "answers": [
+                "Left subtree contains smaller values than the root",
+                "Right subtree contains larger values than the root",
+                "It allows duplicate values by default",
+                "Inorder traversal gives sorted output",
+                "All operations take O(log n) time"
+            ],
+            "correctAnswer": [0, 1, 3],
+            "points": 2,
+            "explanation": "In a BST, left subtree has smaller values, right has larger values, and inorder traversal gives sorted output. Duplicates aren't allowed by default, and operations can take O(n) time in worst case."
+        }
+    ]
+} 

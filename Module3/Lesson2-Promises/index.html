@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promises and Async/Await Practice</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .exercise-container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        .button-container {
+            margin-top: 10px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .output {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 10px;
+            margin-top: 10px;
+            min-height: 100px;
+            white-space: pre-wrap;
+        }
+
+        .loading {
+            display: none;
+            margin: 10px 0;
+            color: #666;
+        }
+
+        .error {
+            color: #dc3545;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .success {
+            color: #28a745;
+            margin-top: 10px;
+            display: none;
+        }
+
+        #user-profile {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .post-card {
+            background-color: white;
+            padding: 15px;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background-color: #4CAF50;
+            width: 0;
+            transition: width 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <h1>Promises and Async/Await Practice</h1>
+
+    <!-- Exercise 1: Basic Promises -->
+    <div class="exercise-container">
+        <h2>Exercise 1: Basic Promises</h2>
+        
+        <div class="button-container">
+            <button onclick="testDelay()">Test Delay</button>
+            <button onclick="testRandomResult()">Test Random Result</button>
+            <button onclick="testChainedOperations()">Test Chained Operations</button>
+        </div>
+        
+        <div id="exercise1-loading" class="loading">Loading...</div>
+        <div id="exercise1-error" class="error"></div>
+        <div id="exercise1-success" class="success"></div>
+        <div id="exercise1-output" class="output"></div>
+    </div>
+
+    <!-- Exercise 2: Async/Await -->
+    <div class="exercise-container">
+        <h2>Exercise 2: Async/Await</h2>
+        
+        <div class="button-container">
+            <button onclick="testFileRead()">Test File Read</button>
+            <button onclick="testFetchUser()">Test Fetch User</button>
+        </div>
+        
+        <div id="exercise2-loading" class="loading">Loading...</div>
+        <div id="exercise2-error" class="error"></div>
+        <div id="exercise2-success" class="success"></div>
+        <div id="exercise2-output" class="output"></div>
+    </div>
+
+    <!-- Exercise 3: Promise Patterns -->
+    <div class="exercise-container">
+        <h2>Exercise 3: Promise Patterns</h2>
+        
+        <div class="button-container">
+            <button onclick="testSequential()">Test Sequential</button>
+            <button onclick="testParallel()">Test Parallel</button>
+            <button onclick="testRace()">Test Race</button>
+            <button onclick="testTimeout()">Test Timeout</button>
+        </div>
+        
+        <div id="exercise3-loading" class="loading">Loading...</div>
+        <div id="exercise3-error" class="error"></div>
+        <div id="exercise3-success" class="success"></div>
+        <div id="exercise3-output" class="output"></div>
+    </div>
+
+    <!-- Exercise 4: Error Handling -->
+    <div class="exercise-container">
+        <h2>Exercise 4: Error Handling</h2>
+        
+        <div class="button-container">
+            <button onclick="testRetry()">Test Retry</button>
+            <button onclick="testCleanup()">Test Cleanup</button>
+        </div>
+        
+        <div id="exercise4-loading" class="loading">Loading...</div>
+        <div id="exercise4-error" class="error"></div>
+        <div id="exercise4-success" class="success"></div>
+        <div id="exercise4-output" class="output"></div>
+    </div>
+
+    <!-- Exercise 5: Real-world Application -->
+    <div class="exercise-container">
+        <h2>Exercise 5: Real-world Application</h2>
+        
+        <div class="button-container">
+            <button onclick="loadUserProfile(1)">Load User 1</button>
+            <button onclick="loadUserProfile(2)">Load User 2</button>
+            <button onclick="loadUserProfile(3)">Load User 3</button>
+        </div>
+        
+        <div id="exercise5-loading" class="loading">Loading user profile...</div>
+        <div id="exercise5-error" class="error"></div>
+        <div id="exercise5-success" class="success"></div>
+        
+        <div class="progress-bar">
+            <div id="progress-bar-fill" class="progress-bar-fill"></div>
+        </div>
+        
+        <div id="user-profile"></div>
+    </div>
+
+    <script src="exercises.js"></script>
+    <script>
+        // Helper functions for UI
+        function showLoading(exerciseNum) {
+            document.getElementById(`exercise${exerciseNum}-loading`).style.display = 'block';
+            document.getElementById(`exercise${exerciseNum}-error`).style.display = 'none';
+            document.getElementById(`exercise${exerciseNum}-success`).style.display = 'none';
+        }
+
+        function hideLoading(exerciseNum) {
+            document.getElementById(`exercise${exerciseNum}-loading`).style.display = 'none';
+        }
+
+        function showError(exerciseNum, message) {
+            const errorDiv = document.getElementById(`exercise${exerciseNum}-error`);
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        }
+
+        function showSuccess(exerciseNum, message) {
+            const successDiv = document.getElementById(`exercise${exerciseNum}-success`);
+            successDiv.textContent = message;
+            successDiv.style.display = 'block';
+        }
+
+        function updateOutput(exerciseNum, content) {
+            document.getElementById(`exercise${exerciseNum}-output`).textContent = 
+                typeof content === 'object' ? JSON.stringify(content, null, 2) : content;
+        }
+
+        // Exercise 1 Tests
+        async function testDelay() {
+            showLoading(1);
+            try {
+                const start = Date.now();
+                await delay(2000);
+                const duration = Date.now() - start;
+                showSuccess(1, `Delay completed after ${duration}ms`);
+                updateOutput(1, 'Delay function executed successfully');
+            } catch (error) {
+                showError(1, error.message);
+            } finally {
+                hideLoading(1);
+            }
+        }
+
+        async function testRandomResult() {
+            showLoading(1);
+            try {
+                const result = await randomResult();
+                showSuccess(1, 'Random operation succeeded');
+                updateOutput(1, result);
+            } catch (error) {
+                showError(1, error.message);
+                updateOutput(1, 'Operation failed (this is expected 50% of the time)');
+            } finally {
+                hideLoading(1);
+            }
+        }
+
+        async function testChainedOperations() {
+            showLoading(1);
+            try {
+                const result = await chainedOperations(5);
+                showSuccess(1, 'Chained operations completed');
+                updateOutput(1, `Final result: ${result}`);
+            } catch (error) {
+                showError(1, error.message);
+            } finally {
+                hideLoading(1);
+            }
+        }
+
+        // Exercise 2 Tests
+        async function testFileRead() {
+            showLoading(2);
+            try {
+                const content = await readFileAsync('file1.txt');
+                showSuccess(2, 'File read successfully');
+                updateOutput(2, content);
+            } catch (error) {
+                showError(2, error.message);
+            } finally {
+                hideLoading(2);
+            }
+        }
+
+        async function testFetchUser() {
+            showLoading(2);
+            try {
+                const user = await fetchUserAsync(1);
+                showSuccess(2, 'User fetched successfully');
+                updateOutput(2, user);
+            } catch (error) {
+                showError(2, error.message);
+            } finally {
+                hideLoading(2);
+            }
+        }
+
+        // Exercise 3 Tests
+        async function testSequential() {
+            showLoading(3);
+            try {
+                const results = await sequential();
+                showSuccess(3, 'Sequential operations completed');
+                updateOutput(3, results);
+            } catch (error) {
+                showError(3, error.message);
+            } finally {
+                hideLoading(3);
+            }
+        }
+
+        async function testParallel() {
+            showLoading(3);
+            try {
+                const results = await parallel();
+                showSuccess(3, 'Parallel operations completed');
+                updateOutput(3, results);
+            } catch (error) {
+                showError(3, error.message);
+            } finally {
+                hideLoading(3);
+            }
+        }
+
+        async function testRace() {
+            showLoading(3);
+            try {
+                const result = await race();
+                showSuccess(3, 'Race completed');
+                updateOutput(3, result);
+            } catch (error) {
+                showError(3, error.message);
+            } finally {
+                hideLoading(3);
+            }
+        }
+
+        async function testTimeout() {
+            showLoading(3);
+            try {
+                const slowOperation = new Promise(resolve => setTimeout(() => resolve('Done'), 3000));
+                const result = await withTimeout(slowOperation, 2000);
+                showSuccess(3, 'Operation completed within timeout');
+                updateOutput(3, result);
+            } catch (error) {
+                showError(3, error.message);
+            } finally {
+                hideLoading(3);
+            }
+        }
+
+        // Exercise 4 Tests
+        async function testRetry() {
+            showLoading(4);
+            try {
+                const result = await withRetry(() => fetchUserAsync(1));
+                showSuccess(4, 'Operation succeeded with retry mechanism');
+                updateOutput(4, result);
+            } catch (error) {
+                showError(4, error.message);
+            } finally {
+                hideLoading(4);
+            }
+        }
+
+        async function testCleanup() {
+            showLoading(4);
+            try {
+                const result = await withCleanup(() => fetchUserAsync(1));
+                showSuccess(4, 'Operation completed with cleanup');
+                updateOutput(4, result);
+            } catch (error) {
+                showError(4, error.message);
+            } finally {
+                hideLoading(4);
+            }
+        }
+
+        // Exercise 5 Tests
+        async function loadUserProfile(id) {
+            const userDisplay = new UserDisplay();
+            document.getElementById('exercise5-loading').style.display = 'block';
+            document.getElementById('exercise5-error').style.display = 'none';
+            document.getElementById('progress-bar-fill').style.width = '0%';
+            
+            try {
+                // Simulate progress
+                const progressBar = document.getElementById('progress-bar-fill');
+                let progress = 0;
+                const progressInterval = setInterval(() => {
+                    progress += 5;
+                    if (progress <= 100) {
+                        progressBar.style.width = `${progress}%`;
+                    }
+                }, 100);
+
+                const result = await userDisplay.displayUserProfile(id);
+                
+                clearInterval(progressInterval);
+                progressBar.style.width = '100%';
+
+                // Display user profile
+                const profileContainer = document.getElementById('user-profile');
+                profileContainer.innerHTML = `
+                    <div class="post-card">
+                        <h3>${result.user.name}</h3>
+                        <p>Email: ${result.user.email}</p>
+                    </div>
+                    ${result.posts.map(post => `
+                        <div class="post-card">
+                            <h4>${post.title}</h4>
+                            <p>${post.content}</p>
+                        </div>
+                    `).join('')}
+                `;
+
+                document.getElementById('exercise5-success').textContent = 'Profile loaded successfully';
+                document.getElementById('exercise5-success').style.display = 'block';
+            } catch (error) {
+                document.getElementById('exercise5-error').textContent = error.message;
+                document.getElementById('exercise5-error').style.display = 'block';
+            } finally {
+                document.getElementById('exercise5-loading').style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html> 
