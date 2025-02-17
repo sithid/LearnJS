@@ -58,7 +58,7 @@ Each project includes:
    - Follow test results to debug and improve your code
 
 4. Development Workflow:
-   - Start a local server (required for modules to work)
+   - Start the server (required for modules to work)
    - Read the lesson/project README
    - Implement the required functionality
    - Run tests to validate your work
@@ -68,6 +68,7 @@ Each project includes:
 ## Prerequisites
 - Basic understanding of HTML and CSS
 - A modern web browser
+- Node.js and npm installed
 - A text editor (VS Code recommended)
 - Basic command line knowledge
 
@@ -79,21 +80,26 @@ Each project includes:
    cd LearnJS
    ```
 
-2. Start a local server:
+2. Install dependencies:
    ```bash
-   # Using Python 3
-   python -m http.server 8000
-
-   # Using Node.js
-   npx http-server
+   npm install
    ```
 
-3. Open in your browser:
+3. Start the server:
+   ```bash
+   # For development with auto-reload:
+   npm run dev
+
+   # For production:
+   npm start
+   ```
+
+4. Open in your browser:
    ```
    http://localhost:8000
    ```
 
-4. Navigate through modules:
+5. Navigate through modules:
    - Start with Module 1
    - Complete all exercises
    - Run tests for validation
