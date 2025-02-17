@@ -111,3 +111,162 @@ function guessNumber() {
 // For Node.js, you would need to use readline or another input method
 console.log("\nExercise 5: Number Guessing Game");
 // Uncomment to play: guessNumber(); 
+
+// Exercise 1: Basic Conditionals
+
+// 1. Check if a number is positive, negative, or zero
+export function checkNumber(num) {
+    if (num > 0) return 'positive';
+    if (num < 0) return 'negative';
+    return 'zero';
+}
+
+// 2. Determine if someone can vote
+export function canVote(age) {
+    return age >= 18;
+}
+
+// 3. Check if a year is a leap year
+export function isLeapYear(year) {
+    return (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
+}
+
+// Exercise 2: Switch Statements
+
+// 1. Get the day type
+export function getDayType(dayName) {
+    switch (dayName.toLowerCase()) {
+        case 'saturday':
+        case 'sunday':
+            return 'weekend';
+        case 'monday':
+        case 'tuesday':
+        case 'wednesday':
+        case 'thursday':
+        case 'friday':
+            return 'workday';
+        default:
+            return 'invalid';
+    }
+}
+
+// 2. Convert number grade to letter grade
+export function getLetterGrade(score) {
+    if (score < 0 || score > 100) return 'invalid';
+    
+    switch (Math.floor(score / 10)) {
+        case 10:
+        case 9:
+            return 'A';
+        case 8:
+            return 'B';
+        case 7:
+            return 'C';
+        case 6:
+            return 'D';
+        default:
+            return 'F';
+    }
+}
+
+// 3. Basic calculator
+export function calculate(num1, num2, operation) {
+    switch (operation) {
+        case 'add':
+            return num1 + num2;
+        case 'subtract':
+            return num1 - num2;
+        case 'multiply':
+            return num1 * num2;
+        case 'divide':
+            return num2 === 0 ? null : num1 / num2;
+        default:
+            return null;
+    }
+}
+
+// Exercise 3: Loops
+
+// 1. Sum numbers from 1 to n
+export function sumToN(n) {
+    if (n < 0) return 0;
+    let sum = 0;
+    for (let i = 1; i <= n; i++) {
+        sum += i;
+    }
+    return sum;
+}
+
+// 2. Find the factorial of n
+export function factorial(n) {
+    if (n < 0) return null;
+    if (n === 0) return 1;
+    
+    let result = 1;
+    let i = n;
+    while (i > 0) {
+        result *= i;
+        i--;
+    }
+    return result;
+}
+
+// 3. Create multiplication table
+export function multiplicationTable(n) {
+    const table = [];
+    for (let i = 1; i <= n; i++) {
+        const row = [];
+        for (let j = 1; j <= n; j++) {
+            row.push(i * j);
+        }
+        table.push(row);
+    }
+    return table;
+}
+
+// Exercise 4: Advanced Challenges
+
+// 1. FizzBuzz
+export function fizzBuzz(n) {
+    const result = [];
+    for (let i = 1; i <= n; i++) {
+        if (i % 3 === 0 && i % 5 === 0) {
+            result.push('FizzBuzz');
+        } else if (i % 3 === 0) {
+            result.push('Fizz');
+        } else if (i % 5 === 0) {
+            result.push('Buzz');
+        } else {
+            result.push(i);
+        }
+    }
+    return result;
+}
+
+// 2. Find prime numbers
+export function findPrimes(start, end) {
+    const primes = [];
+    
+    function isPrime(num) {
+        if (num < 2) return false;
+        for (let i = 2; i <= Math.sqrt(num); i++) {
+            if (num % i === 0) return false;
+        }
+        return true;
+    }
+    
+    for (let i = start; i <= end; i++) {
+        if (isPrime(i)) primes.push(i);
+    }
+    
+    return primes;
+}
+
+// 3. Pattern printing
+export function createPattern(rows) {
+    const pattern = [];
+    for (let i = 1; i <= rows; i++) {
+        pattern.push('*'.repeat(i));
+    }
+    return pattern;
+} 

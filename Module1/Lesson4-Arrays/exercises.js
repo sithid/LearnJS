@@ -1,27 +1,125 @@
 // Exercise 1: Array Operations
-// TODO: Implement the following array operation functions
 
-function findLargestNumber(numbers) {
-    // Your code here
-    // Find the largest number in the array without using Math.max
+// 1. Find maximum value in array
+export function findMax(numbers) {
+    // TODO: Return the maximum value in the array
+    // Return null for invalid inputs (empty array or non-array)
+    return null;
 }
 
-function removeDuplicates(array) {
-    // Your code here
-    // Remove duplicates without using Set
+// 2. Remove duplicates from array
+export function removeDuplicates(array) {
+    // TODO: Remove duplicate values from the array
+    // Return empty array for invalid input
+    return null;
 }
 
-function customReverse(array) {
-    // Your code here
-    // Reverse array without using array.reverse()
+// 3. Rotate array by k positions
+export function rotateArray(array, k) {
+    // TODO: Rotate array k positions to the right
+    // For negative k, rotate to the left
+    // Return null for invalid inputs
+    return null;
+}
+
+// Exercise 2: Array Transformations
+
+// 1. Transform user objects
+export function formatUsers(users) {
+    // TODO: Transform array of users with {name, age} into {fullName, yearOfBirth}
+    // Return empty array for invalid input
+    return null;
+}
+
+// 2. Filter and transform products
+export function processProducts(products) {
+    // TODO: Filter in-stock products and add 20% tax to prices
+    // Return empty array for invalid input
+    return null;
+}
+
+// 3. Group and count items
+export function groupAndCount(items) {
+    // TODO: Group items by category and count occurrences
+    // Return empty object for invalid input
+    return null;
+}
+
+// Exercise 3: Object Manipulation
+
+// 1. Deep clone object
+export function deepClone(obj) {
+    // TODO: Create a deep copy of the object
+    // Handle nested objects and arrays
+    return null;
+}
+
+// 2. Merge objects
+export function mergeObjects(obj1, obj2) {
+    // TODO: Deep merge two objects
+    // Return null for invalid inputs
+    return null;
+}
+
+// 3. Create object hierarchy
+export function createHierarchy(data) {
+    // TODO: Create a tree structure from flat data
+    // Return null for invalid input
+    return null;
+}
+
+// Exercise 4: Advanced Operations
+
+// 1. Array intersection
+export function findIntersection(arr1, arr2) {
+    // TODO: Find common elements between two arrays
+    // Return empty array for invalid inputs
+    return null;
+}
+
+// 2. Object validator
+export function validateObject(obj, schema) {
+    // TODO: Validate object against schema
+    // Return array of validation errors
+    return null;
+}
+
+// 3. Data transformer
+export function transformData(data, transformations) {
+    // TODO: Apply series of transformations to data
+    // Return null for invalid inputs
+    return null;
+}
+
+// Advanced Challenges
+
+// 1. Implement deep equality
+export function deepEqual(value1, value2) {
+    // TODO: Compare two values for deep equality
+    // Handle nested objects and arrays
+    return null;
+}
+
+// 2. Create object observer
+export function createObservable(obj) {
+    // TODO: Create observable object with get/set handlers
+    // Return proxy object
+    return null;
+}
+
+// 3. Implement undo/redo
+export function createVersioned(obj) {
+    // TODO: Create object with undo/redo capability
+    // Return object with value, commit(), undo(), and redo() methods
+    return null;
 }
 
 // Test cases for Exercise 1
 console.log("Exercise 1: Array Operations");
 // TODO: Uncomment and test your functions
-// console.log("Largest number:", findLargestNumber([5, 3, 9, 1, 7]));
+// console.log("Largest number:", findMax([5, 3, 9, 1, 7]));
 // console.log("Remove duplicates:", removeDuplicates([1, 2, 2, 3, 3, 4]));
-// console.log("Custom reverse:", customReverse([1, 2, 3, 4, 5]));
+// console.log("Custom reverse:", rotateArray([1, 2, 3, 4, 5], 2));
 
 // Exercise 2: Shopping List Manager
 const shoppingList = {
