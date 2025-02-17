@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ES6+ Features Tests</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .test-results {
+            margin-top: 20px;
+        }
+        .test-case {
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 4px;
+        }
+        .pass {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+        .fail {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .summary {
+            text-align: center;
+            font-size: 1.2em;
+            margin: 20px 0;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .summary.all-pass {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+        .summary.has-fail {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>ES6+ Features Tests</h1>
+        <div id="testResults" class="test-results"></div>
+        <div id="summary" class="summary"></div>
+    </div>
+
+    <script type="module">
+        import {
+            createCounter,
+            formatUser,
+            getPersonInfo,
+            combineArrays,
+            Shape,
+            removeDuplicates,
+            createPhoneBook,
+            getNestedValue,
+            createPerson,
+            greet,
+            processNumbers
+        } from './exercises.js';
+
+        function runTest(description, testFunction) {
+            const resultDiv = document.createElement('div');
+            try {
+                const result = testFunction();
+                if (result === true) {
+                    resultDiv.className = 'test-case pass';
+                    resultDiv.textContent = `✓ ${description}`;
+                } else {
+                    resultDiv.className = 'test-case fail';
+                    resultDiv.textContent = `✗ ${description}`;
+                }
+            } catch (error) {
+                resultDiv.className = 'test-case fail';
+                resultDiv.textContent = `✗ ${description} (Error: ${error.message})`;
+            }
+            document.getElementById('testResults').appendChild(resultDiv);
+            return resultDiv.className.includes('pass');
+        }
+
+        const tests = [
+            // Exercise 1: Arrow Functions and Lexical Scope
+            () => runTest('Counter increment works correctly', () => {
+                const counter = createCounter();
+                counter.increment();
+                return counter.getCount() === 1;
+            }),
+            () => runTest('Counter maintains lexical scope', () => {
+                const counter = createCounter();
+                counter.increment();
+                counter.increment();
+                counter.decrement();
+                return counter.getCount() === 1;
+            }),
+
+            // Exercise 2: Template Literals
+            () => runTest('formatUser formats string correctly', () => {
+                const user = { name: 'John', age: 30, city: 'New York' };
+                return formatUser(user) === 'User John is 30 years old and lives in New York';
+            }),
+
+            // Exercise 3: Destructuring
+            () => runTest('getPersonInfo extracts correct properties', () => {
+                const person = { name: 'Alice', age: 25, city: 'London', country: 'UK' };
+                const info = getPersonInfo(person);
+                return info.name === 'Alice' && info.age === 25 && info.city === 'London';
+            }),
+
+            // Exercise 4: Spread/Rest Operators
+            () => runTest('combineArrays combines arrays correctly', () => {
+                const arr1 = [1, 2];
+                const arr2 = [3, 4];
+                const arr3 = [5, 6];
+                const combined = combineArrays(arr1, arr2, arr3);
+                return JSON.stringify(combined) === '[1,2,3,4,5,6]';
+            }),
+
+            // Exercise 5: Classes
+            () => runTest('Shape class calculates area and perimeter', () => {
+                const square = new Shape(4);
+                return square.getArea() === 16 && square.getPerimeter() === 16;
+            }),
+
+            // Exercise 6: Map and Set
+            () => runTest('removeDuplicates removes duplicate values', () => {
+                const array = [1, 2, 2, 3, 3, 4];
+                const result = removeDuplicates(array);
+                return JSON.stringify(result) === '[1,2,3,4]';
+            }),
+            () => runTest('createPhoneBook manages contacts correctly', () => {
+                const phoneBook = createPhoneBook();
+                phoneBook.add('John', '123-456-7890');
+                return phoneBook.get('John') === '123-456-7890';
+            }),
+
+            // Exercise 7: Optional Chaining and Nullish Coalescing
+            () => runTest('getNestedValue handles nested properties safely', () => {
+                const obj = { a: { b: { c: 1 } } };
+                return getNestedValue(obj) === 1 && getNestedValue({}) === 'default';
+            }),
+
+            // Exercise 8: Enhanced Object Literals
+            () => runTest('createPerson uses enhanced object literals', () => {
+                const person = createPerson('John', 30, 'New York');
+                return person.name === 'John' && person.age === 30 && person.city === 'New York';
+            }),
+
+            // Exercise 9: Default Parameters
+            () => runTest('greet uses default parameters correctly', () => {
+                return greet('John') === 'Hello, John!' && greet('Jane', 'Hi') === 'Hi, Jane!';
+            }),
+
+            // Exercise 10: Array Methods
+            () => runTest('processNumbers handles array operations correctly', () => {
+                const numbers = [1, 2, 3, 4, 5];
+                const result = processNumbers(numbers);
+                return result.sum === 15 && result.evens.length === 2;
+            })
+        ];
+
+        // Run all tests
+        let passCount = 0;
+        tests.forEach(test => {
+            if (test()) passCount++;
+        });
+
+        // Display summary
+        const summary = document.getElementById('summary');
+        summary.textContent = `Passed ${passCount} out of ${tests.length} tests`;
+        summary.className = `summary ${passCount === tests.length ? 'all-pass' : 'has-fail'}`;
+    </script>
+</body>
+</html> 

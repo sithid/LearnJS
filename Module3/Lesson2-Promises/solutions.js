@@ -270,4 +270,150 @@ document.addEventListener('DOMContentLoaded', async function() {
     } catch (error) {
         console.error('Test error:', error);
     }
-}); 
+});
+
+// Exercise 1: Basic Promise Creation
+export const createDelayedPromise = (value, delay) => {
+    return new Promise(resolve => {
+        setTimeout(() => resolve(value), delay);
+    });
+};
+
+// Exercise 2: Promise Chaining
+export const processUserData = (userId) => {
+    return fetchUser(userId)
+        .then(user => {
+            return fetchUserPosts(userId)
+                .then(posts => ({ user, posts }));
+        });
+};
+
+// Exercise 3: Promise Error Handling
+export const fetchWithRetry = (url, maxRetries) => {
+    return new Promise((resolve, reject) => {
+        const attempt = (retriesLeft) => {
+            fetch(url)
+                .then(resolve)
+                .catch(error => {
+                    if (retriesLeft === 0) {
+                        reject(error);
+                    } else {
+                        const delay = Math.pow(2, maxRetries - retriesLeft) * 1000;
+                        setTimeout(() => attempt(retriesLeft - 1), delay);
+                    }
+                });
+        };
+        attempt(maxRetries);
+    });
+};
+
+// Exercise 4: Promise.all Usage
+export const fetchAllUserData = (userIds) => {
+    const promises = userIds.map(id => fetchUser(id));
+    return Promise.all(promises);
+};
+
+// Exercise 5: Promise.race Implementation
+export const fetchWithTimeout = (url, timeoutMs) => {
+    const fetchPromise = fetch(url);
+    const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('Request timed out')), timeoutMs);
+    });
+    return Promise.race([fetchPromise, timeoutPromise]);
+};
+
+// Exercise 6: Async/Await Basics
+export const getUserDetails = async (userId) => {
+    try {
+        const user = await fetchUser(userId);
+        const posts = await fetchUserPosts(userId);
+        return { user, posts };
+    } catch (error) {
+        throw new Error(`Failed to fetch user details: ${error.message}`);
+    }
+};
+
+// Exercise 7: Async Error Handling
+export const processDataWithRetry = async (data) => {
+    let lastError;
+    for (let i = 0; i < 3; i++) {
+        try {
+            const delay = Math.pow(2, i) * 1000;
+            await new Promise(resolve => setTimeout(resolve, delay));
+            return await processData(data);
+        } catch (error) {
+            lastError = error;
+        }
+    }
+    throw new Error(`Failed after 3 retries: ${lastError.message}`);
+};
+
+// Exercise 8: Parallel Processing
+export const processInParallel = async (tasks) => {
+    const results = [];
+    const errors = [];
+
+    await Promise.all(tasks.map(async (task, index) => {
+        try {
+            const result = await task();
+            results[index] = result;
+        } catch (error) {
+            errors[index] = error;
+        }
+    }));
+
+    return { results, errors };
+};
+
+// Exercise 9: Sequential Processing
+export const processInSequence = async (tasks) => {
+    let result = null;
+    for (const task of tasks) {
+        result = await task(result);
+    }
+    return result;
+};
+
+// Exercise 10: Real-world Example
+export const fetchAndCacheUserData = async (userId, cache) => {
+    try {
+        // Check cache first
+        const cachedData = cache.get(userId);
+        if (cachedData) {
+            return cachedData;
+        }
+
+        // Fetch fresh data
+        const user = await fetchUser(userId);
+        const posts = await fetchUserPosts(userId);
+        const userData = { user, posts, timestamp: Date.now() };
+
+        // Update cache
+        cache.set(userId, userData);
+        return userData;
+    } catch (error) {
+        throw new Error(`Failed to fetch and cache user data: ${error.message}`);
+    }
+};
+
+// Helper functions (simulated API calls)
+const fetchUser = async (userId) => {
+    await new Promise(resolve => setTimeout(resolve, 100));
+    return { id: userId, name: `User ${userId}`, email: `user${userId}@example.com` };
+};
+
+const fetchUserPosts = async (userId) => {
+    await new Promise(resolve => setTimeout(resolve, 100));
+    return [
+        { id: 1, userId, title: 'Post 1' },
+        { id: 2, userId, title: 'Post 2' }
+    ];
+};
+
+// Helper function for processDataWithRetry
+const processData = async (data) => {
+    if (Math.random() < 0.5) { // Simulate random failures
+        throw new Error('Processing failed');
+    }
+    return `Processed: ${data}`;
+}; 

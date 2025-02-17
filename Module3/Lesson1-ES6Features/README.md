@@ -1,195 +1,83 @@
-# Lesson 1: ES6+ Features in JavaScript
+# Lesson 1: ES6+ Features
+
+## Overview
+This lesson covers modern JavaScript features introduced in ES6 and later versions. You'll learn about arrow functions, template literals, destructuring, classes, and other essential modern JavaScript features.
 
 ## Learning Objectives
-By the end of this lesson, you will be able to:
-- Master modern ES6+ syntax and features
-- Use destructuring and spread operators
-- Implement template literals effectively
-- Work with modern variable declarations
-- Apply modern object/array methods
-- Write clean modern JavaScript code
+By completing this lesson, you will:
+- Master arrow functions and lexical scope
+- Use template literals for string interpolation
+- Apply destructuring for cleaner code
+- Implement spread/rest operators
+- Create and use ES6 classes
+- Work with Map and Set data structures
+- Use optional chaining and nullish coalescing
+- Apply modern JavaScript best practices
 
 ## Prerequisites
-- Understanding of basic JavaScript
-- Completion of Module 2
-- Modern browser with ES6+ support
-- Local development environment
+- Basic JavaScript knowledge
+- Understanding of functions and objects
+- Familiarity with arrays and loops
 
-## 1. Modern Variable Declarations
+## Exercises
 
-### Let and Const
-```javascript
-// Block scoping
-let counter = 0;
-const MAX_COUNT = 10;
+### 1. Arrow Functions and Lexical Scope
+Create a counter object with increment, decrement, and getCount methods using arrow functions and closure.
 
-// Temporal Dead Zone
-console.log(counter); // Works
-console.log(newVar); // ReferenceError
-let newVar = 5;
-```
+### 2. Template Literals
+Format user information using template literals for cleaner string interpolation.
 
-### Template Literals
-```javascript
-const name = 'John';
-const age = 30;
+### 3. Destructuring
+Extract specific properties from objects using destructuring assignment.
 
-// String interpolation
-const greeting = `Hello, ${name}!`;
-const bio = `${name} is ${age} years old.`;
+### 4. Spread/Rest Operators
+Combine multiple arrays using the spread operator and rest parameters.
 
-// Multi-line strings
-const html = `
-    <div>
-        <h1>${name}</h1>
-        <p>Age: ${age}</p>
-    </div>
-`;
-```
+### 5. Classes
+Implement a Shape class with methods for calculating area and perimeter.
 
-## 2. Destructuring
+### 6. Map and Set
+Create functions to remove duplicates using Set and implement a phone book using Map.
 
-### Array Destructuring
-```javascript
-// Basic destructuring
-const [first, second] = [1, 2];
+### 7. Optional Chaining and Nullish Coalescing
+Safely access nested object properties and provide default values.
 
-// Skip elements
-const [, , third] = [1, 2, 3];
+### 8. Enhanced Object Literals
+Create objects using modern object literal syntax.
 
-// Rest pattern
-const [head, ...tail] = [1, 2, 3, 4];
+### 9. Default Parameters
+Implement a greeting function with default parameters.
 
-// Default values
-const [x = 0, y = 0] = [1];
-```
+### 10. Array Methods
+Process arrays using modern array methods (map, filter, reduce).
 
-### Object Destructuring
-```javascript
-const user = {
-    name: 'John',
-    age: 30,
-    address: {
-        city: 'Boston',
-        country: 'USA'
-    }
-};
+## Getting Started
 
-// Basic destructuring
-const { name, age } = user;
+1. Open `exercises.js` in your editor
+2. Implement each exercise following the TODO comments
+3. Run `test.html` in your browser to check your solutions
+4. Use `solutions.js` for reference if needed
 
-// Nested destructuring
-const { address: { city } } = user;
+## Testing
+Open `test.html` in your browser to run the test suite. Each test will show:
+- ✓ Green check for passing tests
+- ✗ Red X for failing tests
+- Error messages for failed tests
 
-// Rename variables
-const { name: userName } = user;
+## Tips
+- Use modern syntax whenever possible
+- Pay attention to lexical scope with arrow functions
+- Consider edge cases in your implementations
+- Use the browser console for debugging
+- Read error messages carefully
 
-// Default values
-const { country = 'Unknown' } = user;
-```
-
-## 3. Spread and Rest
-
-### Spread Operator
-```javascript
-// Array spreading
-const numbers = [1, 2, 3];
-const combined = [...numbers, 4, 5];
-
-// Object spreading
-const defaults = { theme: 'light' };
-const custom = { ...defaults, theme: 'dark' };
-
-// Clone arrays/objects
-const clone = [...numbers];
-const objClone = { ...user };
-```
-
-### Rest Parameters
-```javascript
-// Rest in functions
-function sum(...numbers) {
-    return numbers.reduce((total, num) => total + num, 0);
-}
-
-// Rest in destructuring
-const [first, ...rest] = [1, 2, 3, 4];
-const { name, ...userInfo } = user;
-```
-
-## 4. Arrow Functions
-
-### Syntax and Usage
-```javascript
-// Basic arrow function
-const add = (a, b) => a + b;
-
-// Multiple lines
-const process = (data) => {
-    const result = doSomething(data);
-    return result;
-};
-
-// Object literal return
-const createUser = (name, age) => ({ name, age });
-```
-
-## Testing Your Code
-
-### Running Tests
-1. Open test.html in your browser
-2. Complete exercises in exercises.js
-3. Run tests to verify your solutions
-4. Check solutions.js for reference
-
-### Test Cases Cover
-- Variable declarations
-- Template literals
-- Destructuring
-- Spread/rest operators
-- Arrow functions
-- Modern methods
-
-## Practice Exercises
-
-### Exercise 1: Modern Syntax
-1. Variable declarations
-2. Template literals
-3. String methods
-
-### Exercise 2: Destructuring
-1. Array destructuring
-2. Object destructuring
-3. Nested structures
-
-### Exercise 3: Spread/Rest
-1. Array operations
-2. Object operations
-3. Function parameters
-
-### Exercise 4: Arrow Functions
-1. Basic functions
-2. Method context
-3. Callbacks
-
-## Best Practices
-- Use const by default
-- Prefer destructuring
-- Apply template literals
-- Utilize arrow functions
-- Implement modern methods
-- Write clean code
-
-## Common Mistakes
-- Temporal dead zone issues
-- This context in arrows
-- Destructuring depth
-- Spread limitations
-- Mutation problems
-- Scope confusion
+## Additional Resources
+- [MDN Arrow Functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)
+- [MDN Template Literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals)
+- [MDN Destructuring Assignment](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment)
+- [MDN Classes](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes)
+- [MDN Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)
+- [MDN Set](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set)
 
 ## Next Steps
-- Complete all exercises
-- Ensure all tests pass
-- Review solutions
-- Move to next lesson
+After completing this lesson, move on to Lesson 2: Promises and Async/Await to learn about asynchronous programming in modern JavaScript.

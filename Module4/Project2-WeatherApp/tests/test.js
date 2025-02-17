@@ -1,23 +1,17 @@
-import { WeatherService } from '../js/weather.js';
-import { LocationService } from '../js/location.js';
-import { Cache } from '../js/cache.js';
-import { UI } from '../js/ui.js';
+import { weatherService } from '../js/services/weatherService.js';
+import { locationService } from '../js/utils/geolocation.js';
+import { weatherCache } from '../js/utils/cache.js';
+import { WeatherUI } from '../js/components/WeatherUI.js';
 
 // Mock weather data for testing
 const mockWeatherData = {
-    current: {
-        temp: 20,
-        humidity: 65,
-        wind_speed: 5.5,
-        weather: [{ id: 800, main: 'Clear', description: 'clear sky', icon: '01d' }]
-    },
-    daily: [
-        {
-            dt: Date.now() / 1000,
-            temp: { min: 15, max: 25 },
-            weather: [{ id: 800, main: 'Clear', description: 'clear sky', icon: '01d' }]
-        }
-    ]
+    temp: 20,
+    humidity: 65,
+    pressure: 1013,
+    windSpeed: 5.5,
+    description: 'clear sky',
+    icon: '01d',
+    alerts: []
 };
 
 const mockLocationData = {
@@ -32,9 +26,6 @@ class TestRunner {
         this.results = [];
         this.passCount = 0;
         this.totalTests = 0;
-        this.weatherService = null;
-        this.locationService = null;
-        this.cache = null;
         this.ui = null;
     }
 
@@ -45,11 +36,8 @@ class TestRunner {
         // Mock the fetch API
         global.fetch = this.mockFetch.bind(this);
         
-        // Initialize components with mocked dependencies
-        this.cache = new Cache();
-        this.weatherService = new WeatherService('mock-api-key');
-        this.locationService = new LocationService();
-        this.ui = new UI();
+        // Initialize UI component
+        this.ui = new WeatherUI();
         
         // Reset results
         this.results = [];
@@ -58,10 +46,9 @@ class TestRunner {
         
         // Set up DOM test environment
         document.getElementById('test-environment').innerHTML = `
-            <div id="location-name"></div>
-            <div id="current-temp"></div>
-            <div id="weather-description"></div>
-            <div id="forecast-container"></div>
+            <div id="currentWeather"></div>
+            <div id="loadingIndicator" class="hidden"></div>
+            <div id="errorContainer" class="hidden"></div>
         `;
     }
 
@@ -143,7 +130,7 @@ class TestRunner {
     // Test Cases
     async testLocationSearch() {
         try {
-            const locations = await this.locationService.searchLocations('London');
+            const locations = await locationService.searchLocations('London');
             
             await this.assert(Array.isArray(locations), 'Search results should be an array');
             await this.assert(locations.length > 0, 'Search should return results');
@@ -157,21 +144,15 @@ class TestRunner {
 
     async testWeatherDataFetching() {
         try {
-            const weather = await this.weatherService.getCurrentWeather(
-                mockLocationData.lat,
-                mockLocationData.lon
-            );
+            const weather = await weatherService.getCurrentWeather(mockLocationData);
             
             await this.assert(weather.temp === 20, 'Temperature should match mock data');
             await this.assert(weather.humidity === 65, 'Humidity should match mock data');
             
-            const forecast = await this.weatherService.getForecast(
-                mockLocationData.lat,
-                mockLocationData.lon
-            );
+            const forecast = await weatherService.getForecast(mockLocationData);
             
-            await this.assert(Array.isArray(forecast), 'Forecast should be an array');
-            await this.assert(forecast.length > 0, 'Forecast should contain data');
+            await this.assert(Array.isArray(forecast.list), 'Forecast should be an array');
+            await this.assert(forecast.list.length > 0, 'Forecast should contain data');
             
             this.addResult('Weather Data Fetching', true);
         } catch (error) {
@@ -195,10 +176,10 @@ class TestRunner {
             
             navigator.geolocation = mockGeolocation;
             
-            const position = await this.locationService.getCurrentPosition();
+            const position = await locationService.getCurrentPosition();
             
-            await this.assert(position.coords.latitude === mockLocationData.lat, 'Latitude should match');
-            await this.assert(position.coords.longitude === mockLocationData.lon, 'Longitude should match');
+            await this.assert(position.latitude === mockLocationData.lat, 'Latitude should match');
+            await this.assert(position.longitude === mockLocationData.lon, 'Longitude should match');
             
             this.addResult('Geolocation', true);
         } catch (error) {
@@ -215,18 +196,17 @@ class TestRunner {
             };
             
             // Cache weather data
-            await this.cache.cacheWeatherData(
-                location,
-                mockWeatherData.current,
-                mockWeatherData.daily
+            weatherCache.set(
+                `weather-${location.lat}-${location.lon}`,
+                mockWeatherData
             );
             
             // Retrieve cached data
-            const cachedData = await this.cache.getCachedWeatherData(location);
+            const cachedData = weatherCache.get(`weather-${location.lat}-${location.lon}`);
             
             await this.assert(cachedData !== null, 'Cached data should exist');
             await this.assert(
-                cachedData.current.temp === mockWeatherData.current.temp,
+                cachedData.temp === mockWeatherData.temp,
                 'Cached temperature should match'
             );
             
@@ -239,17 +219,16 @@ class TestRunner {
     async testUIUpdates() {
         try {
             // Update UI with mock weather data
-            this.ui.updateWeatherDisplay(mockWeatherData.current, 'C');
+            this.ui.updateCurrentWeather(mockWeatherData);
             
-            const tempElement = document.getElementById('current-temp');
-            const descElement = document.getElementById('weather-description');
+            const weatherContainer = document.getElementById('currentWeather');
             
             await this.assert(
-                tempElement.textContent.includes('20'),
+                weatherContainer.innerHTML.includes('20°C'),
                 'Temperature should be displayed'
             );
             await this.assert(
-                descElement.textContent.includes('clear sky'),
+                weatherContainer.innerHTML.includes('clear sky'),
                 'Weather description should be displayed'
             );
             
@@ -262,8 +241,8 @@ class TestRunner {
     async testUnitConversion() {
         try {
             const celsiusTemp = 20;
-            const fahrenheitTemp = this.weatherService.convertToFahrenheit(celsiusTemp);
-            const backToCelsius = this.weatherService.convertToCelsius(fahrenheitTemp);
+            const fahrenheitTemp = weatherService.convertToFahrenheit(celsiusTemp);
+            const backToCelsius = weatherService.convertToCelsius(fahrenheitTemp);
             
             await this.assert(
                 fahrenheitTemp === 68,

@@ -1,143 +1,90 @@
-import { TodoList } from './todoList.js';
-import { Storage } from './storage.js';
-import { UI } from './ui.js';
+import { TodoList } from './components/TodoList.js';
+import { TodoForm } from './components/TodoForm.js';
+import { TodoFilter } from './components/TodoFilter.js';
+import { initializeTheme } from './utils/theme.js';
+import { initializeKeyboardShortcuts } from './utils/keyboard.js';
 
-class App {
+class TodoApp {
     constructor() {
-        this.storage = new Storage('todo-list');
-        this.todoList = new TodoList(this.storage);
-        this.ui = new UI(this.todoList);
+        this.todoList = new TodoList();
+        this.todoForm = new TodoForm();
+        this.todoFilter = new TodoFilter();
         
-        this.init();
+        this.initialize();
     }
 
-    async init() {
-        try {
-            // Show loading state
-            this.ui.showLoading();
+    initialize() {
+        // Initialize theme
+        initializeTheme();
 
-            // Load saved tasks
-            await this.todoList.loadTasks();
+        // Initialize keyboard shortcuts
+        initializeKeyboardShortcuts();
 
-            // Initialize UI components
-            this.ui.initializeUI();
+        // Set up event listeners
+        this.todoForm.onSubmit((taskData) => {
+            this.todoList.addTask(taskData);
+        });
 
-            // Set up event listeners
-            this.setupEventListeners();
+        this.todoFilter.onFilterChange((filter) => {
+            this.todoList.filterTasks(filter);
+        });
 
-            // Update task count
-            this.ui.updateTaskCount();
+        this.todoFilter.onSortChange((sortBy) => {
+            this.todoList.sortTasks(sortBy);
+        });
 
-            // Hide loading state
-            this.ui.hideLoading();
-        } catch (error) {
-            console.error('Failed to initialize app:', error);
-            this.ui.showError('Failed to load tasks. Please try again.');
-        }
+        // Initialize clear completed button
+        const clearCompletedBtn = document.getElementById('clearCompleted');
+        clearCompletedBtn.addEventListener('click', () => {
+            this.todoList.clearCompleted();
+        });
+
+        // Initialize keyboard shortcuts dialog
+        const shortcutsBtn = document.getElementById('showShortcuts');
+        const shortcutsDialog = document.getElementById('shortcutsDialog');
+        const closeDialogBtn = shortcutsDialog.querySelector('.close-dialog');
+
+        shortcutsBtn.addEventListener('click', () => {
+            shortcutsDialog.showModal();
+        });
+
+        closeDialogBtn.addEventListener('click', () => {
+            shortcutsDialog.close();
+        });
+
+        // Initialize undo/redo buttons
+        const undoBtn = document.getElementById('undoBtn');
+        const redoBtn = document.getElementById('redoBtn');
+
+        undoBtn.addEventListener('click', () => {
+            this.todoList.undo();
+            this.updateUndoRedoButtons();
+        });
+
+        redoBtn.addEventListener('click', () => {
+            this.todoList.redo();
+            this.updateUndoRedoButtons();
+        });
+
+        // Listen for state changes to update undo/redo buttons
+        this.todoList.onStateChange(() => {
+            this.updateUndoRedoButtons();
+        });
+
+        // Initial load of tasks
+        this.todoList.loadTasks();
     }
 
-    setupEventListeners() {
-        // Form submission
-        document.getElementById('task-form').addEventListener('submit', (e) => {
-            e.preventDefault();
-            this.handleNewTask(e.target);
-        });
+    updateUndoRedoButtons() {
+        const undoBtn = document.getElementById('undoBtn');
+        const redoBtn = document.getElementById('redoBtn');
 
-        // Theme toggle
-        document.getElementById('theme-toggle').addEventListener('click', () => {
-            this.ui.toggleTheme();
-        });
-
-        // Search
-        document.getElementById('search-tasks').addEventListener('input', (e) => {
-            this.ui.filterTasks();
-        });
-
-        // Filters
-        document.querySelectorAll('.btn-filter').forEach(button => {
-            button.addEventListener('click', () => {
-                this.ui.setActiveFilter(button);
-                this.ui.filterTasks();
-            });
-        });
-
-        // Sort
-        document.getElementById('sort-tasks').addEventListener('change', (e) => {
-            this.ui.sortTasks(e.target.value);
-        });
-
-        // Bulk actions
-        document.getElementById('complete-all').addEventListener('click', () => {
-            this.handleCompleteAll();
-        });
-
-        document.getElementById('clear-completed').addEventListener('click', () => {
-            this.handleClearCompleted();
-        });
-    }
-
-    async handleNewTask(form) {
-        try {
-            const formData = new FormData(form);
-            const task = {
-                id: Date.now().toString(),
-                title: formData.get('title'),
-                description: formData.get('description'),
-                dueDate: formData.get('dueDate'),
-                priority: formData.get('priority'),
-                completed: false,
-                createdAt: new Date().toISOString()
-            };
-
-            await this.todoList.addTask(task);
-            this.ui.addTaskToList(task);
-            this.ui.updateTaskCount();
-            form.reset();
-            this.ui.showSuccess('Task added successfully!');
-        } catch (error) {
-            console.error('Failed to add task:', error);
-            this.ui.showError('Failed to add task. Please try again.');
-        }
-    }
-
-    async handleCompleteAll() {
-        try {
-            const confirmed = await this.ui.showConfirmDialog(
-                'Are you sure you want to complete all tasks?'
-            );
-
-            if (confirmed) {
-                await this.todoList.completeAllTasks();
-                this.ui.refreshTaskList();
-                this.ui.updateTaskCount();
-                this.ui.showSuccess('All tasks marked as complete!');
-            }
-        } catch (error) {
-            console.error('Failed to complete all tasks:', error);
-            this.ui.showError('Failed to complete tasks. Please try again.');
-        }
-    }
-
-    async handleClearCompleted() {
-        try {
-            const confirmed = await this.ui.showConfirmDialog(
-                'Are you sure you want to delete all completed tasks?'
-            );
-
-            if (confirmed) {
-                await this.todoList.clearCompletedTasks();
-                this.ui.refreshTaskList();
-                this.ui.updateTaskCount();
-                this.ui.showSuccess('Completed tasks cleared!');
-            }
-        } catch (error) {
-            console.error('Failed to clear completed tasks:', error);
-            this.ui.showError('Failed to clear tasks. Please try again.');
-        }
+        undoBtn.disabled = !this.todoList.canUndo();
+        redoBtn.disabled = !this.todoList.canRedo();
     }
 }
 
-// Initialize the application
+// Initialize the app when the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', () => {
-    window.app = new App();
+    new TodoApp();
 }); 

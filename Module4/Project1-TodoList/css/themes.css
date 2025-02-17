@@ -1,0 +1,122 @@
+/* Light Theme (Default) */
+:root {
+    --primary-color: #4a90e2;
+    --secondary-color: #6c757d;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --background-color: #ffffff;
+    --text-color: #333333;
+    --border-color: #e0e0e0;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --input-background: #ffffff;
+    --dialog-background: #ffffff;
+}
+
+/* Dark Theme */
+[data-theme="dark"] {
+    --primary-color: #66b1ff;
+    --secondary-color: #a0aec0;
+    --success-color: #48bb78;
+    --danger-color: #f56565;
+    --background-color: #1a202c;
+    --text-color: #e2e8f0;
+    --border-color: #2d3748;
+    --shadow-color: rgba(0, 0, 0, 0.25);
+    --input-background: #2d3748;
+    --dialog-background: #2d3748;
+}
+
+/* Theme Toggle Button */
+.theme-toggle button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: background-color 0.3s;
+}
+
+.theme-toggle button:hover {
+    background-color: var(--border-color);
+}
+
+/* Theme Icons */
+.theme-icon {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: transform 0.3s;
+}
+
+[data-theme="light"] .theme-icon {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23333'%3E%3Cpath d='M12 3a1 1 0 0 1 1 1v1a1 1 0 1 1-2 0V4a1 1 0 0 1 1-1zm0 15a1 1 0 0 1 1 1v1a1 1 0 1 1-2 0v-1a1 1 0 0 1 1-1zm9-7a1 1 0 0 1-1 1h-1a1 1 0 1 1 0-2h1a1 1 0 0 1 1 1zM4 12a1 1 0 0 1-1 1H2a1 1 0 1 1 0-2h1a1 1 0 0 1 1 1zm15.7-7.7a1 1 0 0 1 0 1.4l-.7.7a1 1 0 1 1-1.4-1.4l.7-.7a1 1 0 0 1 1.4 0zM4.3 19.7a1 1 0 0 1 0-1.4l.7-.7a1 1 0 1 1 1.4 1.4l-.7.7a1 1 0 0 1-1.4 0zM4.3 4.3a1 1 0 0 1 1.4 0l.7.7a1 1 0 1 1-1.4 1.4l-.7-.7a1 1 0 0 1 0-1.4zm15.4 15.4a1 1 0 0 1-1.4 0l-.7-.7a1 1 0 1 1 1.4-1.4l.7.7a1 1 0 0 1 0 1.4zM12 6a6 6 0 1 1 0 12 6 6 0 0 1 0-12z'/%3E%3C/svg%3E");
+}
+
+[data-theme="dark"] .theme-icon {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23e2e8f0'%3E%3Cpath d='M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446A9 9 0 1 1 12 3z'/%3E%3C/svg%3E");
+}
+
+/* Dark Theme Specific Styles */
+[data-theme="dark"] {
+    /* Input Fields */
+    .task-input,
+    .priority-select,
+    .sort-select,
+    .todo-edit {
+        background-color: var(--input-background);
+        color: var(--text-color);
+        border-color: var(--border-color);
+    }
+
+    /* Buttons */
+    .filter-btn {
+        color: var(--text-color);
+        border-color: var(--border-color);
+    }
+
+    .filter-btn.active {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+        color: var(--background-color);
+    }
+
+    /* Todo Items */
+    .todo-item {
+        background-color: var(--input-background);
+        border-color: var(--border-color);
+    }
+
+    .todo-item.completed .todo-label {
+        color: var(--secondary-color);
+    }
+
+    /* Dialog */
+    .shortcuts-dialog {
+        background-color: var(--dialog-background);
+        color: var(--text-color);
+    }
+
+    kbd {
+        background-color: var(--input-background);
+        border-color: var(--border-color);
+        color: var(--text-color);
+    }
+
+    /* Icons */
+    .edit-btn,
+    .delete-btn {
+        color: var(--text-color);
+    }
+}
+
+/* Transition Styles */
+.theme-transition {
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+
+/* Focus Styles */
+[data-theme="dark"] *:focus {
+    outline-color: var(--primary-color);
+} 
