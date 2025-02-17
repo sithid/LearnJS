@@ -1,244 +1,217 @@
-# Lesson 3: Forms and Validation
+# Lesson 3: Forms in JavaScript
 
 ## Learning Objectives
 By the end of this lesson, you will be able to:
-- Create and style HTML forms
-- Implement client-side form validation
-- Handle form submissions
-- Work with different input types
-- Create custom validation rules
-- Display validation feedback
-- Use HTML5 form features
+- Create and validate forms using modern techniques
+- Implement real-time form validation
+- Handle form submissions effectively
+- Process form data efficiently
+- Test form functionality
+- Apply accessibility best practices
+- Create dynamic form interfaces
 
-## 1. HTML Forms Basics
+## Prerequisites
+- Understanding of DOM and Events (Lessons 1-2)
+- Text editor installed
+- Modern web browser
+- Local development server running
 
-### Form Structure
-```html
-<form id="myForm" action="/submit" method="POST">
-    <div class="form-group">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required>
-    </div>
-    <button type="submit">Submit</button>
-</form>
+## 1. Form Handling
+
+### Modern Form Selection
+```javascript
+// Form selection
+const form = document.querySelector('#registration-form');
+const inputs = form.querySelectorAll('input, select, textarea');
+
+// Form submission
+form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    
+    if (await validateForm()) {
+        const formData = new FormData(form);
+        await submitForm(formData);
+    }
+});
 ```
 
-### Common Input Types
-```html
-<!-- Text input -->
-<input type="text" name="username">
+### Form Data Processing
+```javascript
+// Using FormData
+const formData = new FormData(form);
 
-<!-- Password -->
-<input type="password" name="password">
+// Get form values
+const username = formData.get('username');
+const email = formData.get('email');
 
-<!-- Email -->
-<input type="email" name="email">
+// Convert to object
+const data = Object.fromEntries(formData.entries());
 
-<!-- Number -->
-<input type="number" name="age" min="0" max="120">
-
-<!-- Checkbox -->
-<input type="checkbox" name="subscribe" checked>
-
-<!-- Radio buttons -->
-<input type="radio" name="gender" value="male">
-<input type="radio" name="gender" value="female">
-
-<!-- Select dropdown -->
-<select name="country">
-    <option value="us">United States</option>
-    <option value="uk">United Kingdom</option>
-</select>
-
-<!-- Textarea -->
-<textarea name="message" rows="4" cols="50"></textarea>
+// Process multiple values
+const selectedOptions = formData.getAll('options');
 ```
 
 ## 2. Form Validation
 
-### HTML5 Validation Attributes
-```html
-<!-- Required field -->
-<input type="text" required>
+### Real-time Validation
+```javascript
+// Input validation
+input.addEventListener('input', (event) => {
+    const value = event.target.value;
+    const isValid = validateField(event.target);
+    
+    updateFieldStatus(event.target, isValid);
+});
 
-<!-- Minimum length -->
-<input type="text" minlength="3">
-
-<!-- Maximum length -->
-<input type="text" maxlength="20">
-
-<!-- Pattern matching -->
-<input type="text" pattern="[A-Za-z]{3,}">
-
-<!-- Number range -->
-<input type="number" min="0" max="100">
+// Validation functions
+function validateField(field) {
+    const value = field.value;
+    const type = field.type;
+    
+    switch (type) {
+        case 'email':
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+        case 'password':
+            return value.length >= 8 && /[A-Z]/.test(value);
+        default:
+            return value.length > 0;
+    }
+}
 ```
 
-### JavaScript Validation
+### Custom Validation
 ```javascript
-function validateForm(form) {
-    const username = form.username.value;
-    const email = form.email.value;
-    const password = form.password.value;
+// Custom validation rules
+const validationRules = {
+    username: {
+        required: true,
+        minLength: 3,
+        pattern: /^[a-zA-Z0-9_]+$/
+    },
+    email: {
+        required: true,
+        pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    },
+    password: {
+        required: true,
+        minLength: 8,
+        pattern: /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])/
+    }
+};
 
-    // Username validation
-    if (username.length < 3) {
-        showError('username', 'Username must be at least 3 characters');
+// Validate against rules
+function validateAgainstRules(field, rules) {
+    const value = field.value;
+    const fieldRules = rules[field.name];
+    
+    if (!fieldRules) return true;
+    
+    if (fieldRules.required && !value) {
         return false;
     }
-
-    // Email validation
-    if (!isValidEmail(email)) {
-        showError('email', 'Please enter a valid email');
+    
+    if (fieldRules.minLength && value.length < fieldRules.minLength) {
         return false;
     }
-
-    // Password validation
-    if (!isValidPassword(password)) {
-        showError('password', 'Password must be at least 8 characters');
+    
+    if (fieldRules.pattern && !fieldRules.pattern.test(value)) {
         return false;
     }
-
+    
     return true;
 }
 ```
 
-## 3. Form Events
+## Testing Your Code
 
-### Event Handling
-```javascript
-// Form submission
-form.addEventListener('submit', function(event) {
-    event.preventDefault();
-    if (validateForm(this)) {
-        submitForm(this);
-    }
-});
+### Running Tests
+1. Open `test.html` in your browser
+2. Write your code in `exercises.js`
+3. Tests run automatically
+4. Fix any failing tests
+5. Verify all tests pass
 
-// Real-time validation
-input.addEventListener('input', function() {
-    validateField(this);
-});
-
-// Blur validation
-input.addEventListener('blur', function() {
-    validateField(this);
-});
-```
-
-## 4. Custom Validation
-
-### Creating Custom Rules
-```javascript
-function validatePassword(password) {
-    const rules = {
-        minLength: password.length >= 8,
-        hasUpperCase: /[A-Z]/.test(password),
-        hasLowerCase: /[a-z]/.test(password),
-        hasNumber: /\d/.test(password),
-        hasSpecial: /[!@#$%^&*]/.test(password)
-    };
-
-    return {
-        isValid: Object.values(rules).every(Boolean),
-        rules
-    };
-}
-```
-
-### Displaying Validation Feedback
-```javascript
-function showValidation(input, isValid, message) {
-    const feedback = input.parentElement.querySelector('.feedback');
-    
-    if (isValid) {
-        input.classList.remove('invalid');
-        input.classList.add('valid');
-        feedback.classList.remove('error');
-        feedback.classList.add('success');
-    } else {
-        input.classList.remove('valid');
-        input.classList.add('invalid');
-        feedback.classList.remove('success');
-        feedback.classList.add('error');
-    }
-    
-    feedback.textContent = message;
-}
-```
-
-## 5. Form Submission
-
-### Handling Form Data
-```javascript
-function handleSubmit(event) {
-    event.preventDefault();
-    
-    const formData = new FormData(event.target);
-    const data = Object.fromEntries(formData.entries());
-    
-    // Send data to server
-    submitToServer(data)
-        .then(response => {
-            showSuccess('Form submitted successfully!');
-            form.reset();
-        })
-        .catch(error => {
-            showError('Submission failed. Please try again.');
-        });
-}
-```
+### Test Cases Cover
+- Form submission
+- Input validation
+- Error handling
+- Data processing
+- Accessibility
+- User experience
+- Edge cases
 
 ## Practice Exercises
 
 ### Exercise 1: Registration Form
-Create a registration form with:
-- Username validation
-- Email validation
-- Password strength meter
-- Confirm password check
-- Real-time validation feedback
+```javascript
+function initializeRegistrationForm() {
+    // TODO: Implement registration form with
+    // 1. Real-time validation
+    // 2. Password strength meter
+    // 3. Form submission
+    // 4. Error handling
+}
+```
 
 ### Exercise 2: Payment Form
-Build a payment form that validates:
-- Credit card number
-- Expiration date
-- CVV
-- Billing address
-- Postal code format
+```javascript
+function initializePaymentForm() {
+    // TODO: Implement payment form with
+    // 1. Credit card validation
+    // 2. Format card number
+    // 3. Validate expiry
+    // 4. Process payment
+}
+```
 
-### Exercise 3: Survey Form
-Create a survey form with:
-- Multiple choice questions
-- Rating scales
-- Text feedback
-- Required fields
-- Progress tracking
+### Exercise 3: Dynamic Form
+```javascript
+function initializeDynamicForm() {
+    // TODO: Implement dynamic form with
+    // 1. Add/remove fields
+    // 2. Conditional fields
+    // 3. Multi-step navigation
+    // 4. Save progress
+}
+```
 
-### Exercise 4: File Upload
-Implement a file upload form with:
-- File type validation
-- Size restrictions
-- Multiple file support
-- Upload progress
-- Preview functionality
+## Best Practices
+- Use HTML5 validation attributes
+- Implement real-time validation
+- Show clear error messages
+- Maintain form state
+- Handle all input types
+- Ensure accessibility
+- Test thoroughly
 
-### Exercise 5: Dynamic Form
-Build a form that:
-- Adds/removes fields dynamically
-- Validates dependencies
-- Shows conditional fields
-- Saves draft responses
-- Implements multi-step navigation
+## Common Mistakes
+- Missing form validation
+- Poor error handling
+- Inadequate feedback
+- Accessibility issues
+- Security vulnerabilities
+- Performance problems
 
-## Key Takeaways
-- Forms are essential for user input
-- Validation improves data quality
-- Immediate feedback helps users
-- Custom validation enables complex rules
-- Proper error handling is crucial
+## Debugging Tips
+1. Use browser DevTools
+2. Test all input scenarios
+3. Verify form submission
+4. Check validation logic
+5. Test accessibility
+6. Monitor performance
+
+## Additional Resources
+- MDN Forms Guide
+- ARIA Forms Guide
+- Form Validation Guide
+- Security Best Practices
+- Testing Documentation
 
 ## Next Steps
-- Complete the practice exercises
-- Experiment with different validation rules
-- Move on to Module 3: Modern JavaScript
+1. Complete all exercises
+2. Pass all tests
+3. Review solutions
+4. Practice concepts
+5. Move to Module 3: Modern JavaScript
+
+Remember to run the tests frequently and ensure all test cases pass before moving on.

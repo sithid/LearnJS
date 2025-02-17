@@ -2,114 +2,105 @@
 
 ## Learning Objectives
 By the end of this lesson, you will be able to:
-- Understand what the DOM (Document Object Model) is
-- Select elements using different methods
-- Modify element content and attributes
-- Create and remove elements
-- Navigate the DOM tree
-- Modify element styles
+- Master modern DOM selection methods
+- Manipulate DOM elements effectively
+- Create and modify DOM content
+- Handle DOM traversal
+- Test DOM operations
+- Apply best practices for DOM manipulation
 
-## 1. Understanding the DOM
+## Prerequisites
+- Understanding of HTML and CSS
+- Completion of Module 1
+- Modern browser with DevTools
+- Local development environment
 
-The DOM (Document Object Model) is a programming interface for HTML documents. It represents the page as a tree-like structure where each HTML element is a node.
-
-```html
-<!DOCTYPE html>
-<html>
-<head>
-    <title>My Page</title>
-</head>
-<body>
-    <h1>Welcome</h1>
-    <div id="container">
-        <p>This is a paragraph</p>
-    </div>
-</body>
-</html>
-```
-
-This HTML creates a tree structure:
-```
-document
-└── html
-    ├── head
-    │   └── title
-    │       └── "My Page"
-    └── body
-        ├── h1
-        │   └── "Welcome"
-        └── div
-            └── p
-                └── "This is a paragraph"
-```
-
-## 2. Selecting Elements
-
-### By ID
-```javascript
-// Select a single element by ID
-const container = document.getElementById('container');
-```
-
-### By Class Name
-```javascript
-// Select elements by class name
-const items = document.getElementsByClassName('item');
-```
-
-### By Tag Name
-```javascript
-// Select elements by tag name
-const paragraphs = document.getElementsByTagName('p');
-```
+## 1. DOM Selection
 
 ### Modern Selectors
 ```javascript
-// Select first matching element
-const firstItem = document.querySelector('.item');
+// Single element selectors
+const element = document.querySelector('.class-name');
+const container = document.getElementById('container');
 
-// Select all matching elements
-const allItems = document.querySelectorAll('.item');
+// Multiple element selectors
+const elements = document.querySelectorAll('.item');
+const buttons = document.getElementsByTagName('button');
+
+// Complex selectors
+const nestedElement = document.querySelector('.parent > .child');
+const specificInput = document.querySelector('input[type="email"]');
 ```
 
-## 3. Modifying Elements
+### DOM Traversal
+```javascript
+// Parent and children
+const parent = element.parentElement;
+const children = element.children;
+const firstChild = element.firstElementChild;
+const lastChild = element.lastElementChild;
+
+// Siblings
+const nextSibling = element.nextElementSibling;
+const previousSibling = element.previousElementSibling;
+
+// Closest ancestor
+const ancestor = element.closest('.ancestor');
+```
+
+## 2. DOM Manipulation
 
 ### Content Modification
 ```javascript
-// Change text content
+// Text content
 element.textContent = 'New text';
+element.innerText = 'Visible text';
 
-// Change HTML content
+// HTML content
 element.innerHTML = '<span>New HTML</span>';
+
+// Safe HTML insertion
+const span = document.createElement('span');
+span.textContent = 'Safe text';
+element.appendChild(span);
 ```
 
-### Attribute Modification
+### Attributes and Properties
 ```javascript
-// Get attribute
-const value = element.getAttribute('class');
+// Attribute manipulation
+element.setAttribute('data-id', '123');
+element.getAttribute('data-id');
+element.hasAttribute('disabled');
+element.removeAttribute('disabled');
 
-// Set attribute
-element.setAttribute('class', 'new-class');
+// Dataset properties
+element.dataset.userId = '456';
+const userId = element.dataset.userId;
 
-// Remove attribute
-element.removeAttribute('class');
-
-// Check if attribute exists
-const hasAttribute = element.hasAttribute('class');
+// Class manipulation
+element.classList.add('active');
+element.classList.remove('disabled');
+element.classList.toggle('visible');
+element.classList.replace('old', 'new');
 ```
 
-## 4. Creating and Removing Elements
+## 3. DOM Creation and Removal
 
 ### Creating Elements
 ```javascript
-// Create new element
-const newDiv = document.createElement('div');
+// Create element
+const div = document.createElement('div');
+div.className = 'container';
+div.textContent = 'New element';
 
-// Add text content
-newDiv.textContent = 'New Element';
+// Clone element
+const clone = div.cloneNode(true);
 
-// Add to document
-parentElement.appendChild(newDiv);
+// Insert elements
+parent.appendChild(div);
+parent.insertBefore(div, referenceNode);
+referenceNode.before(div);
+referenceNode.after(div);
 ```
 
 ### Removing Elements
@@ -117,106 +108,120 @@ parentElement.appendChild(newDiv);
 // Remove element
 element.remove();
 
-// Remove child element
-parentElement.removeChild(childElement);
+// Remove child
+parent.removeChild(child);
+
+// Clear contents
+while (element.firstChild) {
+    element.firstChild.remove();
+}
 ```
 
-## 5. DOM Navigation
+## 4. Style Manipulation
 
-### Parent-Child Navigation
+### CSS Styles
 ```javascript
-// Get parent
-const parent = element.parentElement;
-
-// Get children
-const children = element.children;
-const firstChild = element.firstElementChild;
-const lastChild = element.lastElementChild;
-```
-
-### Sibling Navigation
-```javascript
-// Get siblings
-const nextSibling = element.nextElementSibling;
-const previousSibling = element.previousElementSibling;
-```
-
-## 6. Modifying Styles
-
-### Direct Style Modification
-```javascript
-// Change single style
-element.style.color = 'red';
+// Direct style manipulation
 element.style.backgroundColor = 'blue';
+element.style.marginTop = '20px';
 
 // Multiple styles
 Object.assign(element.style, {
-    color: 'red',
-    backgroundColor: 'blue',
-    padding: '10px'
+    color: 'white',
+    padding: '10px',
+    borderRadius: '4px'
 });
+
+// Computed styles
+const computed = window.getComputedStyle(element);
+const color = computed.getPropertyValue('color');
 ```
 
-### CSS Classes
-```javascript
-// Add class
-element.classList.add('highlight');
+## Testing Your Code
 
-// Remove class
-element.classList.remove('highlight');
+### Running Tests
+1. Open `test.html` in your browser
+2. Write your code in `exercises.js`
+3. Tests run automatically
+4. Fix any failing tests
+5. Verify all tests pass
 
-// Toggle class
-element.classList.toggle('active');
-
-// Check if class exists
-const hasClass = element.classList.contains('highlight');
-```
+### Test Cases Cover
+- Element selection
+- Content manipulation
+- Attribute handling
+- Style modifications
+- DOM traversal
+- Element creation/removal
+- Error handling
 
 ## Practice Exercises
 
-### Exercise 1: Element Selection
-Create functions to:
-- Find element by ID
-- Find elements by class
-- Find elements by tag name
-- Use querySelector for complex selection
+### Exercise 1: DOM Selection
+Implement selection utilities:
+- Custom selector functions
+- Element filtering
+- DOM traversal helpers
+- Performance optimization
 
 ### Exercise 2: Content Manipulation
-Create a system to:
-- Change text content
-- Update HTML content
-- Modify attributes
-- Toggle classes
+Create content handlers:
+- Safe HTML insertion
+- Text processing
+- Attribute management
+- Class manipulation
 
 ### Exercise 3: DOM Creation
-Build a function that:
-- Creates new elements
-- Adds them to the document
-- Removes specific elements
-- Moves elements around
+Build element factories:
+- Component creation
+- Template handling
+- Dynamic content
+- Event binding
 
-### Exercise 4: Style Manipulation
-Create functions to:
-- Change element colors
-- Modify dimensions
-- Update visibility
-- Apply multiple styles
+### Exercise 4: Style Management
+Implement style utilities:
+- Style application
+- Animation helpers
+- Theme switching
+- Responsive adjustments
 
-### Exercise 5: Dynamic List
-Build a dynamic list that:
-- Adds items
-- Removes items
-- Updates items
-- Sorts items
+## Best Practices
+- Use modern selection methods
+- Avoid innerHTML when possible
+- Batch DOM operations
+- Implement error handling
+- Consider performance
+- Write comprehensive tests
+- Follow accessibility guidelines
 
-## Key Takeaways
-- The DOM represents HTML as a tree structure
-- Multiple methods exist for selecting elements
-- Elements can be created, modified, and removed
-- Styles can be changed programmatically
-- DOM manipulation is key to dynamic web pages
+## Common Mistakes
+- Direct innerHTML usage
+- Excessive DOM queries
+- Memory leaks
+- Poor performance
+- Missing error handling
+- Accessibility issues
+
+## Debugging Tips
+1. Use browser DevTools
+2. Inspect element state
+3. Monitor performance
+4. Test accessibility
+5. Check memory usage
+6. Validate HTML structure
+
+## Additional Resources
+- MDN DOM Documentation
+- DOM Performance Guide
+- Accessibility Guidelines
+- Testing DOM Operations
+- Browser DevTools Guide
 
 ## Next Steps
-- Complete the practice exercises
-- Experiment with different selection methods
-- Move on to Lesson 2: Event Handling 
+1. Complete all exercises
+2. Pass all tests
+3. Review solutions
+4. Practice concepts
+5. Move to Lesson 2: Events
+
+Remember to consider accessibility and performance when manipulating the DOM. 

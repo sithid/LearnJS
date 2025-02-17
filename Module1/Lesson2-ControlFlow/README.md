@@ -7,6 +7,13 @@ By the end of this lesson, you will be able to:
 - Implement switch statements
 - Create and control loops (for, while)
 - Apply control flow concepts to solve real problems
+- Test control flow logic effectively
+
+## Prerequisites
+- Basic understanding of JavaScript variables
+- Text editor installed
+- Modern web browser
+- Local development server running
 
 ## 1. Conditional Statements
 
