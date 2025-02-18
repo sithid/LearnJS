@@ -62,6 +62,11 @@
         <div id="summary" class="summary"></div>
     </div>
 
+    <script>
+        // Import student's code
+        // import * as exercises from './exercises.js';
+    </script>
+
     <script type="module">
         // Import student's code
         import * as exercises from './exercises.js';
@@ -183,6 +188,14 @@
 
         // Display results
         runner.displayResults();
+
+        window.addEventListener('error', (event) => {
+            const container = document.getElementById('test-results');
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'console-output';
+            errorDiv.textContent = `Error: ${event.message} at ${event.filename}:${event.lineno}`;
+            container.appendChild(errorDiv);
+        });
     </script>
 </body>
 </html> 
