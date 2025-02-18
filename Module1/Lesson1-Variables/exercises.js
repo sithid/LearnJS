@@ -4,7 +4,7 @@
 
 
 // Basic Information
-export let yourName = null;        // Add your name as a string
+export let yourName = null; // Add your name as a string
 export let yourAge = null;         // Add your age as a number
 export const birthYear = null;     // Add your birth year as a number
 export let yourHobby = null;       // Add your favorite hobby as a string
