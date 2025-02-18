@@ -1,5 +1,5 @@
 import { weatherService } from '../js/services/weatherService.js';
-import { locationService } from '../js/utils/geolocation.js';
+import { geolocationService } from '../js/utils/geolocation.js';
 import { weatherCache } from '../js/utils/cache.js';
 import { WeatherUI } from '../js/components/WeatherUI.js';
 
@@ -176,7 +176,7 @@ class TestRunner {
             
             navigator.geolocation = mockGeolocation;
             
-            const position = await locationService.getCurrentPosition();
+            const position = await geolocationService.getCurrentPosition();
             
             await this.assert(position.latitude === mockLocationData.lat, 'Latitude should match');
             await this.assert(position.longitude === mockLocationData.lon, 'Longitude should match');
